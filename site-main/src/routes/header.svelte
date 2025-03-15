@@ -19,7 +19,7 @@
 		</li>
 	</ul>
 
-	<button>Toggle</button>
+	<!-- <button>Toggle</button> -->
 </nav>
 
 <style>
@@ -32,9 +32,13 @@
   }
 
   a {
-    color: inherit;
-    text-decoration: none;
-  }
+  color: var(--gray-6);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 
   @media (min-width: 768px) {
     nav {

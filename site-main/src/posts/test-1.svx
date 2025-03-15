@@ -1,6 +1,6 @@
 ---
-title: Abstractions and Design
-description: The basis of programming building blocks
+title: Test 1
+description: Some test 1
 date: '2024-11-23'
 categories:
   - OOP
@@ -23,12 +23,9 @@ An **abstraction** is a conceptual model that represents something—whether it'
 
 Typically, an abstraction consists of:  
 
-- **An Object**:    
-  - A defined entity that represents something.  
-- **Properties**: 
-  - Quantifiable characteristics or attributes the object "owns" and keeps track of.  
-- **Actions (Methods)**: 
-  - Behaviors or functions that allow the object to perform specific tasks or modify its properties.  
+- **An Object**: A defined entity that represents something.  
+- **Properties**: Quantifiable characteristics or attributes the object "owns" and keeps track of.  
+- **Actions (Methods)**: Behaviors or functions that allow the object to perform specific tasks or modify its properties.  
 
 These methods sometimes accept **parameters**—variable data passed into the method to modify how it operates or affects the object's properties.  
 

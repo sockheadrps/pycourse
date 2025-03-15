@@ -42,14 +42,7 @@
 
 <style>
   /* Example root-level sizing variables (tweak as needed) */
-  :global(:root) {
-    --size-7: 2rem;               /* big spacing  */
-    --size-3: 0.75rem;            /* smaller spacing */
-    --border: #ccc;               /* border color  */
-    --text-2: #666;               /* secondary text color */
-    --font-size-fluid-3: 1.25rem;
-    --size-content-3: 80ch;       /* maximum content width for the main section */
-  }
+
 
   section {
     margin-inline: auto;
@@ -66,7 +59,7 @@
     /* Create a responsive grid for horizontal “cards” */
     display: grid;
     gap: var(--size-7);
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(250px, 1fr));
   }
 
   /* Turn each item into a clickable card */

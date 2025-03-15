@@ -1,7 +1,5 @@
 <script lang="js">
 	import { formatDate } from '$lib/utils';
-	import Iframe from '../../components/IFrame.svelte';
-	export { Iframe };
 	export let data;
 </script>
 
@@ -32,10 +30,8 @@
 
 <style>
   article {
-    color: var(--gray-4);
+    color: var(--gray-5);
     width: 1200px;
-
-
   }
 
   h1 {
@@ -44,7 +40,7 @@
 
   h1 + p {
     margin-top: var(--size-2);
-    color: var(--text-2);
+    color: var(--gray-6);
   }
 
   .tags {
@@ -61,6 +57,7 @@
   .content {
     font-size: larger;
     padding: 14px;
+    
   }
 
 

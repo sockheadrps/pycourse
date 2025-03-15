@@ -2,7 +2,6 @@
 import adapter from '@sveltejs/adapter-static'
 
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
-import customIframe from './src/plugins/Iframe.js';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
 import remarkToc from 'remark-toc'
@@ -19,7 +18,7 @@ import { createHighlighter } from 'shiki'
 const mdsvexOptions = {
 	extensions: ['.md', '.svx'],
 	layout: join(__dirname, './src/components/PostLayout.svelte'),
-  remarkPlugins: [customIframe, [remarkToc, { tight: true }]],
+  remarkPlugins: [[remarkToc, { tight: true }]],
 	rehypePlugins: [rehypeSlug],
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
