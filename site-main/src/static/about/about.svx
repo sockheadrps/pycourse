@@ -1,0 +1,23 @@
+---
+title: About
+description: About
+date: '2024-11-22'
+categories:
+  - about
+published: true
+---
+
+Hey friends! 👋
+
+# Another “learn to code” site?
+
+I got tired of seeing learning resources that bury beginners in overly cute or convoluted storylines and half-explained concepts. 
+Many tutorials try to pad out simple ideas with fairy-tale backstories, but they often do more harm than good. I wanted a resource 
+that explains coding topics clearly and directly—no fluff or baby talk.  
+
+This site is my attempt at delivering accurate, plainspoken tutorials. I believe you’re smart enough to follow a direct explanation without needless metaphors 
+or hand-holding. Let’s cut through the noise and learn coding in a straightforward way!
+
+
+
+
