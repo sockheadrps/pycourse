@@ -6,6 +6,7 @@ Since this is pseudo-code (not valid Python syntax), describing a property with 
 
 Below are some standard, primitive data types in Python:
 
+
 - **Boolean** – Can only be `True` or `False`.
 - **Integer** – Any whole number (without a decimal). For example: `0`, `-5`, or `42`.
 - **String** – Represents text. In Python, even single characters are considered strings, and they include anything wrapped in quotes, such as `"A"`, `"Hello"`, or `"#$@"`.

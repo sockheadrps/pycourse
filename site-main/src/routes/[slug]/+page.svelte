@@ -1,6 +1,8 @@
 <script lang="js">
 	import { formatDate } from '$lib/utils';
 	export let data;
+
+
 </script>
 
 <svelte:head>

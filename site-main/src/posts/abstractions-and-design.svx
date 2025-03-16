@@ -7,6 +7,13 @@ categories:
 published: true
 ---
 
+<script>
+  import Terminal from '../components/Terminal.svelte'
+  import EmojiList from '../components/EmojiList.svelte'
+</script>
+
+
+
 # Understanding Code and Its Structure  
 
 To understand how code is written, it might be best to first explain how it is typically structured. Before diving into that, let's consider a fundamental question:  
@@ -22,13 +29,31 @@ The way we use code to solve problems is through **abstractions**.
 An **abstraction** is a conceptual model that represents something—whether it's a real-world object, a process, or an idea. In programming, abstractions help us define structures that represent these things in a logical, organized way.  
 
 Typically, an abstraction consists of:  
+<br>
+<Terminal>
+  <EmojiList>
+    <li>
+      <strong>An Object:</strong>
+      <ul>
+        <li>A defined entity that represents something.</li>
+      </ul>
+    </li>
 
-- **An Object**:    
-  - A defined entity that represents something.  
-- **Properties**: 
-  - Quantifiable characteristics or attributes the object "owns" and keeps track of.  
-- **Actions (Methods)**: 
-  - Behaviors or functions that allow the object to perform specific tasks or modify its properties.  
+    <li>
+      <strong>Object Properties:</strong>
+      <ul>
+        <li>Quantifiable characteristics or attributes the object "owns" and keeps track of.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Object Actions (Methods):</strong>
+      <ul>
+        <li>Behaviors or functions that allow the object to perform specific tasks or modify its properties.</li>
+      </ul>
+    </li>
+  </EmojiList>
+</Terminal>
 
 These methods sometimes accept **parameters**—variable data passed into the method to modify how it operates or affects the object's properties.  
 
