@@ -6,3 +6,4 @@ npm run dev
 
 ![](home.PNG)
 ![](art.PNG)
+![](datatypes.PNG)
