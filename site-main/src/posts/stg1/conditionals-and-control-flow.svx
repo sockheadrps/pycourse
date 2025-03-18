@@ -1,0 +1,110 @@
+---
+title: Conditionals and Control Flow
+description: If/else and code branches
+date: '2024-11-23'
+categories:
+  - OOP
+published: true
+index: 2
+---
+
+<script>
+  import DefinitionList from '$components/DefinitionList.svelte';
+  import Terminal from '$components/Terminal.svelte';
+  import DefinitionListEx from '$components/DefinitionListEx.svelte';
+  import FlashCard from '$components/FlashCard.svelte';
+  import EmojiList from '$components/EmojiList.svelte';
+  import Important from '$components/Important.svelte';
+  import Quiz from '$components/Quiz.svelte';
+</script>
+
+
+
+
+
+# Conditionals and Control Flow
+
+In programming, conditionals and control flow structures are essential tools that allow your code to make decisions and follow different paths based on varying conditions. Whether you're writing a simple script or a complex application, understanding how to branch your code is critical for creating dynamic and responsive programs.
+
+## What Are Conditionals?
+
+Conditionals let your program check for a certain condition or state, and then execute a block of code based on whether that condition is true or false. They act like crossroads in your code, determining which direction the program should take.
+
+
+```python
+if temperature > 30:
+  print("It's hot outside!")
+else: 
+  print("It's not too hot.")
+```
+
+Here, the program checks whether the temperature variable exceeds 30. If true, it outputs a message indicating it's hot; otherwise, it outputs a different message.
+
+## Basic Conditional Statements
+
+The most common conditional structure is the if/else statement. Here's a breakdown of its parts:
+
+
+<Terminal>
+  <EmojiList>
+    <li>
+      <strong>if statement: </strong>
+      <ul>
+        <li>Checks a condition and executes a code block if that condition is true.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>else statement</strong>
+      <ul>
+        <li>Provides an alternative block of code to run if the condition is false.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>else if clause:</strong>
+      <ul>
+        <li>Allows you to test multiple conditions in sequence.</li>
+      </ul>
+    </li>
+  </EmojiList>
+</Terminal>
+
+
+
+
+```python
+score = 85
+
+if score >= 90: 
+  print("Grade: A") 
+elif score >= 80: 
+  print("Grade: B") 
+elif score >= 70: 
+  print("Grade: C") 
+else: 
+  print("Grade: D or below")
+```
+
+## Best Practices
+When writing conditionals and managing control flow in Python, consider these tips:
+
+<Important title="Keep It Simple">
+  Avoid deeply nested conditions by breaking your code into functions and using early returns.
+</Important>
+
+<Important title="Readable Conditions:">
+  Write clear and explicit conditions. Use descriptive variable names and avoid overly complex expressions.
+</Important>
+
+<Important title="Test All Branches:">
+  Ensure every possible condition is handled—including edge cases—to prevent unexpected behavior.
+</Important>
+
+
+## Conclusion
+Conditionals and control flow are the backbone of dynamic programming. They allow your applications to respond
+differently to various inputs and states. Mastering these concepts is essential for writing robust, maintainable, 
+and flexible code. Experiment with different approaches and always keep readability in mind.
+
+<Quiz quiz=0></Quiz>

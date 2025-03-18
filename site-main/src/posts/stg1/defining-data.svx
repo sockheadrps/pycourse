@@ -5,6 +5,7 @@ date: '2024-11-23'
 categories:
   - OOP
 published: true
+index: 1
 ---
 
 <script>
@@ -12,7 +13,10 @@ published: true
   import Terminal from '$components/Terminal.svelte'
   import DefinitionListEx from '$components/DefinitionListEx.svelte'
   import FlashCard from '$components/FlashCard.svelte'
+  import EmojiList from '$components/EmojiList.svelte';
 </script>
+
+
 # Primitive Data Types
 
 Referring back to our laptop abstraction, we can see there is static data associated with our model. When tied to an abstraction,
@@ -107,3 +111,57 @@ list_of_important_data = ['A', 1, 'B', 2, 'C', 3, True, None, 4.5]
 ]} />
 
 
+# Variables
+In Python, variables are symbolic names that refer to objects stored in memory. 
+They act as containers for data and are created when you assign a value to them using the assignment operator (=). 
+For example, writing x = 10 creates a variable named x that stores the integer value 10.
+
+```python
+# Boolean: represents the power state of a laptop (True for on, False for off)
+power_state = False
+
+# Integer: number of CPU cores
+cpu_cores = 4
+
+# String: brand name of the laptop, You can use single or double quotes.
+brand = "Dell"
+# or
+brand = 'Dell'
+
+# Float: battery life (in hours)
+battery_life = 2.5
+
+# Boolean: indicates if the laptop is broken
+is_broken = True
+
+# None: represents an unknown or missing value
+warranty_expiration = None
+```
+
+<Terminal>
+  <EmojiList>
+    <li>
+      <strong>Dynamic Typing: </strong>
+      <ul>
+        <li>You do not need to declare a variable’s type explicitly; Python automatically determines the data type based on the assigned value.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Naming Conventions:</strong>
+      <ul>
+        <li>Variable names should start with a letter (a–z, A–Z) or an underscore (_), followed by letters, digits, or underscores. You may not use reserved keywords (like True, False, or None) as variable names.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Mutability:</strong>
+      <ul>
+        <li>The behavior of a variable depends on the type of object it references. For instance, integers and strings are immutable, meaning that once created, their values cannot be changed. In contrast, lists and dictionaries are mutable, so their contents can be modified after assignment.</li>
+      </ul>
+    </li>
+  </EmojiList>
+</Terminal>
+
+Variables are a fundamental concept in Python programming, allowing you to store, retrieve, 
+and manipulate data as your program executes.

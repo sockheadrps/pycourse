@@ -9,6 +9,10 @@
   export { DefinitionListEx };
   import FlashCard from './FlashCard.svelte';
   export { FlashCard };
+  import Important from './Important.svelte';
+  export { Important };
+  import Quiz from './Quiz.svelte';
+  export { Quiz };
 </script>
 
 <slot />

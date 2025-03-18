@@ -1,33 +1,38 @@
 <script lang="js">
-	import { formatDate } from '$lib/utils';
-	export let data;
-
-
+  import { formatDate } from '$lib/utils';
+  import Quiz from '$components/Quiz.svelte';
+  export let data;
+  console.log("data", data);
 </script>
 
 <svelte:head>
-	<title>{data.meta.title}</title>
-	<meta property="og:type" content="article" />
-	<meta property="og:title" content={data.meta.title} />
+  <title>{data.meta.title}</title>
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content={data.meta.title} />
 </svelte:head>
 
 <article>
-	<hgroup>
-		<h1>{data.meta.title}</h1>
-		<p>Published on {formatDate(data.meta.date)}</p>
-	</hgroup>
+  <hgroup>
+    <h1>{data.meta.title}</h1>
+    <p>Published on {formatDate(data.meta.date)}</p>
+  </hgroup>
 
-	<div class="tags">
-		{#each data.meta.categories as category}
-			<span class="surface-4">&num;{category}</span>
-		{/each}
-	</div>
+  <div class="tags">
+    {#each data.meta.categories as category}
+      <span class="surface-4">&num;{category}</span>
+    {/each}
+  </div>
 
-	<div class="prose">
-		<div class="content">
-			<svelte:component this={data.content} />
-		</div>
-	</div>
+  <div class="prose">
+    <div class="content">
+      <svelte:component this={data.content} />
+    </div>
+  </div>
+
+  {#if data.quiz && data.quiz.length > 0}
+    <!-- Assuming you want the first quiz from the array -->
+    <Quiz quiz={data.quiz[0].data.default} />
+  {/if}
 </article>
 
 <style>
@@ -59,8 +64,5 @@
   .content {
     font-size: larger;
     padding: 14px;
-    
   }
-
-
 </style>

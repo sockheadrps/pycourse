@@ -1,0 +1,49 @@
+{
+  "questions": [
+    {
+      "question": "What is a conditional in programming?",
+      "answers": [
+        "A tool for handling data",
+        "A statement that executes code based on a condition",
+        "A type of loop"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "Which keyword is used in Python to start a conditional statement?",
+      "answers": [
+        "if",
+        "switch",
+        "for"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "What is the purpose of an 'elif' clause in Python?",
+      "answers": [
+        "To start a new loop",
+        "To provide additional conditions after an 'if'",
+        "To end a conditional block"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "How can you write a compact inline conditional in Python?",
+      "answers": [
+        "Using the ternary operator",
+        "Using a lambda function",
+        "Using the 'match' statement"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Which of the following is considered a best practice when writing conditionals?",
+      "answers": [
+        "Deeply nest multiple conditionals for clarity",
+        "Write clear and explicit conditions with early returns if needed",
+        "Avoid using conditionals entirely"
+      ],
+      "correct": 1
+    }
+  ]
+}

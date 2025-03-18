@@ -33,13 +33,14 @@ async function getPosts() {
    * @property {string} slug
    * @property {boolean} published
    * @property {string[]} categories
-   * @property {Array<{ depth: number, text: string }>} headings  // new property!
+   * @property {number} [index]         // provided in the markdown frontmatter
+   * @property {Array<{ depth: number, text: string }>} headings
    */
 
   /** @type {Post[]} */
   let posts = [];
 
-  // Import compiled modules with metadata
+  // Import compiled modules with metadata for .svx
   const modules = import.meta.glob('/src/posts/**/*.svx', { eager: true });
   // Import raw content for heading extraction
   const raws = import.meta.glob('/src/posts/**/*.svx', { eager: true, as: 'raw' });
@@ -68,16 +69,71 @@ async function getPosts() {
     }
   }
 
-  // Sort posts by date (newest first)
-  posts = posts.sort(
-    (first, second) => new Date(second.date).getTime() - new Date(first.date).getTime()
-  );
+  // Sort by index if present, otherwise by date, etc.
+  posts = posts.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
 
   return posts;
 }
+function parseQuizFilename(path) {
+  // e.g. path = "/src/posts/stg1/quiz-2-1.json"
+  const fileName = path.split('/').pop().replace('.json', ''); // "quiz-2-1"
+  
+  // Quick check to ensure it starts with "quiz-"
+  if (!fileName.startsWith('quiz-')) {
+    return { postIndex: null, quizIndex: null };
+  }
+
+  // fileName.split('-') => ["quiz", "2", "1"]
+  const parts = fileName.split('-');
+  return {
+    postIndex: parseInt(parts[1], 10),  // "2" -> 2
+    quizIndex: parseInt(parts[2], 10)   // "1" -> 1
+  };
+}
+
+/**
+ * Gather all quiz JSON files in /src/posts/stg[x]
+ */
+async function getQuizzes() {
+  // Import all .json quiz files in /src/posts/... subfolders
+  const quizFiles = import.meta.glob('/src/posts/**/*.json', { eager: true });
+  console.log("quizFiles", quizFiles);
+  const quizzes = [];
+
+  for (const path in quizFiles) {
+    // Each quiz file is already parsed into an object
+    const data = quizFiles[path];
+
+    // Parse the stage folder (like "stg1") if needed
+    const segments = path.split('/');
+    const postsIndex = segments.indexOf('posts');
+    let stage = '';
+    if (postsIndex !== -1 && segments.length > postsIndex + 1) {
+      stage = segments[postsIndex + 1]; // e.g. "stg1"
+    }
+
+    // Parse the postIndex and quizIndex from the filename
+    const { postIndex, quizIndex } = parseQuizFilename(path);
+
+    // Push a quiz object with indices, stage, and data
+    quizzes.push({
+      stage,
+      postIndex,
+      quizIndex,
+      data
+    });
+  }
+
+  return quizzes;
+}
+
+
+
 
 export async function GET() {
-  const posts = await getPosts();
-  console.log(posts);
-  return json(posts);
+  const posts = await getPosts();      // your existing .svx logic
+	console.log("posts", posts);
+  const quizzes = await getQuizzes();  // new quiz logic
+	console.log("quizzes", quizzes);
+  return json({ posts, quizzes });
 }

@@ -5,6 +5,7 @@ date: '2024-11-23'
 categories:
   - OOP
 published: true
+index: 0
 ---
 
 <script>
