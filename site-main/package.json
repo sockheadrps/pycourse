@@ -34,6 +34,7 @@
 	"dependencies": {
 		"@fontsource/jetbrains-mono": "^5.1.1",
 		"@fontsource/manrope": "^5.1.0",
+		"@sveltejs/adapter-node": "^5.2.12",
 		"lucide-svelte": "^0.460.1",
 		"open-props": "^1.7.7",
 		"rehype-slug": "^6.0.0",
