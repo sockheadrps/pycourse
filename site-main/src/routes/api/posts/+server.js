@@ -1,45 +1,83 @@
 import { json } from '@sveltejs/kit';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import { visit } from 'unist-util-visit';
+
+/**
+ * Extract headings from a markdown string.
+ * @param {string} markdown
+ * @returns {Array<{ depth: number, text: string }>}
+ */
+function extractHeadings(markdown) {
+  const tree = unified().use(remarkParse).parse(markdown);
+  const headings = [];
+  visit(tree, 'heading', (node) => {
+    // Extract text from heading children
+    const text = node.children
+      .filter(child => child.type === 'text')
+      .map(child => child.value)
+      .join('');
+    headings.push({
+      depth: node.depth,
+      text
+    });
+  });
+  return headings;
+}
 
 async function getPosts() {
-	/**
-	 * @typedef {Object} Post
-	 * @property {string} title - The title of the post
-	 * @property {string} date - The date of the post
-	 * @property {string} content - The content of the post
-	 * @property {string} slug - The slug of the post
-	 * @property {boolean} published - The file path
-	 * @property {string[]} categories - The categories of the post
-	 */
+  /** @typedef {Object} Post
+   * @property {string} title
+   * @property {string} date
+   * @property {string} content
+   * @property {string} slug
+   * @property {boolean} published
+   * @property {string[]} categories
+   * @property {Array<{ depth: number, text: string }>} headings  // new property!
+   */
 
-	/** @type {Post[]} */
-	let posts = [];
+  /** @type {Post[]} */
+  let posts = [];
 
-	const paths = import.meta.glob('/src/posts/*.svx', {
-		eager: true
-	});
+  // Import compiled modules with metadata
+  const modules = import.meta.glob('/src/posts/**/*.svx', { eager: true });
+  // Import raw content for heading extraction
+  const raws = import.meta.glob('/src/posts/**/*.svx', { eager: true, as: 'raw' });
 
-	/**
-	 * @property {string} file.metadata - The file path of the post
-	 */
-	for (const path in paths) {
-		/**
-		 * @type {{ metadata: Post }}
-		 */
-		const file = /** @type {{ metadata: Post }} */ (paths[path]); // JSDoc type cast
-		const slug = path.split('/').at(-1)?.replace('.svx', '') || '';
-		const metadata = file.metadata;
-		const post = { ...metadata, slug };
-		post.published && posts.push(post);
-	}
+  for (const path in modules) {
+    /** @type {{ metadata: Post }} */
+    const file = /** @type {{ metadata: Post }} */ (modules[path]);
+    const rawContent = raws[path];
+    const slug = path.split('/').at(-1)?.replace('.svx', '') || '';
+    const metadata = file.metadata;
 
-	posts = posts.sort(
-		(first, second) => new Date(second.date).getTime() - new Date(first.date).getTime()
-	);
+    // Extract the stage from the file path.
+    const segments = path.split('/');
+    const postsIndex = segments.indexOf('posts');
+    let stage = '';
+    if (postsIndex !== -1 && segments.length > postsIndex + 1) {
+      stage = segments[postsIndex + 1];
+    }
 
-	return posts;
+    // Extract headings from the raw markdown content
+    const headings = extractHeadings(rawContent);
+
+    const post = { ...metadata, slug, stage, headings };
+    if (post.published) {
+      posts.push(post);
+    }
+  }
+
+  // Sort posts by date (newest first)
+  posts = posts.sort(
+    (first, second) => new Date(second.date).getTime() - new Date(first.date).getTime()
+  );
+
+  return posts;
 }
 
 export async function GET() {
-	const posts = await getPosts();
-	return json(posts);
+  const posts = await getPosts();
+  console.log(posts);
+  return json(posts);
 }

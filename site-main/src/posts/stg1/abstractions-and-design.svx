@@ -8,8 +8,8 @@ published: true
 ---
 
 <script>
-  import Terminal from '../components/Terminal.svelte'
-  import EmojiList from '../components/EmojiList.svelte'
+  import Terminal from '$components/Terminal.svelte';
+  import EmojiList from '$components/EmojiList.svelte';
 </script>
 
 

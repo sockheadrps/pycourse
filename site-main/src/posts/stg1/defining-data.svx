@@ -8,10 +8,10 @@ published: true
 ---
 
 <script>
-  import DefinitionList from '../components/DefinitionList.svelte';
-  import Terminal from '../components/Terminal.svelte'
-  import DefinitionListEx from '../components/DefinitionListEx.svelte'
-  import FlashCard from '../components/FlashCard.svelte'
+  import DefinitionList from '$components/DefinitionList.svelte';
+  import Terminal from '$components/Terminal.svelte'
+  import DefinitionListEx from '$components/DefinitionListEx.svelte'
+  import FlashCard from '$components/FlashCard.svelte'
 </script>
 # Primitive Data Types
 
