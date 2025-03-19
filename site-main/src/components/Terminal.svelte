@@ -1,6 +1,6 @@
 <!-- src/lib/Terminal.svelte -->
 <script>
-  // No specific props needed unless you want them
+  import { fly } from 'svelte/transition';
 </script>
 
 <div class="fake-terminal">

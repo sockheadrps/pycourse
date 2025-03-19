@@ -1,6 +1,8 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { createHighlighter } from 'shiki';
+	import { fade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 
   // Props: description (array of strings), code (string), and an optional lang (default: 'python')
   export let description = [];
@@ -75,9 +77,11 @@
     </button>
   </div>
   {#if revealed && code}
-    <div class="back" class:revealed>
+    <div class="back" class:revealed in:fade={{ duration: 300, delay: 200, easing: quintOut }}>
       {#if highlightedCode}
+      {#key highlightedCode}
         <pre class="code-example"><code>{@html highlightedCode}</code></pre>
+      {/key}
       {:else}
         <p>Loading code...</p>
       {/if}

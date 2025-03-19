@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { quintOut } from 'svelte/easing';
 	let current_endpoint = $page.url.pathname.slice(1);
 	let quiz = null;
 
@@ -78,10 +79,10 @@
 	}
 </script>
 
-{#if ready}
+{#if ready && quiz}
 	{#if quiz.questions && quiz.questions.length > 0}
 		{#if !completed}
-			<div class="quiz">
+			<div class="quiz" in:fade={{ duration: 300, delay: 200, easing: quintOut }}>
 				<h2>Question {currentQuestionIndex + 1} of {quiz.questions.length}</h2>
 				<p class="question">{quiz.questions[currentQuestionIndex].question}</p>
 				<ul class="answers">

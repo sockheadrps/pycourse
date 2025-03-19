@@ -10,23 +10,6 @@
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	let ready = false;
-	onMount(() => {
-		const element = document.getElementById('element');
-
-		if (element) {
-			element.animate(
-				[
-					{ opacity: 0, transform: 'scale(0.8)' },
-					{ opacity: 1, transform: 'scale(1)' }
-				],
-				{
-					duration: 800,
-					easing: 'ease-out'
-				}
-			);
-		}
-	});
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;

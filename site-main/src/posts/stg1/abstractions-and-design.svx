@@ -1,9 +1,7 @@
 ---
 title: Abstractions and Design
 description: The basis of programming building blocks
-date: '2024-11-23'
-categories:
-  - OOP
+date: '2025-3-15'
 published: true
 index: 0
 ---
@@ -12,12 +10,14 @@ index: 0
   import Terminal from '$components/Terminal.svelte';
   import EmojiList from '$components/EmojiList.svelte';
   import Quiz from '$components/Quiz.svelte';
+  import Important from '$components/Important.svelte';
+
 
 </script>
 
 
 
-# Understanding Code and Its Structure  
+## Understanding Code and Its Structure  
 
 To understand how code is written, it might be best to first explain how it is typically structured. Before diving into that, let's consider a fundamental question:  
 
@@ -58,7 +58,8 @@ Typically, an abstraction consists of:
   </EmojiList>
 </Terminal>
 
-These methods sometimes accept **parameters**—variable data passed into the method to modify how it operates or affects the object's properties.  
+<Important>These methods sometimes accept <strong>parameters</strong>— variable data passed into the method to modify how it operates or affects the object's properties.  </Important>
+
 
 ## A Simple Example  
 

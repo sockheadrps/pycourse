@@ -4,6 +4,8 @@
   let activeIndex = items.length > 0 ? 0 : null;
   import { createHighlighter } from 'shiki';
   import { onDestroy } from 'svelte';
+	import { quintOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
 
   let highlighter;
 
@@ -72,8 +74,9 @@
 </div>
 
 {#if activeIndex !== null && items[activeIndex].code}
-  <div class="code-container">
-    <div class="code-example">
+  {#key activeIndex}
+<div class="code-container"in:fade={{ duration: 300, delay: 200, easing: quintOut }}>
+    <div class="code-example" >
       {#await highlightCode(items[activeIndex].code)}
         <p>Loading...</p>
       {:then html}
@@ -81,6 +84,7 @@
       {/await}
     </div>
   </div>
+  {/key}
 {/if}
 
 <style>

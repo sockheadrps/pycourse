@@ -1,127 +1,152 @@
 <script>
-	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
-	import { fly } from 'svelte/transition';
-	import { formatDate } from '$lib/utils';
+  import { onMount } from 'svelte';
+  import { fade, scale, fly } from 'svelte/transition';
+  import { quintIn, quintInOut, quintOut } from 'svelte/easing';
+  import { formatDate } from '$lib/utils';
 
-	/**
-	 * @typedef {Object} Heading
-	 * @property {number} depth
-	 * @property {string} text
-	 */
-	/**
-	 * @typedef {Object} Post
-	 * @property {string} title
-	 * @property {string} date
-	 * @property {string} description
-	 * @property {string} slug
-	 * @property {string} stage
-	 * @property {Heading[]} [headings]
-	 */
-	/**
-	 * @typedef {Object} PageData
-	 * @property {string} title
-	 * @property {Post[]} posts
-	 */
+  // Import the Timeline component
+  import Timeline from '../components/Timeline.svelte';
 
-	/** @type {PageData} */
-	export let data;
+  /**
+   * @typedef {Object} Heading
+   * @property {number} depth
+   * @property {string} text
+   */
+  /**
+   * @typedef {Object} Post
+   * @property {string} title
+   * @property {string} date
+   * @property {string} description
+   * @property {string} slug
+   * @property {string} stage
+   * @property {Heading[]} [headings]
+   */
+  /**
+   * @typedef {Object} PageData
+   * @property {string} title
+   * @property {Post[]} posts
+   */
 
-	let ready = false;
-	let stages = [];
-	let selectedStage = 'stg1';
-	let filteredPosts = [];
-	// The post that remains "hovered" (sticky) until a new one is hovered.
-	let hoveredPost = null;
+  /** @type {PageData} */
+  export let data;
 
-	function getStageLabel(stage) {
-		const num = stage.match(/\d+/);
-		return num ? `Stage ${num[0]}` : stage;
-	}
+  let ready = false;
+  let stages = [];
+  let selectedStage = 'stg1';
+  let filteredPosts = [];
+  let hoveredPost = null;
 
-	onMount(() => {
-		stages = Array.from(new Set(data.posts.map((post) => post.stage).filter(Boolean)));
-		if (stages.length === 0) {
-			stages = ['stg1'];
-		}
-		selectedStage = stages.includes('stg1') ? 'stg1' : stages[0];
-		filteredPosts = data.posts.filter((post) => post.stage === selectedStage);
-		ready = true;
-	});
+  // This array will feed into the Timeline component
+  let timelineSteps = [];
 
-	// Update filteredPosts when selectedStage changes.
-	$: if (ready) {
-		filteredPosts = data.posts.filter((post) => post.stage === selectedStage);
-	}
+  function getStageLabel(stage) {
+    const num = stage.match(/\d+/);
+    return num ? `Stage ${num[0]}` : stage;
+  }
+
+  // Build the array of timeline steps from your stages
+  function updateTimelineSteps() {
+    timelineSteps = stages.map((stage, i) => ({
+      label: getStageLabel(stage),
+      // Mark as "active" if it's before or equal to the selected stage
+      active: i <= stages.indexOf(selectedStage)
+    }));
+  }
+
+  onMount(() => {
+    stages = Array.from(
+      new Set(data.posts.map((post) => post.stage).filter(Boolean))
+    );
+    if (stages.length === 0) {
+      stages = ['stg1'];
+    }
+
+    // If "stg1" is present, default to that; otherwise pick the first stage
+    selectedStage = stages.includes('stg1') ? 'stg1' : stages[0];
+    filteredPosts = data.posts.filter((post) => post.stage === selectedStage);
+
+    // Initialize the timeline steps
+    updateTimelineSteps();
+
+    ready = true;
+  });
+
+  // Whenever selectedStage changes, rebuild the timeline steps
+  // and re-filter the posts
+  $: if (ready) {
+    filteredPosts = data.posts.filter((post) => post.stage === selectedStage);
+    updateTimelineSteps();
+  }
+
+  // Called when a timeline bubble is clicked
+  function handleSelect(event) {
+    const { index } = event.detail;
+    // Set the selected stage based on the clicked bubble index
+    selectedStage = stages[index];
+		console.log(selectedStage);
+    hoveredPost = null; // reset any sticky hover
+  }
 </script>
 
 <svelte:head>
 	<title>{data.title}</title>
 </svelte:head>
 
-<!-- Stage Navigation Bar -->
-<nav class="stage-bar">
-	{#if ready}
-		{#each stages as stage}
-			<button
-				class:active={selectedStage === stage}
-				on:click={() => {
-					hoveredPost = null; // reset sticky hover on stage change
-					selectedStage = stage;
-				}}
-			>
-				{getStageLabel(stage)}
-			</button>
-		{/each}
-	{/if}
-</nav>
+<!-- Replace the stage nav bar with the Timeline component -->
+<Timeline steps={timelineSteps} on:select={handleSelect} />
+
+
 
 {#if ready}
-	<div class="layout" in:fade|local={{ y: 20, duration: 300 }} out:fade|local={{ y: -20, duration: 300 }}>
-		<section class="posts-container">
-			<h1>{data.title}</h1>
-			{#key selectedStage}
-				<ul
-					class="posts"
-					in:fade|local={{ delay: 200, duration: 200 }}
-
-				>
-					{#each filteredPosts as post}
-						<li
-							on:mouseenter={() => (hoveredPost = post)}
-							class:hovered={hoveredPost && hoveredPost.slug === post.slug}
-						>
-							<a class="post" href={post.slug}>
-								<h2 class="post-title">{post.title}</h2>
-								<time class="post-date">{formatDate(post.date)}</time>
-								<p class="post-description">{post.description}</p>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			{/key}
-		</section>
-
-		<!-- The sidebar is always rendered (keeping layout width constant)
-		     Its content fades in/out. -->
-		{#if hoveredPost && hoveredPost.headings && hoveredPost.headings.length > 0}
-			<aside class="headings-sidebar">
-				<div in:fade|local={{ delay: 200, duration: 200 }}>
-					<h2>{hoveredPost.title}</h2>
-					<ul>
-						{#each hoveredPost.headings as heading}
-							<li class="heading-item" style="margin-left: {(heading.depth - 1) * 10}px;">
-								{heading.text}
+	<div class="layout-holder">
+		<div class="layout">
+			<section class="posts-container">
+				<h1>{data.title}</h1>
+				{#key selectedStage}
+					<ul class="posts" in:fly={{ duration: 200, delay: 300, easing: quintOut }}>
+						{#each filteredPosts as post}
+							<li
+								on:mouseenter={() => (hoveredPost = post)}
+								class:hovered={hoveredPost && hoveredPost.slug === post.slug}
+							>
+								<a class="post" href={post.slug}>
+									<h2 class="post-title">{post.title}</h2>
+									<time class="post-date">{formatDate(post.date)}</time>
+									<p class="post-description">{post.description}</p>
+								</a>
 							</li>
 						{/each}
 					</ul>
-				</div>
-			</aside>
-		{/if}
+				{/key}
+			</section>
+
+			{#if hoveredPost && hoveredPost.headings && hoveredPost.headings.length > 0}
+				{#key hoveredPost.slug}
+					<aside
+						class="headings-sidebar"
+
+					>
+						<div>
+							<h2 in:fade={{ duration: 200, delay: 300, easing: quintOut }}>{hoveredPost.title}</h2>
+							<ul in:fade={{ duration: 200, delay: 300, easing: quintOut }}>
+								{#each hoveredPost.headings as heading}
+									<li class="heading-item" style="margin-left: {(heading.depth - 1) * 10}px;" >
+										{heading.text}
+									</li>
+								{/each}
+							</ul>
+						</div>
+					</aside>
+				{/key}
+			{/if}
+		</div>
 	</div>
 {/if}
 
 <style>
+	.layout-holder {
+		max-height: 35rem;
+	}
 	button {
 		all: unset;
 	}
@@ -202,6 +227,7 @@
 		overflow-y: auto;
 		box-sizing: border-box;
 		margin-top: 1rem;
+		z-index: 10;
 	}
 	.headings-sidebar h2 {
 		margin: 0 0 1rem;
@@ -273,7 +299,6 @@
 			width: 100%;
 			padding: 0 1rem;
 			grid-template-columns: 1fr;
-      
 		}
 
 		.posts-container {
@@ -298,4 +323,3 @@
 		}
 	}
 </style>
-

@@ -13,6 +13,8 @@
   export { Important };
   import Quiz from './Quiz.svelte';
   export { Quiz };
+  import Timeline from './Timeline.svelte';
+  export { Timeline };
 </script>
 
 <slot />

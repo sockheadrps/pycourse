@@ -1,6 +1,5 @@
 <script lang="js">
   import { formatDate } from '$lib/utils';
-  import Quiz from '$components/Quiz.svelte';
   import { setContext } from 'svelte';
 
   export let data;
