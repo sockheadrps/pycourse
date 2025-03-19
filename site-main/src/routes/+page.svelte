@@ -266,4 +266,36 @@
 		color: #fff;
 		text-decoration: underline;
 	}
+
+	/* Media queries for phones */
+	@media (max-width: 600px) {
+		.layout {
+			width: 100%;
+			padding: 0 1rem;
+			grid-template-columns: 1fr;
+      
+		}
+
+		.posts-container {
+			grid-column: 1 / -1;
+		}
+
+		.headings-sidebar {
+			grid-column: 1 / -1;
+			margin-top: 1rem;
+		}
+
+		.stage-bar {
+			flex-direction: column;
+			width: 100%;
+			margin: 1rem 0;
+		}
+
+		.stage-bar button {
+			width: 100%;
+			text-align: center;
+			margin: 0.25rem 0;
+		}
+	}
 </style>
+

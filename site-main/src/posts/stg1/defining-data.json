@@ -1,0 +1,20 @@
+[
+	{
+		"questions": [
+			{
+				"question": "Which of the following describes an object property?",
+				"answers": [
+					"A variable that stores a value associated with an object",
+					"An action that can be performed on an object",
+					"A function that returns a value"
+				],
+				"correct": 0
+			},
+			{
+				"question": "Which of the following could be a method on a Laptop?",
+				"answers": ["brightness=100", "reboot()", "Laptop = Asus"],
+				"correct": 1
+			}
+		]
+	}
+]

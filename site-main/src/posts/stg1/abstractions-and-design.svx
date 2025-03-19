@@ -11,6 +11,8 @@ index: 0
 <script>
   import Terminal from '$components/Terminal.svelte';
   import EmojiList from '$components/EmojiList.svelte';
+  import Quiz from '$components/Quiz.svelte';
+
 </script>
 
 
@@ -78,3 +80,6 @@ Laptop:
  This abstraction shows that the **Laptop** object has an internal state (**power_state**) that it keeps track of, even when changes occur. The transformation of this state happens through the **toggle_power** method, which modifies the property based on a defined set of instructions.  
 
 This is a basic example, but it provides a starting point for understanding how we use abstractions to represent things and ideas in code. As we build upon these concepts, we can model increasingly complex systems and interactions, allowing us to write more powerful and efficient programs.
+
+
+<Quiz quiz_index=0></Quiz>

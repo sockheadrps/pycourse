@@ -14,6 +14,7 @@ index: 1
   import DefinitionListEx from '$components/DefinitionListEx.svelte'
   import FlashCard from '$components/FlashCard.svelte'
   import EmojiList from '$components/EmojiList.svelte';
+  import Quiz from '$components/Quiz.svelte';
 </script>
 
 
@@ -165,3 +166,6 @@ warranty_expiration = None
 
 Variables are a fundamental concept in Python programming, allowing you to store, retrieve, 
 and manipulate data as your program executes.
+
+
+<Quiz quiz_index=0></Quiz>

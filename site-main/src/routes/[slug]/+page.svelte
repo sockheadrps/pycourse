@@ -1,8 +1,14 @@
 <script lang="js">
   import { formatDate } from '$lib/utils';
   import Quiz from '$components/Quiz.svelte';
+  import { setContext } from 'svelte';
+
   export let data;
-  console.log("data", data);
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    setContext('quiz', data.quiz);
+  });
 </script>
 
 <svelte:head>
@@ -28,21 +34,22 @@
       <svelte:component this={data.content} />
     </div>
   </div>
-
+<!-- 
   {#if data.quiz && data.quiz.length > 0}
-    <!-- Assuming you want the first quiz from the array -->
     <Quiz quiz={data.quiz[0].data.default} />
-  {/if}
+  {/if} -->
 </article>
 
 <style>
   article {
     color: var(--gray-5);
     width: 1200px;
+    margin: 0 auto;
   }
 
   h1 {
     text-transform: capitalize;
+    font-size: 2rem;
   }
 
   h1 + p {
@@ -64,5 +71,35 @@
   .content {
     font-size: larger;
     padding: 14px;
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 767px) {
+    article {
+      width: 100%;
+      padding: 1rem;
+      margin-left: auto;
+			margin-right: auto;
+    }
+    h1 {
+      font-size: 1.5rem;
+    }
+    h1 + p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .content {
+      font-size: 1rem;
+      padding: 10px;
+    }
+    .tags {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .tags > * {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+    }
   }
 </style>

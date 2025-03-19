@@ -32,6 +32,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@animotion/core": "^1.1.2",
 		"@fontsource/jetbrains-mono": "^5.1.1",
 		"@fontsource/manrope": "^5.1.0",
 		"@sveltejs/adapter-node": "^5.2.12",
