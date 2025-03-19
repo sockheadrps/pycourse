@@ -27,11 +27,12 @@
 	async function load() {
 		const response = await fetch('/api/quiz', {
 			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ endpoint: $page.url.pathname })
 		});
 		const { quizzes } = await response.json();
 		let keys = Object.keys(quizzes);
-    console.log("quizzes", quizzes)
+		console.log('quizzes', quizzes);
 		let target_quiz_name = '';
 		for (let key of keys) {
 			let target = key.slice(0, -5);
