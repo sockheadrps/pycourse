@@ -15,6 +15,12 @@
   export { Quiz };
   import Timeline from './Timeline.svelte';
   export { Timeline };
+  import ListComp from './ListComp.svelte';
+  export { ListComp };
+  import VerticalHighlight from './VerticalHighlight.svelte';
+  export { VerticalHighlight };
+  import GithubButton from './GithubButton.svelte';
+  export { GithubButton };
 </script>
 
 <slot />

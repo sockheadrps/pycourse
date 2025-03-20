@@ -92,7 +92,7 @@
     all: unset;
   }
   .definition-list {
-    background-color: var(--stone-11);
+    background-color: #24283b;
     color: #eee;
     padding: 1.5rem;
     border-radius: 0.5rem;
@@ -133,7 +133,7 @@
   }
   /* Code example styling */
   .code-example :global(pre) {
-    background-color: var(--stone-12) !important;
+    background-color: #1a1b26 !important;
     padding: 1rem;
     border-radius: 0.5rem;
     margin-top: 1rem;

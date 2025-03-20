@@ -118,92 +118,119 @@
 	button {
 		all: unset;
 	}
+
 	.quiz {
-		background: rgba(255, 255, 255, 0.1);
-		padding: 1.5rem;
+		background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(50, 50, 50, 0.06) 100%);
+		padding: 2rem;
 		border-radius: 8px;
-		max-width: 600px;
-		margin: 1rem auto;
+		margin: 2rem auto;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		color: #fff;
-		font-family: sans-serif;
+		font-family: 'Open Sans', sans-serif;
 		text-align: center;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
+	/* Quiz heading */
 	.quiz h2 {
 		all: unset;
-		margin-top: 0;
-		font-size: 1.2rem;
-		margin-bottom: 0.75rem;
+		margin: 0 0 1rem;
+		font-size: 1.5rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
 	}
 
+	/* Individual question text */
 	.question {
-		font-size: 1rem;
-		margin-bottom: 1rem;
+		font-size: 1.2rem;
+		margin-bottom: 1.5rem;
+		font-weight: 500;
 	}
 
+	/* Container for answer choices */
 	.answers {
 		all: unset;
 		list-style: none;
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
-		justify-content: space-between;
+		gap: 0.75rem;
 		align-items: center;
-	}
-
-	.answers li {
-		display: flex;
-		margin-bottom: 0.5rem;
 		width: 100%;
 	}
 
+	/* Each list item wraps a button */
+	.answers li {
+		width: 100%;
+	}
+
+	/* Answer choice buttons */
 	.answers button {
 		width: 100%;
-		padding: 1rem;
-		border: none;
-		border-radius: 4px;
+		padding: 0.75rem 1rem;
+		border-radius: 6px;
 		background-color: #444;
 		color: #fff;
 		cursor: pointer;
-		transition: background-color 0.2s ease;
+		font-size: 1rem;
+		transition:
+			background-color 0.2s ease,
+			transform 0.2s ease;
+		text-align: center;
+		font-weight: 500;
 	}
 
 	.answers button:hover:not(:disabled) {
-		background-color: #555;
+		background-color: #666;
+		transform: scale(1.02);
 	}
 
+	/* Highlight for the selected answer */
 	.answers button.selected {
 		background-color: #0070f3;
+		transform: scale(1.02);
 	}
 
+	/* Disabled buttons become semi-transparent and non-clickable */
 	.answers button:disabled {
 		opacity: 0.7;
 		cursor: not-allowed;
 	}
 
+	/* Feedback message (e.g., correct/incorrect) */
 	.feedback {
-		font-size: 0.95rem;
-		margin-bottom: 1rem;
+		font-size: 1rem;
+		margin: 1rem 0;
+		font-style: italic;
 	}
 
+	/* "Next" or "Submit" button at the bottom */
 	.next {
 		padding: 0.75rem 1rem;
-		border: none;
-		border-radius: 4px;
+		border-radius: 6px;
 		background-color: #0070f3;
 		color: #fff;
 		cursor: pointer;
-		transition: background-color 0.2s ease;
+		transition:
+			background-color 0.2s ease,
+			transform 0.2s ease;
+		margin-top: 1rem;
+		display: inline-block;
+		font-weight: 600;
+		text-align: center;
 	}
 
 	.next:hover {
 		background-color: #005bb5;
+		transform: scale(1.02);
 	}
 
+	/* Final score display */
 	.score-card {
-		background: rgba(255, 255, 255, 0.1);
+		background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(50, 50, 50, 0.06) 100%);
 		padding: 2rem;
 		border-radius: 8px;
 		max-width: 600px;
@@ -211,17 +238,79 @@
 		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 		color: #fff;
 		text-align: center;
-		font-family: sans-serif;
+		font-family: 'Open Sans', sans-serif;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	.score-card h2 {
 		all: unset;
 		margin: 0 0 1rem;
-		font-size: 1.4rem;
+		font-size: 1.5rem;
+		font-weight: 700;
 	}
 
 	.score-card p {
-		font-size: 1rem;
-		margin: 0.5rem 0;
+		font-size: 1.1rem;
+		margin: 0.75rem 0;
+	}
+
+	.quiz-container {
+		background-color: var(--surface-2);
+		padding: 1rem;
+		border-radius: 8px;
+		margin: 2rem 0;
+		border: 1px solid var(--border);
+		box-shadow: 0 2px 4px hsl(var(--surface-shadow) / var(--shadow-strength));
+	}
+
+	.question {
+		color: var(--text-1);
+		margin-bottom: 1rem;
+	}
+
+	.answers {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	button {
+		background-color: var(--surface-3);
+		color: var(--text-1);
+		border: 1px solid var(--surface-4);
+		padding: 0.5rem 1rem;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+
+	button:hover {
+		background-color: var(--surface-4);
+	}
+
+	.feedback {
+		margin-top: 1rem;
+		padding: 0.5rem;
+		border-radius: 4px;
+		color: var(--text-1);
+		background-color: var(--surface-3);
+	}
+
+	.feedback.correct {
+		color: var(--brand);
+	}
+
+	.score {
+		color: var(--brand);
+		font-size: 1.2rem;
+		margin-top: 1rem;
+	}
+
+	button.selected {
+		background-color: var(--brand);
+		color: var(--text-1);
 	}
 </style>

@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.svx": "markdown"
+  },
+  "editor.languageAssociations": {
+    "*.svx": ["markdown", "svelte"]
+  }
+}

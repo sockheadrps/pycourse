@@ -10,7 +10,7 @@
 
 <style>
   .fake-terminal {
-    background-color: #2e2e2e;
+    background-color: #24283b;
     color: #eee;
     padding: 1.5rem 1rem;
     border-radius: 0.5rem;

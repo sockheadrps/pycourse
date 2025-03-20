@@ -12,12 +12,9 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@code-hike/mdx": "^0.9.0",
 		"@mdx-js/rollup": "^3.1.0",
 		"@shikijs/rehype": "^1.23.1",
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/adapter-static": "^2.0.1",
-		"@sveltejs/kit": "^1.27.4",
+		"@sveltejs/adapter-node": "^1.1.0",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-svelte": "^2.30.0",
@@ -25,23 +22,20 @@
 		"prettier": "^3.0.0",
 		"prettier-plugin-svelte": "^3.0.0",
 		"shiki": "^1.23.1",
-		"svelte": "^5.2.7",
+		"svelte": "^4.2.19",
 		"svelte-check": "^3.6.0",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2"
 	},
 	"type": "module",
 	"dependencies": {
-		"@animotion/core": "^1.1.2",
-		"@fontsource/jetbrains-mono": "^5.1.1",
+		"@fontsource/jetbrains-mono": "^4.1.1",
 		"@fontsource/manrope": "^5.1.0",
-		"@sveltejs/adapter-node": "^5.2.12",
 		"lucide-svelte": "^0.460.1",
 		"open-props": "^1.7.7",
 		"rehype-slug": "^6.0.0",
 		"remark-parse": "^11.0.0",
 		"remark-toc": "^9.0.0",
-		"shiki-magic-move": "^1.1.0",
 		"unified": "^11.0.5",
 		"unist-util-visit": "^5.0.0"
 	}

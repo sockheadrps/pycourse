@@ -2,8 +2,11 @@
 title: Abstractions and Design
 description: The basis of programming building blocks
 date: '2025-3-15'
+categories:
+  - OOP
 published: true
 index: 0
+author: 'sockheadrps'
 ---
 
 <script>
@@ -11,6 +14,7 @@ index: 0
   import EmojiList from '$components/EmojiList.svelte';
   import Quiz from '$components/Quiz.svelte';
   import Important from '$components/Important.svelte';
+  
 
 
 </script>
@@ -25,7 +29,7 @@ To understand how code is written, it might be best to first explain how it is t
 
 Simply put, we write code to accomplish tasks. Code, like any other tool, is designed to solve problems. When used correctly, it can be leveraged to perform a wide range of functions. While code is often associated with logic and mathematics, it extends far beyond just solving numerical problems—it's used in everything from web development to artificial intelligence.  
 
-The way we use code to solve problems is through **abstractions**.  
+### The way we use code to solve problems is through **abstractions**.  
 
 ## What is an Abstraction?  
 
@@ -78,7 +82,7 @@ Laptop:
     toggle_power():
       power_state = inverse of current power_state
  ```
- This abstraction shows that the **Laptop** object has an internal state (**power_state**) that it keeps track of, even when changes occur. The transformation of this state happens through the **toggle_power** method, which modifies the property based on a defined set of instructions.  
+This abstraction shows that the **Laptop** object has an internal state (**power_state**) that it keeps track of, even when changes occur. The transformation of this state happens through the **toggle_power** method, which modifies the property based on a defined set of instructions.  
 
 This is a basic example, but it provides a starting point for understanding how we use abstractions to represent things and ideas in code. As we build upon these concepts, we can model increasingly complex systems and interactions, allowing us to write more powerful and efficient programs.
 

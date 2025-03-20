@@ -6,6 +6,7 @@ categories:
   - OOP
 published: true
 index: 2
+author: 'sockheadrps'
 ---
 
 <script>

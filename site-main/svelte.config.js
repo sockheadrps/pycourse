@@ -1,8 +1,4 @@
-// import adapter from '@sveltejs/adapter-auto'
-// import adapter from '@sveltejs/adapter-static'
 import adapter from '@sveltejs/adapter-node'
-
-
 
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import { fileURLToPath } from 'url';
@@ -30,7 +26,10 @@ const mdsvexOptions = {
 				langs: ['javascript', 'typescript']
 			})
 			await highlighter.loadLanguage('javascript', 'python')
-			const html = escapeSvelte(highlighter.codeToHtml(code, { lang, theme: 'tokyo-night' }))
+			// Modify the theme to use 24283b for background
+			const theme = highlighter.getTheme('tokyo-night')
+			theme.bg = '#24283b'
+			const html = escapeSvelte(highlighter.codeToHtml(code, { lang, theme }))
 			return `{@html \`${html}\` }`
 		}
 	},

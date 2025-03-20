@@ -1,0 +1,100 @@
+---
+title: Loops 
+description: Cyclical code execution
+date: '2024-11-23'
+categories:
+  - OOP
+published: true
+index: 3
+author: 'sockheadrps'
+---
+
+
+<script>
+  import DefinitionList from '$components/DefinitionList.svelte';
+  import DefinitionListEx from '$components/DefinitionListEx.svelte';
+  import FlashCard from '$components/FlashCard.svelte';
+  import Important from '$components/Important.svelte';
+  import Quiz from '$components/Quiz.svelte';
+  import ListComp from '$components/ListComp.svelte';
+  import VerticalHighlight from '$components/VerticalHighlight.svelte';
+
+</script>
+
+
+
+# Code Executes Exactly as Written
+When you write a Python program, the interpreter does exactly what you tell it to do—nothing more and nothing less.
+Once your program reaches the end of your script (the bottom of the file), execution stops. This behavior is perfectly 
+fine when all of your tasks are done. However, if you need the program to keep doing something beyond that point, you 
+need a way to repeat certain instructions. This is where looping comes in.
+
+## What Is Looping?
+Looping is simply the act of repeating a set of instructions until a particular condition changes or tells the loop to 
+stop. In code, that “condition” could be:
+ <VerticalHighlight >
+  <div>A counter / limit (e.g., “run this set of instructions 100 times”).</div>
+  <div>A logical expression (e.g., “keep looping as long as this variable is below 10”).</div>
+  <div>User input (e.g., “ask the user if they want to continue, and stop if they say no”).</div>
+</VerticalHighlight>
+
+If no condition ever signals the program to exit the loop, you’ll end up with what’s called an infinite loop—a loop that never terminates on its own. 
+In that case, it’s usually the operating system or a manual interruption (like pressing Ctrl + C in a terminal) that stops the Python interpreter from continuing.
+
+## The significance of Loops
+Loops allow us to automate repetitive tasks and manage persistent or ongoing processes in our programs. They’re a powerful tool because they let you write instructions once, 
+then reuse them as many times as you need without writing out each repeated step manually. Theyre a core featutre of programming that allows for processes like
+continuously reading data from a sensor, or checking for user input.
+
+## Basic Looping Constructs in Python
+#### While loop
+
+```python
+count = 0
+while count < 5:
+    print("Count is:", count)
+    count += 1
+```
+
+<Important>This loop repeats as long as count less than 5. Once count reaches 5, the condition count less than 5 is no longer true, and the loop stops.</Important>
+
+#### For Loop
+```python
+for i in range(5):
+    print("Index:", i)
+```
+
+<Important>This loop runs the body for each number in range(5), which yields 0, 1, 2, 3, 4. Once it has looped over these five values, it automatically stops. </Important>
+
+### Break and Continue
+
+```python
+for i in range(10):
+    if i == 3:
+        break  # Stop the loop entirely.
+    elif i == 1:
+        continue  # Skip the rest of this loop iteration. 
+    print("Value of i:", i)
+```
+
+<Important>Break does exactly as it implies. It breaks the loop, and exits execution of the loop. Continue stops execution, skipping all control flow and proceedes to finish that loop, and the beging the next loop. </Important>
+
+### Logical Concepts
+<ListComp
+  items={[
+    {
+      term: 'Break',
+      definition: 'A loop repeats a block of instructions until a condition changes or a special statement (break) causes it to exit.',
+    },
+    {
+      term: 'Infinite Loop',
+      definition: 'If no exit condition exists, the loop never terminates on its own, leading to an infinite loop',
+    },
+    {
+      term: 'Types of Loops',
+      definition: 'Python provides powerful looping constructs, such as while and for, to handle a variety of repetitive tasks.'
+    }
+  ]}
+/>
+
+<Quiz quiz_index=0></Quiz>

@@ -10,7 +10,6 @@
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
 
@@ -25,7 +24,7 @@
 
 <div class="layout">
 	<Header />
-	<main>
+	<main class="container">
 		<div id="element"><slot /></div>
 	</main>
 	<Footer />
@@ -33,14 +32,30 @@
 
 <style>
 	.layout {
-		display: grid;
+		display: flex;
+		flex-direction: column;
 		min-height: 100vh;
-		grid-template-rows: auto 1fr auto;
 		margin-inline: auto;
 		padding-inline: var(--size-6);
+		background-color: var(--surface-4);
+		padding-top: 2.5rem;
 	}
 
+	.container {
+		flex: 1;
+		margin-top: 2rem;
+		padding: 0 1rem;
+		max-width: 1200px;
+		margin-left: auto;
+		margin-right: auto;
+	}
 
+	@media (min-width: 768px) {
+		.container {
+			margin-top: 4rem;
+			padding: 0 2rem;
+		}
+	}
 
 	@keyframes slideInFromLeft {
 		0% {
@@ -56,6 +71,4 @@
 	.slide-in-left {
 		animation: slideInFromLeft 0.6s ease-out forwards;
 	}
-
-
 </style>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { fade, scale, fly } from 'svelte/transition';
   import { quintIn, quintInOut, quintOut } from 'svelte/easing';
@@ -12,6 +12,11 @@
    * @property {number} depth
    * @property {string} text
    */
+  interface Heading {
+    depth: number;
+    text: string;
+  }
+
   /**
    * @typedef {Object} Post
    * @property {string} title
@@ -21,31 +26,43 @@
    * @property {string} stage
    * @property {Heading[]} [headings]
    */
+  interface Post {
+    title: string;
+    date: string;
+    description: string;
+    slug: string;
+    stage: string;
+    headings?: Heading[];
+  }
+
   /**
    * @typedef {Object} PageData
    * @property {string} title
    * @property {Post[]} posts
    */
+  interface PageData {
+    title: string;
+    posts: Post[];
+  }
 
-  /** @type {PageData} */
-  export let data;
+  export let data: PageData;
 
   let ready = false;
-  let stages = [];
+  let stages: string[] = [];
   let selectedStage = 'stg1';
-  let filteredPosts = [];
-  let hoveredPost = null;
+  let filteredPosts: Post[] = [];
+  let hoveredPost: Post | null = null;
 
   // This array will feed into the Timeline component
-  let timelineSteps = [];
+  let timelineSteps: { label: string; active: boolean }[] = [];
 
-  function getStageLabel(stage) {
+  function getStageLabel(stage: string): string {
     const num = stage.match(/\d+/);
     return num ? `Stage ${num[0]}` : stage;
   }
 
   // Build the array of timeline steps from your stages
-  function updateTimelineSteps() {
+  function updateTimelineSteps(): void {
     timelineSteps = stages.map((stage, i) => ({
       label: getStageLabel(stage),
       // Mark as "active" if it's before or equal to the selected stage
@@ -69,6 +86,7 @@
     updateTimelineSteps();
 
     ready = true;
+		console.log(data.posts);
   });
 
   // Whenever selectedStage changes, rebuild the timeline steps
@@ -79,7 +97,7 @@
   }
 
   // Called when a timeline bubble is clicked
-  function handleSelect(event) {
+  function handleSelect(event: CustomEvent<{ index: number }>): void {
     const { index } = event.detail;
     // Set the selected stage based on the clicked bubble index
     selectedStage = stages[index];
@@ -100,8 +118,7 @@
 {#if ready}
 	<div class="layout-holder">
 		<div class="layout">
-			<section class="posts-container">
-				<h1>{data.title}</h1>
+			<section class="posts-container"> 	
 				{#key selectedStage}
 					<ul class="posts" in:fly={{ duration: 200, delay: 300, easing: quintOut }}>
 						{#each filteredPosts as post}
@@ -177,6 +194,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		margin-top: 1rem;
 	}
 
 	/* Post styling */
@@ -186,7 +204,6 @@
 		border: 1px solid #444;
 		border-radius: 4px;
 		background-color: #1a1a1a;
-		color: #fff;
 		text-decoration: none;
 		transition:
 			transform 0.2s ease,
@@ -205,14 +222,16 @@
 	.post-title {
 		margin: 0 0 0.5rem;
 		font-size: 1.25rem;
+		color: var(--blue-4);
 	}
 	.post-date {
 		display: block;
 		margin-bottom: 0.5rem;
-		color: #999;
+		color: var(--text-2);
 	}
 	.post-description {
 		margin: 0;
+		color: var(--stone-5);
 	}
 
 	/* Headings sidebar takes 2/3 of the space */

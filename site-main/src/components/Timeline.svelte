@@ -71,7 +71,7 @@
 
   /* Highlight “active” steps */
   .timeline-bubble.active {
-    background: #0b1251; /* pink-ish color */
+    background: var(--blue-9); /* pink-ish color */
     border-color: #004d8c;
     color: #fff;
   }

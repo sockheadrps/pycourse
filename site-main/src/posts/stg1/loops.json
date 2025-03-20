@@ -1,0 +1,42 @@
+[
+  {
+    "questions": [
+      {
+        "question": "Which of the following best describes a while loop in Python?",
+        "answers": [
+          "It iterates over a given range of numbers automatically.",
+          "It repeats until a certain condition is no longer true.",
+          "It only runs once and then stops."
+        ],
+        "correct": 1
+      },
+      {
+        "question": "What does the `continue` statement do within a loop?",
+        "answers": [
+          "It ends the loop immediately, skipping all remaining iterations.",
+          "It skips the remainder of the current iteration and continues with the next.",
+          "It has no effect unless used within a function."
+        ],
+        "correct": 1
+      },
+      {
+        "question": "Which statement about `break` is correct?",
+        "answers": [
+          "It only works inside a `while` loop, not a `for` loop.",
+          "It immediately stops the loop and exits its block.",
+          "It restarts the loop from the beginning."
+        ],
+        "correct": 1
+      },
+      {
+        "question": "What happens if a loop has no exit condition or `break`?",
+        "answers": [
+          "It will gracefully stop after one iteration.",
+          "It results in an infinite loop unless externally interrupted.",
+          "It automatically converts into a `for` loop."
+        ],
+        "correct": 1
+      }
+    ]
+  }
+]

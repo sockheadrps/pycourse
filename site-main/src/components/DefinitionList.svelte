@@ -45,7 +45,7 @@
 
 <style>
 	.definition-list {
-		background-color: var(--stone-11);
+		background-color: #24283b;
 		color: #eee;
 		padding: 1.5rem;
 		border-radius: 0.5rem;

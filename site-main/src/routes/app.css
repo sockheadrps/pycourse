@@ -6,34 +6,36 @@
 }
 
 body {
-	height: 100svh;
-	display: grid;
-	place-content: center;
 	font-family: 'Monaspace Neon', monospace;
-	background-color: oklch(23.66% 0.02 271.79);
+	font-size: 1.2rem;
 }
 
+
+
 pre {
-	font-size: 1rem;
-	min-width: 80%;
+	font-size: 1.2rem;
+	min-width: 100%;
 }
 
 html,
 body {
 	margin: 0;
-	overflow-y: auto; /* or scroll */
 }
+
+p {
+	color: var(--blue-2);
+	font-size: 1.5rem;
+}
+
 
 /* Media queries for phones */
 @media (max-width: 767px) {
 	
 	body {
-		font-size: 0.9rem;
 		padding: 1rem;
 		
 	}
 	pre {
-		font-size: 0.9rem;
 		min-width: 100%;
 	}
 
@@ -42,8 +44,11 @@ body {
 	}
 	code {
 		white-space : pre-wrap !important;
+		width: 100%;
 	}
 	
 
 
 }
+
+box-shadow: 0 2px 4px hsl(var(--surface-shadow-dim) / var(--shadow-strength-dim));
