@@ -175,6 +175,7 @@
 		align-items: flex-start;
 		box-sizing: border-box;
 		overflow-y: auto;
+		
 	}
 
 	/* Posts container takes 1/3 of the space */
@@ -210,6 +211,8 @@
 			transform 0.2s ease,
 			box-shadow 0.2s ease;
 		box-sizing: border-box;
+		margin-bottom: 1rem;
+		
 	}
 	.post:hover {
 		transform: translateY(-2px);

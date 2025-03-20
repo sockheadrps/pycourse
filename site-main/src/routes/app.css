@@ -13,19 +13,18 @@ body {
 
 
 pre {
-	font-size: 1.2rem;
+	font-size: 1.1rem;
 	min-width: 100%;
 }
 
 html,
 body {
 	margin: 0;
-	nma
 }
 
 p {
 	color: var(--blue-2);
-	font-size: 1.5rem;
+	font-size: 1.25rem;
 }
 
 

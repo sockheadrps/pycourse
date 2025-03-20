@@ -42,6 +42,7 @@
 		width: 1200px;
 		margin-top: 2rem;
     margin-bottom: 5rem;
+    
 	}
   
 
@@ -54,11 +55,13 @@
 		justify-content: space-between;
 		align-items: center;
 		border-bottom: 1px solid var(--surface-2);
-	}
+    margin:0;
+    padding:0;
+  }
 
 	.post-title {
 		color: var(--stone-5);
-		font-size: 2rem;
+		font-size: 2.5rem;
 		width: 100%;
 		max-width: 100%;
 	}
@@ -66,14 +69,22 @@
 	.tags {
 		display: flex;
 		gap: var(--size-3);
-		margin-top: var(--size-7);
 	}
 
 	.tags > * {
 		padding: var(--size-2) var(--size-3);
 		border-radius: var(--radius-round);
 		background-color: var(--surface-2);
+    margin-top: -2rem;
+
 	}
+
+  p {
+    font-size: .9rem;
+    height: 100%;
+    margin-top: -3rem;
+    color: var(--stone-7);
+  }
 
 	/* Mobile Styles */
 	@media (max-width: 767px) {

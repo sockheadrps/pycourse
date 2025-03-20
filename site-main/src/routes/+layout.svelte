@@ -36,12 +36,6 @@
   margin: 0 auto;
   padding: 0 2rem;
   display: grid;
-
-  /* Three rows: header, content, footer. 
-     If you still want two columns for the content area, 
-     nest another grid in the “content” row or just keep 
-     your existing approach there. */
-
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 1fr;
   gap: 0;
