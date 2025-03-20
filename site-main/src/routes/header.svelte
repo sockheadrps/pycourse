@@ -23,7 +23,6 @@
 		padding-top: 1rem;
 		padding-bottom: 1rem;
 		margin-bottom: 1rem;
-		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 		position: fixed;
 		top: 0;
 		left: 0;

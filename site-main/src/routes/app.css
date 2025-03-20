@@ -20,6 +20,7 @@ pre {
 html,
 body {
 	margin: 0;
+	nma
 }
 
 p {
@@ -50,5 +51,3 @@ p {
 
 
 }
-
-box-shadow: 0 2px 4px hsl(var(--surface-shadow-dim) / var(--shadow-strength-dim));

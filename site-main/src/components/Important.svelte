@@ -71,7 +71,7 @@
   }
 
   .info-bar {
-    background: linear-gradient(120deg, #0c267d31 0%, #091d5f31 100%);
+    background: linear-gradient(120deg, var(--orange-7) 0%, var(--orange-4) 100%);
     background-blend-mode: overlay;
     background-repeat: no-repeat;
     background-size: cover;
@@ -87,7 +87,8 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--blue-10);
+
   }
 
   .info-content {

@@ -40,8 +40,10 @@
 <style>
 	article {
 		width: 1200px;
-		margin: 0 auto;
+		margin-top: 2rem;
+    margin-bottom: 5rem;
 	}
+  
 
   .github-button-container {
     margin-top: 1rem;

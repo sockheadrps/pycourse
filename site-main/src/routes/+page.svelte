@@ -53,7 +53,6 @@
   let filteredPosts: Post[] = [];
   let hoveredPost: Post | null = null;
 
-  // This array will feed into the Timeline component
   let timelineSteps: { label: string; active: boolean }[] = [];
 
   function getStageLabel(stage: string): string {
@@ -102,7 +101,7 @@
     // Set the selected stage based on the clicked bubble index
     selectedStage = stages[index];
 		console.log(selectedStage);
-    hoveredPost = null; // reset any sticky hover
+    hoveredPost = null;
   }
 </script>
 
@@ -161,9 +160,7 @@
 {/if}
 
 <style>
-	.layout-holder {
-		max-height: 35rem;
-	}
+
 	button {
 		all: unset;
 	}
@@ -177,12 +174,17 @@
 		gap: 1rem;
 		align-items: flex-start;
 		box-sizing: border-box;
+		overflow-y: auto;
 	}
 
 	/* Posts container takes 1/3 of the space */
 	.posts-container {
-		grid-column: 1;
-	}
+  /* Let it fill nearly the entire viewport height */
+  height: calc(100vh - 60px); /* subtract header/footer height as needed */
+  overflow-y: auto;
+  position: relative; /* allows “z-index” layering if needed */
+  z-index: 1;        /* so the footer can appear above it if desired */
+}
 	.posts-container h1 {
 		margin: 0 0 1rem;
 	}
@@ -193,7 +195,6 @@
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
 		margin-top: 1rem;
 	}
 
@@ -315,14 +316,47 @@
 	/* Media queries for phones */
 	@media (max-width: 600px) {
 		.layout {
-			width: 100%;
-			padding: 0 1rem;
+			padding: 0;
+			margin: 0;
 			grid-template-columns: 1fr;
 		}
 
 		.posts-container {
 			grid-column: 1 / -1;
 		}
+		.post {
+		display: block;
+		padding: 1rem;
+		border: 1px solid #444;
+		border-radius: 4px;
+		background-color: #1a1a1a;
+		text-decoration: none;
+		font-size: .8rem;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+		box-sizing: border-box;
+		margin: 0;
+		width: 40%;
+		
+	}
+
+	.post-title {
+		margin: 0 0 0.5rem;
+		font-size: 1rem;
+		color: var(--blue-4);
+	}
+	.post-date {
+		display: block;
+		margin-bottom: 0.5rem;
+		font-size: .8rem;
+		color: var(--text-2);
+	}
+	.post-description {
+		margin: 0;
+		color: var(--stone-5);
+		font-size: .9rem;
+	}
 
 		.headings-sidebar {
 			grid-column: 1 / -1;
