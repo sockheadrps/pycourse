@@ -10,8 +10,6 @@
   <slot />
 </div>
 <style>
-
-
   .vertical-highlight {
     /* Give it a “glass-like” look with partial transparency */
     background-color: rgba(255, 255, 255, 0.07);
@@ -34,5 +32,13 @@
     justify-content: space-between; /* Space content evenly vertically */
     gap: 1rem;
     align-items: flex-start;
+  }
+
+  @media (max-width: 600px) {
+    .vertical-highlight {
+      flex-direction: row;
+      padding: 0.5rem;
+      gap: 0.5rem;
+    }
   }
 </style>

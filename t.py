@@ -8,6 +8,7 @@ my_dict = {
     "age": 30,
     "city": "New York"
 }
-print(my_dict*3)
 
 my_dict.pop
+
+print(dir(dict))

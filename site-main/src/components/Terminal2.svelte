@@ -54,4 +54,16 @@
   .copy-button:hover {
     background-color: #45a049;
   }
+
+  @media (max-width: 600px) {
+    .fake-terminal {
+      padding: 1rem;
+    }
+
+    .copy-button {
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.25rem 0.5rem;
+    }
+  }
 </style>

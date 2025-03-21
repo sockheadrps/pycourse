@@ -11,6 +11,7 @@
 		<ul class="links">
 			<li><a href="/about">About</a></li>
 			<li><a href="/rss.xml" target="_blank">RSS</a></li>
+			<li><a href="/614">614</a></li>
 		</ul>
 	</nav>
 </div>
@@ -85,8 +86,8 @@
 	/* Media queries for phones */
 	@media (max-width: 600px) {
 		nav {
-			flex-direction: column;
 			align-items: center;
+			margin-right: 4rem;
 		}
 
 		.title {
