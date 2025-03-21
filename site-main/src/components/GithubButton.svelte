@@ -3,7 +3,6 @@
 	$: githubUrl = `https://github.com/${username}`;
 </script>
 
-import GitHubButton from '$lib/components/GitHubButton.svelte';
 
 <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="github-button">
 	{username}
