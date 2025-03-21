@@ -1,14 +1,12 @@
 <script>
-
   export let username = 'octocat';
-
 
   // Construct the full profile URL
   $: githubUrl = `https://github.com/${username}`;
 </script>
 
 <a
-  href="{githubUrl}"
+  href={githubUrl}
   target="_blank"
   rel="noopener noreferrer"
   class="github-button"
