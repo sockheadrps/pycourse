@@ -1,6 +1,6 @@
 <script lang="js">
 	import { formatDate } from '$lib/utils';
-  import GitHubButton from '../../components/GitHubButton.svelte';
+  import GitHubButton from '$lib/components/GitHubButton.svelte';
 
 	export let data;
 </script>
