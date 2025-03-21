@@ -19,7 +19,7 @@
   export { ListComp };
   import VerticalHighlight from './VerticalHighlight.svelte';
   export { VerticalHighlight };
-  import GithubButton from './GithubButton.svelte';
+  import GithubButton from './GitHubButton.svelte';
   export { GithubButton };
   import ListLink from './ListLink.svelte';
   export { ListLink };
