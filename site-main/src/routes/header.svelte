@@ -1,5 +1,8 @@
 <script lang="ts">
 	import * as config from '$lib/config';
+	import { session } from '$lib/stores/session';
+	import { supabase } from '$lib/supabase';
+
 </script>
 
 <div class="glass-navbar">
@@ -11,7 +14,12 @@
 		<ul class="links">
 			<li><a href="/about">About</a></li>
 			<li><a href="/rss.xml" target="_blank">RSS</a></li>
-			<li><a href="/614">614</a></li>
+			{#if $session}
+				<li><a href="/logout" on:click|preventDefault={() => supabase.auth.signOut()}>Logout</a></li>
+			{:else}
+			<!-- go to login page -->
+			<li><a href="/login">Login</a></li>
+			{/if}
 		</ul>
 	</nav>
 </div>

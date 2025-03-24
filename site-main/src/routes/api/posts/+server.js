@@ -97,7 +97,6 @@ function parseQuizFilename(path) {
 async function getQuizzes() {
   // Import all .json quiz files in /src/posts/... subfolders
   const quizFiles = import.meta.glob('/src/posts/**/*.json', { eager: true });
-  console.log("quizFiles", quizFiles);
   const quizzes = [];
 
   for (const path in quizFiles) {
@@ -132,8 +131,6 @@ async function getQuizzes() {
 
 export async function GET() {
   const posts = await getPosts();      // your existing .svx logic
-	console.log("posts", posts);
   const quizzes = await getQuizzes();  // new quiz logic
-	console.log("quizzes", quizzes);
   return json({ posts, quizzes });
 }

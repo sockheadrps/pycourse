@@ -7,8 +7,26 @@
 	import 'open-props/normalize';
 	import 'open-props/buttons';
 	import '../app.css';
-	import { onNavigate } from '$app/navigation';
+	import { supabase } from '$lib/supabase';
 	import { onMount } from 'svelte';
+	import { invalidateAll, onNavigate } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { session } from '$lib/stores/session'; // Import the session store
+	
+
+
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabase.auth.onAuthStateChange((event, newSession) => {
+			session.set(newSession); // Store the session in the session store
+			invalidateAll();
+		});
+		return async () => {
+			subscription.unsubscribe();
+		};
+	});
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
@@ -31,17 +49,16 @@
 </div>
 
 <style>
-.layout {
-  width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  grid-template-columns: 1fr;
-  gap: 0;
-  box-sizing: border-box;
-}
-
+	.layout {
+		width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		grid-template-columns: 1fr;
+		gap: 0;
+		box-sizing: border-box;
+	}
 
 	.container {
 		flex: 1;

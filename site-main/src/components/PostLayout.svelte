@@ -1,4 +1,5 @@
 <script context="module">
+  
   import Terminal from './Terminal.svelte';
   export { Terminal };
   import EmojiList from './EmojiList.svelte';

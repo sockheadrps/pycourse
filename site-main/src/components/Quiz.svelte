@@ -3,9 +3,11 @@
 	export let quiz_index;
 	import { getContext } from 'svelte';
 	const value = getContext('quiz');
-	import { onMount } from 'svelte';
-	import { fly, fade } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
+
+	import { fly, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	let current_endpoint = $page.url.pathname.slice(1);
 	let quiz = null;
@@ -19,34 +21,57 @@
 	let score = 0;
 
 	onMount(async () => {
-		await load().then((quizzes) => {
-			quiz = quizzes.default[quiz_index];
-		});
+		try {
+			const loaded = await load();
+
+			// If loaded is an array (e.g., [{ questions: [...] }])
+			const first = Array.isArray(loaded) ? loaded[0] : loaded;
+
+			if (first && first.questions) {
+				quiz = first;
+			} else {
+				console.error('Quiz data missing or malformed:', loaded);
+			}
+		} catch (err) {
+			console.error('Failed to load quiz:', err);
+		}
 		ready = true;
 	});
+
+	async function loadQuiz() {
+		const endpoint = get(page).url.pathname;
+		current_endpoint = endpoint;
+		const loaded = await load(endpoint);
+
+		if (loaded && loaded.questions) {
+			quiz = loaded;
+		} else {
+			console.error('Quiz data missing or malformed:', loaded);
+		}
+		ready = true;
+	}
 
 	async function load() {
 		const response = await fetch('/api/quiz', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ endpoint: $page.url.pathname })
+			body: JSON.stringify({ endpoint: window.location.pathname }) // safer client-side
 		});
-		const { quizzes } = await response.json();
-		let keys = Object.keys(quizzes);
-		console.log('quizzes', quizzes);
-		let target_quiz_name = '';
-		for (let key of keys) {
-			let target = key.slice(0, -5);
 
-			let final_target = target.slice(target.length - current_endpoint.length);
-			if (final_target === current_endpoint) {
-				target_quiz_name = key;
-				break;
+		const { quizzes } = await response.json();
+		if (!quizzes) return null;
+
+		const keys = Object.keys(quizzes);
+		const slug = window.location.pathname.split('/').pop();
+
+		for (const key of keys) {
+			if (key.replace(/\.json$/, '') === slug) {
+				return quizzes[key];
 			}
 		}
-		return quizzes[`${target_quiz_name}`];
-	}
 
+		return null;
+	}
 	function selectAnswer(index) {
 		if (!isAnswered) {
 			selectedAnswer = index;
