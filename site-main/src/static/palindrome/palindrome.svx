@@ -1,0 +1,399 @@
+---
+title: Solving Palindromes
+description: Solving Palindromes
+date: '2025-04-17'
+categories:
+  - Solving Palindromes
+published: true
+---
+
+<script>
+  import DefinitionList from '$components/DefinitionList.svelte';
+  import DefinitionListEx from '$components/DefinitionListEx.svelte';
+  import FlashCard from '$components/FlashCard.svelte';
+  import Important from '$components/Important.svelte';
+  import Quiz from '$components/Quiz.svelte';
+  import ListComp from '$components/ListComp.svelte';
+  import VerticalHighlight from '$components/VerticalHighlight.svelte';
+  import EmojiList from '$components/EmojiList.svelte';
+  import Terminal from '$components/Terminal.svelte'
+
+
+
+</script>
+
+
+
+
+# Solving Palindromes
+
+Every single leetcode-esk / learn-programming online course seems to reference palindrome-solving, and at this point, im wondering....What is it Im missing?
+Clearly there's some hidden meaning behind the logic used to satisfy this problem. There must be more than meets the eye here. Programming a solution that will determine if a sequence of
+characters is a palindrome must be something programmers have to tackle every single day, and they must laugh every time they see us noobs using string slicing to 
+logically categorize a palindrome!
+
+First of all — let’s talk about string slicing.
+Python’s word[::-1] syntax?
+It’s sleek, sure. But I’ll be honest: it feels like black magic.
+
+I don’t want to memorize slicing syntax like some arcane spellbook.
+
+And in the era of AI... surely there's a better way.
+Why write explicit logic at all when we can train a machine to detect palindromes for us?
+
+For one, I suck with string slicing. The syntax is just too much for me to memorize, and in this day and age of AI, that must be the perfect solution! Train a machine learning
+model to recognize if a word is a palindrome! That has to be the true, sought after solution to this problem. String slicing deals in absolutes, it compares indexes of a string. Why 
+use such hardline logic when we can use statistical probability? 
+
+## Picking an AI denomination
+
+<Important>We'll be using Python, Tensorflow and Keras to tackle this convoluted task.</Important>
+
+We need to train a model to recognize palindromes — words where the character sequence is the same forward and backward (like racecar, noon, tacocat). 
+Patterns that make up a palindrome:
+
+
+<DefinitionList items={[
+  { term: 'Order of characters matters', definition: 'Obviously to identify palindromes, we have to pay attention to the sequence and positions of each letter of a word, to identify validity' },
+]} />
+
+ <VerticalHighlight >
+  <div>The model must understand relationships between characters across positions in the word</div>
+</VerticalHighlight>
+
+In order to accomplish this, Ive selected using a Recurrent Neural Network (RNN), more specifically, an LSTM RNN. 
+LSTM stands for Long Short-Term Memory, and its typically used to understand sequential data.
+Keraas coincidentally provides a  Bidirectional LSTM, which is used to identify and work with Symmetry.
+Additionally, Standard dense layers treat every input independently, but LSTMs carry "memory" across time steps. Which should help identify symetric structure.
+
+So, in summary, we use an LSTM because:
+
+  <EmojiList>
+    <li>
+      <strong>Palindromes are sequence-based </strong>
+      <ul>
+        <li>we need a model that "reads" a word like a sentence.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>LSTMs can track and compare characters across the whole sequence.</strong>
+    </li>
+
+    <li>
+      <strong>Bidirectional</strong>
+      <ul>
+        <li> look both ways — which is literally what palindromes are</li>
+      </ul>
+    </li>
+  </EmojiList>
+
+
+To start off, I gathered 2 files, palindromes.txt and not_palindromes.txt
+These are line-deliminated files with actual english-word examples of both valid palindromes, and invalid palindromes. I just picked them up using google.
+But thats not enough data to train on, really. So we'll have to generate our own data, which represents both categories here.
+
+This is done in the https://github.com/sockheadrps/PalindromeRNNClassifier/blob/main/data_gen.py file.
+
+Just a function to help check validity of input data.
+```python
+def is_palindrome(s):
+```
+
+
+<br>
+
+```python
+generate_string(length, palindrome=False)
+```
+
+<VerticalHighlight >
+    Randomly selects half the number of letters
+    If length is even, just mirror it
+    rac + car = racecar 
+
+    If length is odd, insert a random middle letter:
+    rac + e + car = racecar
+
+    if the keyword is false, 
+    Randomly generate a full word of the given length
+    If it accidentally turns out to be a palindrome (e.g. "noon", "abba")
+    It loops until it gets a non-palindrome
+</VerticalHighlight>
+
+<br>
+<br>
+
+```python
+make_near_palindrome(p)
+```
+
+<VerticalHighlight >
+    It takes a palindrome like "noon" and makes a small change that breaks the symmetry — but only slightly.    
+
+    make_near_palindrome("noon")  →  "noan" or "nook" (input word with 1 character flipped)
+    This helps the model learn that not all similar-looking words are palindromes.
+</VerticalHighlight>
+
+<br>
+
+<br>
+
+```python
+generate_dataset()
+```
+
+<VerticalHighlight >
+    Creates an empty list to hold (string, label) pairs.
+
+    Load real palindromes from a file
+    Filters out any words that are too short or too long
+    Inject real palindromes Adds 25% real-world palindromes
+
+    Fill the remaining 75% with randomly generated strings
+    Randomly decides if each one should be a palindrome (1) or not (0)
+
+    Add "hard negatives"
+    Loads manually chosen non-palindromes that might look symmetrical but aren't
+    Injects x number of them and then
+    Mixes the data so the model doesn’t see examples in a predictable order (like all palindromes first)
+</VerticalHighlight>
+
+<br>
+<br>
+
+```python
+preprocess()
+```
+<VerticalHighlight >
+    data tokenizer and formatter
+    raw string-label pairs (like ("racecar", 1)) and transforms them into padded numeric arrays that can be fed into a neural network.
+
+    [("racecar", 1), ("apple", 0), ...]
+    into
+
+    X = [[18, 1, 3, 5, 3, 1, 18, 0, 0, 0], [...], ...]   # char sequences
+
+    y = [1, 0, ...]      # the corresponding boolean identifying if that item is in fact a palindrome, or not.
+</VerticalHighlight>
+
+<br>
+<br>
+
+```python
+encode(word)
+```
+<VerticalHighlight >
+    We build a hashmap giving encoded values to each letterof the alphabet, which 
+    Converts "racecar" → [18, 1, 3, 5, 3, 1, 18]
+</VerticalHighlight>
+
+we then pad the sequence which: 
+
+<VerticalHighlight >
+Ensures all sequences are the same length (maxlen)   
+Adds 0s after the sequence (post-padding)
+Is required for batching in TensorFlow/Keras.
+
+"cat" → [3, 1, 20]
+padded → [3, 1, 20, 0, 0, 0, 0, 0, 0, 0]  ← (if maxlen = 10)
+</VerticalHighlight>
+
+## The Model
+
+https://github.com/sockheadrps/PalindromeRNNClassifier/blob/main/model.py
+
+```python
+Embedding(input_dim=vocab_size, output_dim=16, mask_zero=True)
+```
+Turns each character (e.g., 'a', 'b', ...) into a learnable 16-dimensional vector.
+
+<Important title=""><strong>Why it matters:</strong>     
+
+This layer gives the model a way to learn semantic meaning of characters in relation to each other. For example, it might learn that 'r' and 'a' often appear in mirrored positions in palindromes.
+
+mask_zero=True:
+Tells downstream layers to ignore padding (0s), so shorter words don’t confuse the model with meaningless zeros.
+</Important>
+
+  
+
+
+
+
+```python
+Bidirectional(LSTM(128, return_sequences=True))
+```
+
+An LSTM that reads the input both forwards and backwards and outputs a sequence at every step.
+
+
+<br>
+<Important title=""><strong>Why it's used</strong>    
+
+Palindromes are all about symmetry. Bidirectional LSTMs are perfect for that because they:
+Look at characters from both directions,
+Catch mirrored patterns regardless of position.
+</Important>
+   
+
+
+
+```python
+Dropout(0.2)
+```
+<Important title=""><strong>Why it's used</strong>    
+
+Randomly “drops out” 20% of the layer’s neurons during training. This prevents overfitting — especially important when working with a relatively small vocabulary (only 26 letters). It helps the model generalize better.    
+</Important>
+<br>
+
+```python
+Bidirectional(LSTM(128, return_sequences=True))
+```
+
+### Why another?
+<VerticalHighlight >
+Deeper LSTM stacks allow the model to capture more complex long-range dependencies. The first LSTM layer might catch basic mirror symmetry, and this one can refine that into more nuanced structural understanding.
+</VerticalHighlight>
+
+```python
+LayerNormalization()
+```
+
+
+<VerticalHighlight >
+Normalizes the outputs of the LSTM layer so the distribution of values is more stable.
+Helps speed up training and reduce the chance of vanishing or exploding gradients, especially in deeper RNNs.
+</VerticalHighlight>
+
+
+```python
+Another Dropout(0.2)
+```
+Same purpose:
+Keep regularizing the model.
+
+<br>
+<br>
+
+
+```python
+LSTM(128)
+```
+
+<Important title=""><strong>Why it's used</strong>    
+
+Processes the output from the stacked bidirectional layers but only returns the final output (i.e., a single vector summarizing the sequence).
+
+This is the compression step — it condenses the learned features from the character sequence into a summary representation that can be passed into Dense layers for classification.
+</Important>
+   
+
+
+```python
+Another Dropout(0.2)
+```
+Still regularizing. This time it's before heading into fully connected layers.
+
+```python
+Dense(32, activation='relu', kernel_initializer='he_uniform')
+```
+
+<Important title=""><strong>What it does:</strong>    
+A fully connected layer to learn non-linear combinations of the sequence summary.
+Gives the model some capacity to transform the LSTM output into decision-friendly features.
+relu: activates positive weights only (good for deep nets).
+he_uniform: initializer designed for relu, to keep the variance of activations in check.
+</Important>
+
+
+
+```python
+Dropout(0.2)
+```
+Final layer of regularization before the output.
+
+```python
+Dense(1, activation='sigmoid')
+```
+
+<VerticalHighlight >
+What it does:
+Outputs a single number between 0 and 1 — the confidence that the input is a palindrome.
+
+Why it's perfect:
+This is binary classification, so sigmoid is standard — it maps to probability, between 0 and 1.
+</VerticalHighlight>
+
+
+```python
+ExponentialDecay + Adam
+```
+
+### What it does:
+
+<VerticalHighlight >
+Gradually lowers the learning rate over time:
+Starts fast (to explore),
+Slows down (to fine-tune).
+
+This is helpful in deep models to stabilize late-stage training.
+</VerticalHighlight>
+
+
+```python
+BinaryFocalCrossentropy(gamma=2.5)
+```
+
+### What it does:
+
+<VerticalHighlight >
+A smarter loss function that penalizes incorrect confident predictions more than easy ones.
+Why focal loss?
+Your task might have class imbalance (e.g., more non-palindromes), or tricky edge cases. Focal loss helps the model:
+Focus on hard examples,
+Avoid becoming overconfident on easy ones.
+</VerticalHighlight>
+
+
+## Summary
+So, this model is:
+
+
+  <EmojiList>
+    <li>
+      <strong>Rich enough to learn subtle symmetrical structure</strong>
+    </li>
+
+    <li>
+      <strong>Deep enough to abstract features over time</strong>
+    </li>
+
+    <li>
+      <strong>Bidirectional to account for mirrored sequences,</strong>
+    </li>
+
+    <li>
+      <strong>Regularized to avoid overfitting</strong>
+    </li>
+
+    <li>
+      <strong>Adaptively optimized with learning rate decay and focal loss</strong>
+    </li>
+  </EmojiList>
+
+
+
+### Then we train the!
+https://github.com/sockheadrps/PalindromeRNNClassifier/blob/main/run.py
+
+<br>
+
+
+![img](https://github.com/sockheadrps/PalindromeRNNClassifier/blob/main/image.png?raw=true)
+
+<br>
+
+![img](https://github.com/sockheadrps/PalindromeRNNClassifier/raw/main/ter.png)
+
