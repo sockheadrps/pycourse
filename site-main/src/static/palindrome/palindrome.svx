@@ -385,7 +385,7 @@ So, this model is:
 
 
 
-### Then we train the!
+### Then we train!
 https://github.com/sockheadrps/PalindromeRNNClassifier/blob/main/run.py
 
 <br>
