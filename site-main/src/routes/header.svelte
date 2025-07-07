@@ -2,7 +2,7 @@
 	import * as config from '$lib/config';
 	import { session } from '$lib/stores/session';
 	import { supabase } from '$lib/supabase';
-
+	import Settings from 'lucide-svelte/icons/settings';
 </script>
 
 <div class="glass-navbar">
@@ -14,13 +14,14 @@
 		<ul class="links">
 			<li><a href="/about">About</a></li>
 			<li><a href="/rss.xml" target="_blank">RSS</a></li>
+			<li><a href="/rowshambo">RoShamBo</a></li> <!-- 🎮 Added link -->
 			{#if $session}
-				<li><a href="/logout" on:click|preventDefault={() => supabase.auth.signOut()}>Logout</a></li>
+			  <li><a href="/logout" on:click|preventDefault={() => supabase.auth.signOut()}>Logout</a></li>
+			  <li><a href="/account" class="icon-link"><Settings size={20} /></a></li>
 			{:else}
-			<!-- go to login page -->
-			<li><a href="/login">Login</a></li>
+			  <li><a href="/login">Login</a></li>
 			{/if}
-		</ul>
+		  </ul>
 	</nav>
 </div>
 
@@ -89,6 +90,12 @@
 	.links a:hover {
 		color: var(--gray-4);
 		text-shadow: 0 0 10px rgba(255, 255, 255, 0.181);
+	}
+
+	.icon-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	/* Media queries for phones */

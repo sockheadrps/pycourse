@@ -1,9 +1,0 @@
----
-title: Release on a later date
-description: Release on a later date
-date: '2024-11-23'
-categories:
-  - OOP
-published: true
-index: 2
----

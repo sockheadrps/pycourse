@@ -50,7 +50,6 @@
 
 <style>
 	.layout {
-		width: 1200px;
 		margin: 0 auto;
 		padding: 0 2rem;
 		display: grid;
@@ -58,13 +57,13 @@
 		grid-template-columns: 1fr;
 		gap: 0;
 		box-sizing: border-box;
+
 	}
 
 	.container {
 		flex: 1;
 		margin-top: 2rem;
 		padding: 0 1rem;
-		max-width: 1200px;
 		margin-left: auto;
 		margin-right: auto;
 	}

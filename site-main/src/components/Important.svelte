@@ -36,8 +36,6 @@
   class:animate-in={inView}
 >
   <div class="info-bar">
-    <!-- Icon from lucide-svelte, or remove/replace as needed -->
-    <!-- <Activity class="info-bar-icon" /> -->
     <h3>{title}</h3>
   </div>
   <div class="info-content">

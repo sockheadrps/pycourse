@@ -1,0 +1,65 @@
+---
+title: Building a Transformer-Based Palindrome Detector
+description: Deep learning model combining Transformers and GRUs for palindrome detection with 99.8% accuracy
+date: '2025-01-15'
+categories:
+  - Machine Learning
+  - Neural Networks
+  - Natural Language Processing
+  - Deep Learning
+published: true
+index: 3
+author: 'sockheadrps'
+---
+
+
+<script>
+  import DefinitionList from '$components/DefinitionList.svelte';
+  import DefinitionListEx from '$components/DefinitionListEx.svelte';
+  import FlashCard from '$components/FlashCard.svelte';
+  import Important from '$components/Important.svelte';
+  import Quiz from '$components/Quiz.svelte';
+  import ListComp from '$components/ListComp.svelte';
+  import VerticalHighlight from '$components/VerticalHighlight.svelte';
+
+</script>
+https://github.com/sockheadrps/PalindromeTransformerClassifier
+## 🧠 Model Evolution and Training Journey
+
+The final version of this model uses a hybrid architecture that combines a Transformer encoder block with a bidirectional GRU layer. The Transformer allows for efficient parallel sequence processing and robust pattern recognition, while the GRU provides temporal awareness, which is particularly useful for detecting symmetry in palindromes. 
+
+To reach high accuracy, the model was trained using curriculum learning, adaptive retraining, and binary focal loss. As a result, it correctly classifies over 99.8% of examples, with only a small number of edge cases occasionally misclassified. The progression from GRU to LSTM to a Transformer-GRU hybrid played a central role in developing a reliable and accurate palindrome detection system.
+
+The latest model has an accuracy of 99.88% over 800 samples.
+
+---
+
+1. **The Foundation (GRU Era)**
+   1. Started with basic GRU networks for sequence processing  
+   2. A simple recurrent approach to palindrome detection  
+   3. Encountered limitations with longer sequences and complex structures  
+
+2. **The LSTM Improvement**
+   1. Switched to LSTM for better long-term memory handling  
+   2. Improved pattern recognition across time steps  
+   3. Achieved more stable and effective training  
+
+3. **The Transformer Revolution**
+   1. Adopted a hybrid architecture combining Transformers with bidirectional GRUs  
+   2. Leveraged self-attention for parallel analysis and sequence modeling  
+
+
+### 📈 Accuracy & Performance
+
+1. **Curriculum Training**
+   1. Gradually reduced the ratio of positive samples (from 85% to 50%) over several training phases  
+
+2. **Hard Negative Mining**
+   1. Collected misclassified edge cases to improve model robustness during retraining  
+
+3. **Adaptive Retraining**
+   1. Used a custom script (`xfmer_stress.py`) to iteratively fine-tune the model  
+
+4. **Class Balancing and Data Augmentation**
+   1. Adjusted loss weights to account for class imbalance  
+   2. Generated diverse examples including near-palindromes and visually symmetrical non-palindromes  

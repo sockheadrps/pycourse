@@ -1,0 +1,55 @@
+---
+title: The Best FastAPI Websockets Example in the world
+description: Data Validation, Asymetric Encryption, Password Hashing and Event handling like a pro
+date: '2025-07-07'
+categories:
+  - Data Validation
+published: true
+index: 3
+author: 'sockheadrps'
+---
+
+
+<script>
+  import DefinitionList from '$components/DefinitionList.svelte';
+  import DefinitionListEx from '$components/DefinitionListEx.svelte';
+  import FlashCard from '$components/FlashCard.svelte';
+  import Important from '$components/Important.svelte';
+  import Quiz from '$components/Quiz.svelte';
+  import ListComp from '$components/ListComp.svelte';
+  import VerticalHighlight from '$components/VerticalHighlight.svelte';
+
+</script>
+https://github.com/sockheadrps/websocketchat   
+
+**[https://chat.socksthoughtshop.lol](https://chat.socksthoughtshop.lol)**  
+(Production-ready deployment with SSL, CORS, and encrypted WebSocket support)
+
+# 🚀 Real-Time Encrypted Chat Application
+## 🧩 Project Summary
+
+A real-time, full-stack chat application designed for secure communication between users, featuring end-to-end RSA encryption, private messaging, live public chatrooms, and an integrated AI chatbot. Built with modern web standards and a strong focus on security, the system includes JWT-based authentication, responsive UI, and production-ready deployment practices like HTTPS, CORS policies, and WebSocket connection management.
+
+---
+
+## 🛠 Notable Technologies Used
+
+1. **FastAPI** – Python web framework for API and WebSocket handling  
+2. **WebSockets** – Real-time messaging for public and private chat  
+3. **RSA Encryption** – End-to-end encrypted private messaging  
+4. **JWT (JSON Web Tokens)** – Secure user authentication  
+5. **bcrypt** – Password hashing for secure login  
+6. **SQLAlchemy + SQLite** – ORM and lightweight database layer  
+7. **Pydantic** – Typed request/response validation  
+8. **Vanilla JavaScript** – Lightweight frontend without frameworks  
+9. **CSS3** – Animations and glassmorphism-style UI  
+10. **Nginx + Certbot (SSL)** – Secure deployment with HTTPS and reverse proxy
+
+
+
+## 📈 What This Project Shows
+
+Experience building **full-stack** applications from API to UI  
+Deep understanding of **secure real-time communication** using WebSockets and encryption  
+Commitment to **code quality**: typed, modular, and well-documented  
+Awareness of **production constraints** like SSL, CORS, and deployment setup

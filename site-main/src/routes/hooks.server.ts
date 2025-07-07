@@ -10,14 +10,15 @@ const server = createServer(handler);
 startSignalingServer(server);
 
 server.listen(5173, () => {
-  console.log('SvelteKit app + WebSocket running on http://localhost:5173');
+	// Remove debug logs
+	// console.log('SvelteKit app + WebSocket running on http://localhost:5173');
 });
-
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const { session, supabaseClient } = await getSupabase(event);
 
-	console.log('SESSION in handle:', session); // <-- add this line
+	// Remove debug logs
+	// console.log('SESSION in handle:', session);
 
 	event.locals.sb = supabaseClient;
 	event.locals.session = session;
