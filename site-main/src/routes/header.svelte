@@ -14,7 +14,7 @@
 		<ul class="links">
 			<li><a href="/about">About</a></li>
 			<li><a href="/rss.xml" target="_blank">RSS</a></li>
-			<li><a href="/rowshambo">RoShamBo</a></li> <!-- 🎮 Added link -->
+			<li><a href="https://chat.socksthoughtshop.lol/chat">Chat</a></li>
 			{#if $session}
 			  <li><a href="/logout" on:click|preventDefault={() => supabase.auth.signOut()}>Logout</a></li>
 			  <li><a href="/account" class="icon-link"><Settings size={20} /></a></li>
