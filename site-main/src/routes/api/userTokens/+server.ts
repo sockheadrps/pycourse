@@ -1,47 +1,35 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
-const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!
-);
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-async function getUserTokens(userId: string): Promise<number> {
-    const { data, error } = await supabase
-        .from('tokens')
-        .select('tokens')
-        .eq('user_id', userId)
-        .single();
+export const GET: RequestHandler = async ({ url, locals }) => {
+	const session = await locals.getSession();
 
-    if (error) {
-        console.error('Error fetching tokens:', error);
-        return 0;
-    }
+	if (!session?.user) {
+		return json({ error: 'Unauthorized' }, { status: 401 });
+	}
 
-    return data?.tokens || 0;
-}
+	try {
+		const { data, error } = await supabase
+			.from('tokens')
+			.select('tokens, grey_tokens')
+			.eq('user_id', session.user.id)
+			.single();
 
-wss.on('connection', async (ws, req) => {
-    const token = new URL(req.url!, 'ws://localhost').searchParams.get('token');
-    
-    if (!token) {
-        ws.close(1008, 'No token provided');
-        return;
-    }
+		if (error) {
+			console.error('Error fetching tokens:', error);
+			return json({ tokens: 0, grey_tokens: 0 });
+		}
 
-    try {
-        const { data: { user }, error } = await supabase.auth.getUser(token);
-        
-        if (error || !user) {
-            ws.close(1008, 'Invalid token');
-            return;
-        }
-
-        const tokens = await getUserTokens(user.id);
-        ws.send(JSON.stringify({ type: 'tokens', tokens }));
-
-        // ... rest of your connection handling code ...
-    } catch (error) {
-        console.error('Error during connection:', error);
-        ws.close(1011, 'Internal server error');
-    }
-}); 
+		return json({
+			tokens: data?.tokens || 0,
+			grey_tokens: data?.grey_tokens || 0
+		});
+	} catch (error) {
+		console.error('Unexpected error:', error);
+		return json({ error: 'Internal server error' }, { status: 500 });
+	}
+};
