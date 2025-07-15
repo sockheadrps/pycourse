@@ -15,10 +15,12 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173",
-                   "http://127.0.0.1:5173",
-                   "https://www.socksthoughtshop.lol",
-                   "https://www.socksthoughtshop.lol/guides"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://socksthoughtshop.lol",
+        "https://www.socksthoughtshop.lol"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,13 +29,15 @@ app.add_middleware(
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 GUIDES_DIR = BASE_DIR / "guides"
+STATIC_DIR = BASE_DIR / "static"
+
+print("Templates directory:", TEMPLATES_DIR)
+print("Static directory:", STATIC_DIR)
 
 # Development mode - set to True for auto-reload of templates
 DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
+app.mount("/guides/static", StaticFiles(directory=STATIC_DIR), name="static")
 def get_jinja_env():
     """Get Jinja environment, reloading templates in dev mode"""
     return Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))

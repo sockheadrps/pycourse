@@ -20,4 +20,4 @@ export const url = dev ? 'http://localhost:5173' : 'url';
  */
 export const guideServerUrl =
 	import.meta.env.VITE_GUIDE_SERVER_URL ||
-	(dev ? 'http://localhost:8002' : 'https://guides.yourdomain.com');
+	(dev ? 'http://localhost:8002' : 'https://socksthoughtshop.lol');
