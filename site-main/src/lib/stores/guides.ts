@@ -30,7 +30,7 @@ function createGuidesStore() {
 			update((state) => ({ ...state, loading: true, error: null }));
 
 			try {
-				const response = await fetch(`${guideServerUrl}/api/guides`);
+				const response = await fetch(`${guideServerUrl}/guides/api/guides`);
 				if (!response.ok) {
 					throw new Error(`Failed to fetch guides: ${response.status}`);
 				}

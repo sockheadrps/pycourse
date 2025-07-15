@@ -5,6 +5,7 @@
 	import { supabase } from '$lib/supabase';
 	import Settings from 'lucide-svelte/icons/settings';
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
+	import { guideServerUrl } from '$lib/config.js';
 	import { onMount } from 'svelte';
 
 	let dropdownOpen = false;
@@ -69,7 +70,7 @@
 						{:else}
 							{#each $guides.guides as guide}
 								<a 
-									href="{config.guideServerUrl}{guide.tutorial_url}" 
+									href="{guide.tutorial_url}" 
 									target="_blank" 
 									class="dropdown-item"
 								>

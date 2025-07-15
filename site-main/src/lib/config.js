@@ -18,6 +18,4 @@ export const url = dev ? 'http://localhost:5173' : 'url';
 /**
  * @type {string}
  */
-export const guideServerUrl =
-	import.meta.env.VITE_GUIDE_SERVER_URL ||
-	(dev ? 'http://localhost:8002' : 'https://socksthoughtshop.lol');
+export const guideServerUrl = import.meta.env.VITE_GUIDE_SERVER_URL || 'http://localhost:8001';

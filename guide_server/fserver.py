@@ -168,7 +168,7 @@ def list_guides():
     return {"guides": list(guides.keys())}
 
 
-@app.get("/api/guides")
+@app.get("/guides/api/guides")
 def get_guides_with_titles():
     """Return all guides with their titles and links"""
     guides = get_guides()
