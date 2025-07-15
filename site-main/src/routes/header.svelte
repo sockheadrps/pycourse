@@ -86,10 +86,10 @@
 			</li>
 			
 			{#if $session}
-			  <li><a href="/logout" on:click|preventDefault={() => supabase.auth.signOut()}>Logout</a></li>
-			  <li><a href="/account" class="icon-link"><Settings size={20} /></a></li>
+			  <li class="dropdown-container"><a href="/logout" on:click|preventDefault={() => supabase.auth.signOut()}>Logout</a></li>
+			  <li class="dropdown-container"><a href="/account" class="icon-link"><Settings size={20} /></a></li>
 			{:else}
-			  <li><a href="/login">Login</a></li>
+			  <li class="dropdown-container"><a href="/login">Login</a></li>
 			{/if}
 		  </ul>
 	</nav>
@@ -155,6 +155,7 @@
 		text-decoration: none;
 		font-size: 1rem;
 		transition: color 0.3s ease, text-shadow 0.3s ease;
+		
 	}
 
 	.links a:hover {
@@ -171,9 +172,23 @@
 	/* Dropdown Styles */
 	.dropdown-container {
 		position: relative;
+		color: var(--gray-6);
+		text-decoration: none;
+		font-size: 1rem;
+		transition: color 0.3s ease, text-shadow 0.3s ease;
+		box-shadow: none;
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
 	}
 
 	.dropdown-trigger {
+		/* reset all styles */
+		all: unset;
 		background: none;
 		border: none;
 		color: var(--gray-6);
@@ -181,6 +196,7 @@
 		font-size: 1rem;
 		cursor: pointer;
 		display: flex;
+		
 		align-items: center;
 		gap: 0.25rem;
 		transition: color 0.3s ease, text-shadow 0.3s ease;
