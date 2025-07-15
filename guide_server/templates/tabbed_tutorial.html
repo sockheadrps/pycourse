@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/flow_diagram.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1 class="tutorial-title">{{ title }}</h1>
+        <p class="tutorial-description">{{ description }}</p>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="tab-container">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-tab="tutorial">Tutorial</button>
+          <button class="tab-button" data-tab="flow">App Flow</button>
+        </div>
+
+        <!-- Tutorial Tab Content -->
+        <div id="tutorial-tab" class="tab-content active">
+          <div class="content">
+            {% for phase in tutorial_data.phases %}
+            <div class="phase-section">
+              <div class="phase-header">
+                <div class="phase-number">{{ phase.phase }}</div>
+                <h2 class="phase-title">{{ phase.title }}</h2>
+              </div>
+
+              {% for step in phase.steps %} {% set step_index = loop.index %}
+              <div class="step-item" data-step-id="{{ phase.phase }}-{{ step_index }}">
+                <div class="tutorial-step-header">
+                  <div class="step-edit-controls">
+                    <button class="step-edit-btn" data-step-id="{{ phase.phase }}-{{ step_index }}">
+                      🔒
+                    </button>
+                  </div>
+                  <div class="step-info">
+                    <div class="step-number">{{ phase.phase }}.{{ step_index }}</div>
+                    <div class="step-title-section">
+                      <div class="step-title">{{ step.title }}</div>
+                      {% if step.file %}
+                      <div class="step-file">📁 {{ step.file }}</div>
+                      {% endif %}
+                    </div>
+                    <div class="step-description-container">
+                      <div class="step-description">{{ step.description }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {% if step.code_snippet %}
+                <div class="code-preview">
+                  <div class="code-edit-controls">
+                    <button class="code-edit-btn" data-step-id="{{ phase.phase }}-{{ step_index }}">
+                      🔒
+                    </button>
+                    <button class="code-copy-btn" data-step-id="{{ phase.phase }}-{{ step_index }}">
+                      📋
+                    </button>
+                  </div>
+                  {% set extension = step.file.split('.')[-1] %} {% set lang_map = {'py': 'python',
+                  'js': 'javascript', 'html': 'markup', 'css': 'css'} %}
+                  <pre
+                    class="line-numbers language-{{ lang_map.get(extension, 'plaintext') }}"
+                  ><code class="language-{{ lang_map.get(extension, 'plaintext') }}">{{ step.code_snippet | e }}</code></pre>
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Flow Tab Content -->
+        <div id="flow-tab" class="tab-content">
+          <div class="flow-content" id="flow-container">
+            {% if flow_data %}
+
+            <!-- Architecture Section -->
+            {% if flow_data.architecture %}
+            <div class="architecture-section">
+              <h2>{{ flow_data.architecture.title }}</h2>
+              <div class="architecture-grid">
+                {% if flow_data.architecture.components %} {% for component_name, component in
+                flow_data.architecture.components.items() %}
+                <div class="arch-component">
+                  <h3>{{ component.title }}</h3>
+                  {% if component.components and component.components is iterable %} {% for item in
+                  component.components %}
+                  <div>
+                    <strong>{{ item.title }}</strong>
+                    <p>{{ item.description }}</p>
+                  </div>
+                  {% endfor %} {% endif %}
+                </div>
+                {% endfor %} {% endif %}
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Legend Section -->
+            {% if flow_data.legend %}
+            <div class="legend-section">
+              <h2>{{ flow_data.legend.title }}</h2>
+              <div class="legend-grid">
+                {% for item in flow_data.legend["items"] %}
+                <div class="legend-item">
+                  <div class="legend-icon">
+                    {% if item.type == 'normal' %}🔵 {% elif item.type == 'decision' %}🟡 {% elif
+                    item.type == 'success' %}🟢 {% elif item.type == 'database' %}🟣 {% elif
+                    item.type == 'security' %}🔴 {% else %}⚪{% endif %}
+                  </div>
+                  <div class="legend-text">{{ item.label }}</div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Flow Diagram -->
+            <div class="phases-section">
+              <h2>Application Flow</h2>
+              <div class="phases-container">
+                {% for phase in flow_data.phases %}
+                <div class="phase" data-phase="{{ loop.index }}">
+                  <div class="phase-header">
+                    <h3>{{ phase.flow_title or phase.title }}</h3>
+                  </div>
+                  <div class="steps-container">
+                    {% for step in phase.steps %}
+                    <div
+                      class="step {{ step.step_type }}-point"
+                      data-step="{{ loop.index }}"
+                      tabindex="0"
+                    >
+                      <div class="step-header">
+                        <div class="step-number">{{ step.step }}</div>
+                        <div class="step-content">
+                          <div class="step-text-container">
+                            <div class="step-title">{{ step.title }}</div>
+                            <div class="step-description">{{ step.description }}</div>
+                          </div>
+                          <div class="step-location">
+                            <div class="location-badge {{ step.location.type }}">
+                              {{ step.location.type.upper() }}
+                            </div>
+                            <div class="location-file">
+                              <span class="file-icon">📁</span>
+                              {{ step.location.file }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% else %}
+            <div class="no-flow-data">
+              <p>No flow diagram data available.</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toc-indicator" id="tocIndicator">
+      <div class="toc-progress">
+        <div class="toc-progress-bar" id="tocProgressBar" style="width: 0%"></div>
+      </div>
+      <div class="toc-content">
+        <div class="toc-header">Currently Viewing:</div>
+        <div class="toc-current-step">
+          <div class="toc-step-number" id="tocStepNumber"></div>
+          <div class="toc-step-title" id="tocStepTitle">Loading...</div>
+          <div class="toc-step-file" id="tocStepFile">–</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prism Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
+
+    <!-- Line numbers plugin - MUST come after Prism core -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <!-- Supported languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+
+    <script>
+      // Make tutorial data available globally
+      window.tutorialData = {{ tutorial_data | tojson | safe }};
+      window.totalSteps = {{ total_steps }};
+
+      // Make flow data available globally
+      {% if flow_data %}
+      window.flowData = {{ flow_data | tojson | safe }};
+      {% endif %}
+    </script>
+
+    <!-- Flow Diagram Script -->
+    <script src="/static/js/flow_diagram.js"></script>
+
+    {{ js_links | safe }}
+  </body>
+</html>

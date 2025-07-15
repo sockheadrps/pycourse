@@ -1,0 +1,636 @@
+{
+  "title": "Complete FastAPI Chat App Flow",
+  "description": "Arrow keys to focus step elements",
+  "phases": [
+    {
+      "phase": 1,
+      "title": "User Registration",
+      "flow_title": "1. User Registration Process",
+      "steps": [
+        {
+          "step": 1,
+          "title": "User Visits Registration Page",
+          "description": "User navigates to /register endpoint",
+          "location": {
+            "type": "server",
+            "file": "main.py → register_page()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 2,
+          "title": "User Fills Registration Form",
+          "description": "Username and password input",
+          "location": {
+            "type": "client",
+            "file": "register.html template"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 3,
+          "title": "JavaScript Validates Form",
+          "description": "Client-side validation (required fields, password 4+ chars)",
+          "location": {
+            "type": "client",
+            "file": "static/js/register.js → register()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 4,
+          "title": "Send Registration Request",
+          "description": "POST /api/v1/auth/register with user data",
+          "location": {
+            "type": "client",
+            "file": "static/js/register.js → fetch()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 5,
+          "title": "Check Username Availability",
+          "description": "Query database for existing username",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → get_user_by_username()"
+          },
+          "step_type": "database"
+        },
+        {
+          "step": 6,
+          "title": "Username Available?",
+          "description": "Check if username already exists",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → validation logic"
+          },
+          "step_type": "decision"
+        },
+        {
+          "step": 7,
+          "title": "Hash Password with bcrypt",
+          "description": "Convert plain password to secure hash",
+          "location": {
+            "type": "server",
+            "file": "app/auth.py → get_password_hash()"
+          },
+          "step_type": "security"
+        },
+        {
+          "step": 8,
+          "title": "Save User to Database",
+          "description": "Insert new user record with hashed password",
+          "location": {
+            "type": "server",
+            "file": "app/database.py → create_user()"
+          },
+          "step_type": "database"
+        },
+        {
+          "step": 9,
+          "title": "Registration Successful",
+          "description": "Return user data (without password)",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → register() → response"
+          },
+          "step_type": "success"
+        },
+        {
+          "step": 10,
+          "title": "Redirect to Login Page",
+          "description": "User can now login with new credentials",
+          "location": {
+            "type": "client",
+            "file": "static/js/register.js → redirectTo('/login')"
+          },
+          "step_type": "normal"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "title": "User Authentication",
+      "flow_title": "2. User Login & JWT Token Generation",
+      "steps": [
+        {
+          "step": 1,
+          "title": "User Visits Login Page",
+          "description": "User navigates to /login endpoint",
+          "location": {
+            "type": "server",
+            "file": "main.py → login_page()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 2,
+          "title": "User Enters Credentials",
+          "description": "Username and password input",
+          "location": {
+            "type": "client",
+            "file": "login.html template"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 3,
+          "title": "Send Login Request",
+          "description": "POST /api/v1/auth/login with form data",
+          "location": {
+            "type": "client",
+            "file": "static/js/login.js → login()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 4,
+          "title": "Query Database for User",
+          "description": "Find user by username",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → get_user_by_username()"
+          },
+          "step_type": "database"
+        },
+        {
+          "step": 5,
+          "title": "User Exists?",
+          "description": "Check if username is found",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → validation logic"
+          },
+          "step_type": "decision"
+        },
+        {
+          "step": 6,
+          "title": "Verify Password Hash",
+          "description": "Compare input password with stored hash",
+          "location": {
+            "type": "server",
+            "file": "app/auth.py → verify_password()"
+          },
+          "step_type": "security"
+        },
+        {
+          "step": 7,
+          "title": "Password Correct?",
+          "description": "bcrypt verification result",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → validation logic"
+          },
+          "step_type": "decision"
+        },
+        {
+          "step": 8,
+          "title": "Generate JWT Token",
+          "description": "Create access token with user ID and expiration",
+          "location": {
+            "type": "server",
+            "file": "app/auth.py → create_access_token()"
+          },
+          "step_type": "security"
+        },
+        {
+          "step": 9,
+          "title": "Return JWT Token",
+          "description": "Send token to client",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → login() → response"
+          },
+          "step_type": "success"
+        },
+        {
+          "step": 10,
+          "title": "Store Token in localStorage",
+          "description": "Client saves token for future requests",
+          "location": {
+            "type": "client",
+            "file": "static/js/login.js → setToken()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 11,
+          "title": "Redirect to Chat Page",
+          "description": "User is now authenticated and ready to chat",
+          "location": {
+            "type": "client",
+            "file": "static/js/login.js → redirectTo('/chat')"
+          },
+          "step_type": "normal"
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "title": "Chat Initialization",
+      "flow_title": "3. Chat Page Initialization",
+      "steps": [
+        {
+          "step": 1,
+          "title": "User Visits Chat Page",
+          "description": "Navigate to /chat endpoint",
+          "location": {
+            "type": "server",
+            "file": "main.py → chat_page()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 2,
+          "title": "JavaScript Checks Authentication",
+          "description": "Verify JWT token exists in localStorage",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → initializeChat()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 3,
+          "title": "Token Exists?",
+          "description": "Check if user is logged in",
+          "location": {
+            "type": "client",
+            "file": "static/js/common.js → isAuthenticated()"
+          },
+          "step_type": "decision"
+        },
+        {
+          "step": 4,
+          "title": "Get Current User Info",
+          "description": "GET /api/v1/auth/me with JWT token",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → apiRequest('/auth/me')"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 5,
+          "title": "Server Validates JWT Token",
+          "description": "Decode and verify token signature",
+          "location": {
+            "type": "server",
+            "file": "app/auth.py → verify_token()"
+          },
+          "step_type": "security"
+        },
+        {
+          "step": 6,
+          "title": "Fetch User from Database",
+          "description": "Get user details by ID from token",
+          "location": {
+            "type": "server",
+            "file": "app/database.py → get_user()"
+          },
+          "step_type": "database"
+        },
+        {
+          "step": 7,
+          "title": "Update UI with User Info",
+          "description": "Display username in sidebar",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → update username display"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 8,
+          "title": "Initialize WebSocket Connection",
+          "description": "Ready to establish real-time connection",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → connectWebSocket()"
+          },
+          "step_type": "success"
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "title": "Real-Time Chat",
+      "flow_title": "4. WebSocket Connection & Chat",
+      "steps": [
+        {
+          "step": 1,
+          "title": "Create WebSocket Connection",
+          "description": "ws://localhost:8000/api/v1/chat/ws/{token}",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → new WebSocket()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 2,
+          "title": "Server Accepts Connection",
+          "description": "WebSocket handshake completed",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → websocket_endpoint()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 3,
+          "title": "Server Validates Token",
+          "description": "Verify JWT token from URL",
+          "location": {
+            "type": "server",
+            "file": "app/auth.py → verify_token()"
+          },
+          "step_type": "security"
+        },
+        {
+          "step": 4,
+          "title": "Token Valid?",
+          "description": "Check authentication status",
+          "location": {
+            "type": "server",
+            "file": "app/routes.py → websocket_endpoint() → validation"
+          },
+          "step_type": "decision"
+        },
+        {
+          "step": 5,
+          "title": "Add User to Connection Manager",
+          "description": "Store WebSocket connection",
+          "location": {
+            "type": "server",
+            "file": "app/utils/websocket_manager.py → connect()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 6,
+          "title": "Broadcast User Joined Animation",
+          "description": "Notify all users about new connection",
+          "location": {
+            "type": "server",
+            "file": "app/utils/websocket_manager.py → broadcast_message()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 7,
+          "title": "Request Online Users List",
+          "description": "Get current online users",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → loadOnlineUsers()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 8,
+          "title": "Connection Established ✓",
+          "description": "Ready for real-time messaging",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → ws.onopen"
+          },
+          "step_type": "success"
+        }
+      ]
+    },
+    {
+      "phase": 5,
+      "title": "Message Flow",
+      "flow_title": "5. Real-Time Message Flow",
+      "steps": [
+        {
+          "step": 1,
+          "title": "User Types Message",
+          "description": "Input text in chat interface",
+          "location": {
+            "type": "client",
+            "file": "chat.html → message input field"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 2,
+          "title": "User Sends Message",
+          "description": "Click send or press Enter",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → message form submit"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 3,
+          "title": "Create Message Object",
+          "description": "Format with type, content, timestamp",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → create message JSON"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 4,
+          "title": "Send via WebSocket",
+          "description": "Transmit message to server",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → ws.send()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 5,
+          "title": "Server Processes Message",
+          "description": "Validate and format message",
+          "location": {
+            "type": "server",
+            "file": "app/utils/websocket_manager.py → handle_websocket_message()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 6,
+          "title": "Broadcast to All Users",
+          "description": "Send message to all connected clients",
+          "location": {
+            "type": "server",
+            "file": "app/utils/websocket_manager.py → broadcast_message()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 7,
+          "title": "Each Client Receives Message",
+          "description": "WebSocket message event triggered",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → ws.onmessage"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 8,
+          "title": "JavaScript Processes Message",
+          "description": "Parse and determine message type",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → handleWebSocketMessage()"
+          },
+          "step_type": "normal"
+        },
+        {
+          "step": 9,
+          "title": "Display Message in Chat",
+          "description": "Add message to chat interface",
+          "location": {
+            "type": "client",
+            "file": "static/js/chat.js → addMessage()"
+          },
+          "step_type": "success"
+        }
+      ]
+    }
+  ],
+  "architecture": {
+    "title": "System Architecture",
+    "components": {
+      "client": {
+        "title": "Client-Side (Browser)",
+        "components": [
+          {
+            "title": "Authentication",
+            "description": "JWT token management and validation"
+          },
+          {
+            "title": "WebSocket Client",
+            "description": "Real-time connection management"
+          },
+          {
+            "title": "UI Management",
+            "description": "Chat interface and animations"
+          },
+          {
+            "title": "Message Handling",
+            "description": "Send/receive message processing"
+          }
+        ]
+      },
+      "server": {
+        "title": "Server-Side (FastAPI)",
+        "components": [
+          {
+            "title": "Authentication Routes",
+            "description": "Register, login, token validation"
+          },
+          {
+            "title": "WebSocket Manager",
+            "description": "Connection tracking and broadcasting"
+          },
+          {
+            "title": "Security Middleware",
+            "description": "JWT verification and CORS"
+          },
+          {
+            "title": "Message Processing",
+            "description": "Message validation and routing"
+          }
+        ]
+      },
+      "database": {
+        "title": "Database (SQLite)",
+        "components": [
+          {
+            "title": "User Table",
+            "description": "Stores user accounts and hashed passwords"
+          },
+          {
+            "title": "Session Management",
+            "description": "User authentication state"
+          },
+          {
+            "title": "Data Persistence",
+            "description": "User registration and profile data"
+          }
+        ]
+      }
+    }
+  },
+  "legend": {
+    "title": "Flow Legend",
+    "items": [
+      {
+        "type": "normal",
+        "label": "Normal Step",
+        "color": "legend-normal"
+      },
+      {
+        "type": "decision",
+        "label": "Decision Point",
+        "color": "legend-decision"
+      },
+      {
+        "type": "success",
+        "label": "Success/Completion",
+        "color": "legend-success"
+      },
+      {
+        "type": "database",
+        "label": "Database Operation",
+        "color": "legend-database"
+      },
+      {
+        "type": "security",
+        "label": "Security Operation",
+        "color": "legend-security"
+      }
+    ]
+  },
+  "metadata": {
+    "step_types": {
+      "normal": {
+        "description": "Standard flow step",
+        "css_class": ""
+      },
+      "decision": {
+        "description": "Decision point with branching logic",
+        "css_class": "decision-point"
+      },
+      "success": {
+        "description": "Successful completion of a process",
+        "css_class": "success-point"
+      },
+      "database": {
+        "description": "Database operation or query",
+        "css_class": "database-point"
+      },
+      "security": {
+        "description": "Security-related operation",
+        "css_class": "security-point"
+      }
+    },
+    "locations": {
+      "client": {
+        "description": "Client-side (browser) operation",
+        "badge_class": "client",
+        "color": "#48bb78"
+      },
+      "server": {
+        "description": "Server-side (FastAPI) operation",
+        "badge_class": "server",
+        "color": "#4facfe"
+      },
+      "database": {
+        "description": "Database operation",
+        "badge_class": "database",
+        "color": "#a0aec0"
+      }
+    }
+  }
+}

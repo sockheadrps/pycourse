@@ -1,0 +1,1056 @@
+/* Flow Diagram Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #23243a 0%, #2d2e4a 100%);
+  color: #e8eaed;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.flow-container {
+  max-width: 100%;
+  margin: 0 20px;
+}
+
+/* Architecture Section */
+.architecture-section {
+  background: #2d3748;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #4a5568;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.architecture-section h2 {
+  font-size: 1.4em;
+  margin-bottom: 15px;
+  color: #e8eaed;
+  border-bottom: 2px solid #4facfe;
+  padding-bottom: 8px;
+  font-weight: 600;
+}
+
+.architecture-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.arch-component {
+  background: #1a202c;
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid #4a5568;
+}
+
+.arch-component h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #4facfe;
+}
+
+.arch-component div {
+  background: #2d3748;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border-left: 3px solid #4facfe;
+}
+
+.arch-component strong {
+  font-weight: 600;
+  color: #e8eaed;
+  margin-bottom: 4px;
+  font-size: 0.9em;
+  display: block;
+}
+
+.arch-component p {
+  color: #a0aec0;
+  font-size: 0.8em;
+  margin-top: 4px;
+}
+
+/* Phases Section */
+.phases-section {
+  margin-bottom: 40px;
+}
+
+.phases-section h2 {
+  color: #e8eaed;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.phases-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.phase {
+  background: #2d3748;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  border: 1px solid #4a5568;
+}
+
+.phase-header {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  color: #e8eaed;
+  padding: 25px;
+  text-align: center;
+  border-bottom: 1px solid #4a5568;
+}
+
+.phase-header h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #e8eaed;
+}
+
+.phase-header p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  color: #a0aec0;
+}
+
+/* Steps Container */
+.steps-container {
+  margin-top: 20px;
+}
+
+.flow-content .step-location {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  border-left: 3px solid rgba(74, 85, 104, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  white-space: nowrap;
+  width: 50%;
+  gap: 8px;
+  margin-left: auto;
+  background: rgba(26, 32, 44, 0.062);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-content .step-location::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+  pointer-events: none;
+}
+
+.location-badge {
+  padding: 10px 20px;
+  border-radius: 16px;
+  font-size: 0.65em;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  order: 1;
+  letter-spacing: 0.8px;
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.location-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.02),
+    transparent
+  );
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+.location-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  pointer-events: none;
+}
+
+.location-badge.client {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.location-badge.server {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.location-badge.database {
+  background: rgba(107, 114, 128, 0.15);
+  color: #9ca3af;
+  border-color: rgba(107, 114, 128, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.location-file {
+  color: #e2e8f0;
+  font-size: 0.75em;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+  text-align: center;
+  word-break: break-all;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  order: 2;
+  background: rgba(45, 55, 72, 0.6);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.location-file::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+/* Step type styling */
+.flow-content .normal-point {
+  background: rgba(79, 172, 254, 0.05);
+  border: 1px solid rgba(79, 172, 254, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .normal-point .step-number {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  color: #e8eaed;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced active state for normal-point steps */
+.flow-content .normal-point.active {
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.15), rgba(79, 172, 254, 0.08));
+  border: 2px solid rgba(79, 172, 254, 0.6);
+  box-shadow: 0 20px 40px rgba(79, 172, 254, 0.2), 0 8px 16px rgba(79, 172, 254, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-content .normal-point.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4facfe, #00f2fe, #4facfe);
+  opacity: 0.8;
+}
+
+.flow-content .normal-point.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), transparent);
+  pointer-events: none;
+}
+
+.flow-content .normal-point.active .step-number {
+  background: linear-gradient(135deg, #4facfe, #3b82f6);
+  color: white;
+  box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.flow-content .normal-point.active .step-title {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(79, 172, 254, 0.3);
+}
+
+.flow-content .normal-point.active .step-description {
+  color: #e2e8f0;
+  border-left-color: rgba(79, 172, 254, 0.4);
+}
+
+/* Focus effects for different step types */
+.flow-content .normal-point:focus,
+.flow-content .normal-point:focus-within {
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.12), rgba(79, 172, 254, 0.06));
+  border-color: rgba(79, 172, 254, 0.5);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(79, 172, 254, 0.15), 0 10px 10px rgba(79, 172, 254, 0.1);
+}
+
+.flow-content .decision-point:focus,
+.flow-content .decision-point:focus-within {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.12), rgba(255, 193, 7, 0.06));
+  border-color: rgba(255, 193, 7, 0.5);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(255, 193, 7, 0.15), 0 10px 10px rgba(255, 193, 7, 0.1);
+}
+
+.flow-content .success-point:focus,
+.flow-content .success-point:focus-within {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.12), rgba(40, 167, 69, 0.06));
+  border-color: rgba(40, 167, 69, 0.5);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(40, 167, 69, 0.15), 0 10px 10px rgba(40, 167, 69, 0.1);
+}
+
+.flow-content .database-point:focus,
+.flow-content .database-point:focus-within {
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.12), rgba(108, 117, 125, 0.06));
+  border-color: rgba(108, 117, 125, 0.5);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(108, 117, 125, 0.15), 0 10px 10px rgba(108, 117, 125, 0.1);
+}
+
+.flow-content .security-point:focus,
+.flow-content .security-point:focus-within {
+  background: linear-gradient(135deg, rgba(23, 162, 184, 0.12), rgba(23, 162, 184, 0.06));
+  border-color: rgba(23, 162, 184, 0.5);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(23, 162, 184, 0.15), 0 10px 10px rgba(23, 162, 184, 0.1);
+}
+
+.flow-content .decision-point {
+  background: rgba(255, 193, 7, 0.05);
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .decision-point .step-number {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  color: #ffc107;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .decision-point.active {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.08));
+  border: 2px solid rgba(255, 193, 7, 0.6);
+  box-shadow: 0 20px 40px rgba(255, 193, 7, 0.2), 0 8px 16px rgba(255, 193, 7, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-content .decision-point.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ffc107, #ffb300, #ffc107);
+  opacity: 0.8;
+}
+
+.flow-content .decision-point.active .step-number {
+  background: linear-gradient(135deg, #ffc107, #ffb300);
+  color: #1a202c;
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.flow-content .success-point {
+  background: rgba(40, 167, 69, 0.05);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .success-point .step-number {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  color: #48bb78;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .success-point.active {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(40, 167, 69, 0.08));
+  border: 2px solid rgba(40, 167, 69, 0.6);
+  box-shadow: 0 20px 40px rgba(40, 167, 69, 0.2), 0 8px 16px rgba(40, 167, 69, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-content .success-point.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #28a745, #20c997, #28a745);
+  opacity: 0.8;
+}
+
+.flow-content .success-point.active .step-number {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.flow-content .database-point {
+  background: rgba(108, 117, 125, 0.05);
+  border: 1px solid rgba(108, 117, 125, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .database-point .step-number {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  color: #a0aec0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .database-point.active {
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.15), rgba(108, 117, 125, 0.08));
+  border: 2px solid rgba(108, 117, 125, 0.6);
+  box-shadow: 0 20px 40px rgba(108, 117, 125, 0.2), 0 8px 16px rgba(108, 117, 125, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-content .database-point.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6c757d, #495057, #6c757d);
+  opacity: 0.8;
+}
+
+.flow-content .database-point.active .step-number {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  color: white;
+  box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.flow-content .security-point {
+  background: rgba(23, 162, 184, 0.05);
+  border: 1px solid rgba(23, 162, 184, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .security-point .step-number {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  color: #17a2b8;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-content .security-point.active {
+  background: linear-gradient(135deg, rgba(23, 162, 184, 0.15), rgba(23, 162, 184, 0.08));
+  border: 2px solid rgba(23, 162, 184, 0.6);
+  box-shadow: 0 20px 40px rgba(23, 162, 184, 0.2), 0 8px 16px rgba(23, 162, 184, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-content .security-point.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #17a2b8, #20c997, #17a2b8);
+  opacity: 0.8;
+}
+
+.flow-content .security-point.active .step-number {
+  background: linear-gradient(135deg, #17a2b8, #20c997);
+  color: white;
+  box-shadow: 0 8px 20px rgba(23, 162, 184, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Responsive design for steps */
+@media (max-width: 768px) {
+  .step-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .step-text-container {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .step-location {
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    width: 100%;
+    padding: 6px 10px;
+  }
+
+  .location-badge {
+    font-size: 0.6em;
+    padding: 3px 6px;
+    order: 2;
+  }
+
+  .location-file {
+    font-size: 0.65em;
+    flex: 1;
+    order: 1;
+    text-align: left;
+    padding: 3px 6px;
+  }
+
+  .step-title {
+    font-size: 0.9em;
+  }
+
+  .step-description {
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 480px) {
+  .step-location {
+    width: 100%;
+    padding: 4px 6px;
+    gap: 3px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .location-badge {
+    font-size: 0.55em;
+    padding: 2px 4px;
+    order: 2;
+  }
+
+  .location-file {
+    font-size: 0.6em;
+    flex: 1;
+    order: 1;
+    text-align: left;
+    padding: 2px 4px;
+  }
+}
+
+.step-file {
+  background: #e3f2fd;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1976d2;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.file-icon {
+  font-size: 1.1rem;
+}
+
+.step-code {
+  background: #2d3748;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.step-code pre {
+  margin: 0;
+  padding: 20px;
+  color: #e2e8f0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.step-code code {
+  background: none;
+  padding: 0;
+}
+
+/* Security Section */
+.security-section {
+  background: linear-gradient(135deg, #2d3748, #1a202c);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #4a5568;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.security-section h2 {
+  color: #e8eaed;
+  font-size: 1.3em;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.security-feature {
+  background: #232b39;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #3a4252;
+  box-shadow: none;
+  transition: none;
+}
+
+.security-feature:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #3a4252;
+}
+
+.security-feature h3 {
+  color: #4facfe;
+  font-size: 1em;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.security-feature ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.security-feature li {
+  color: #e8eaed;
+  padding: 2px 0 2px 14px;
+  border-bottom: none;
+  position: relative;
+  font-size: 0.92em;
+}
+
+.security-feature li:before {
+  content: '🔒';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font-size: 0.85em;
+}
+
+.security-feature li:last-child {
+  border-bottom: none;
+}
+
+/* Legend Section */
+.legend-section {
+  background: linear-gradient(135deg, #2d3748, #1a202c);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #4a5568;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.legend-section h2 {
+  color: #e8eaed;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 600;
+  text-shadow: none;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #232b39;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: none;
+  border: 1px solid #3a4252;
+  transition: none;
+}
+
+/* Remove hover effect */
+.legend-item:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #3a4252;
+}
+
+.legend-icon {
+  font-size: 1.1em;
+  min-width: 18px;
+  text-align: center;
+}
+
+.legend-text {
+  color: #e8eaed;
+  font-weight: 500;
+  font-size: 0.98em;
+}
+
+/* Legend Color Classes */
+.legend-normal {
+  color: #4facfe;
+}
+
+.legend-decision {
+  color: #f6ad55;
+}
+
+.legend-success {
+  color: #68d391;
+}
+
+.legend-database {
+  color: #9f7aea;
+}
+
+.legend-security {
+  color: #fc8181;
+}
+
+/* Navigation Controls */
+.navigation-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+  padding: 20px;
+  background: #2d3748;
+  border-radius: 12px;
+  border: 1px solid #4a5568;
+}
+
+.nav-btn {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  color: #e8eaed;
+  border: 1px solid #4a5568;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #4facfe, #3b82f6);
+  color: white;
+}
+
+.nav-btn:disabled {
+  background: #4a5568;
+  color: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.phase-indicator {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e8eaed;
+}
+
+/* Progress Bar */
+.progress-container {
+  margin-top: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .flow-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .flow-header h1 {
+    font-size: 1.5em;
+  }
+
+  .architecture-grid,
+  .security-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .navigation-controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-btn {
+    width: 100%;
+  }
+}
+
+/* Keyboard Navigation Styles */
+.phase.active {
+  border: 3px solid #4facfe4d;
+  box-shadow: 0 15px 40px rgba(79, 172, 254, 0.3);
+}
+
+.flow-content .step.active {
+  background: linear-gradient(135deg, rgba(45, 55, 72, 0.95), rgba(26, 32, 44, 0.9));
+  border: 2px solid rgba(79, 172, 254, 0.8);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(79, 172, 254, 0.3), 0 10px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  outline: none; /* Remove default focus outline since we have custom styling */
+}
+
+.flow-content .step.active::before {
+  background: linear-gradient(90deg, transparent, rgba(79, 172, 254, 0.3), transparent);
+}
+
+.flow-content .step.active .step-number {
+  background: linear-gradient(135deg, #4facfe, #3b82f6);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animation for phase transitions */
+.phase {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  padding-top: 10px;
+}
+
+.phase.active {
+  opacity: 1;
+}
+
+.flow-content .step {
+  background: linear-gradient(135deg, rgba(45, 55, 72, 0.85), rgba(26, 32, 44, 0.8));
+  border-radius: 20px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 20px 20px;
+}
+
+.flow-content .step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.flow-content .step:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(79, 172, 254, 0.4);
+  cursor: pointer;
+}
+
+.flow-content .step:focus {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(79, 172, 254, 0.4);
+  outline: none;
+  z-index: 10;
+}
+
+.flow-content .step:focus-within {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(79, 172, 254, 0.4);
+  outline: none;
+  z-index: 10;
+}
+
+.flow-content .step:last-child {
+  margin-bottom: 0;
+}
+
+.flow-content .step-header {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  min-height: 44px;
+}
+
+.flow-content .step-number {
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.9), rgba(90, 98, 104, 0.8));
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  flex-shrink: 0;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.flow-content .step-number::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+}
+
+.flow-content .step-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  flex-wrap: wrap;
+  flex: 1;
+  margin-left: 20px;
+}
+
+.flow-content .step-text-container {
+  flex: 1;
+  min-width: 0;
+  max-width: calc(100% - 140px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+  align-items: flex-start;
+  margin: auto;
+  padding-left: 30px;
+}
+
+.flow-content .step-title {
+  font-size: 1.25em;
+  color: #e9ecef;
+  font-weight: 700;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.flow-content .step-description {
+  font-size: 0.95em;
+  color: #a0aec0;
+  line-height: 1.6;
+  opacity: 0.95;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+  margin-left: 20px;
+}
