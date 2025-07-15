@@ -1,11 +1,9 @@
 {
   "assets": {
-    "css": [
-      "/static/css/style.css"
-    ],
-    "js": [
-      "/static/js/scripts.js"
-    ]
+    "assets": {
+      "css": ["/guides/static/css/style.css"],
+      "js": ["/guides/static/js/scripts.js", "/guides/static/js/flow_diagram.js"]
+    }
   },
   "tutorial": {
     "current_structure": {
@@ -234,10 +232,7 @@
         "title": "Main Application"
       }
     ],
-    "prerequisites": [
-      "Python 3.8+",
-      "Basic knowledge of FastAPI, SQLAlchemy, and WebSockets"
-    ],
+    "prerequisites": ["Python 3.8+", "Basic knowledge of FastAPI, SQLAlchemy, and WebSockets"],
     "security_features": [
       "Password hashing with bcrypt and salt rounds",
       "JWT token authentication with secure headers",
