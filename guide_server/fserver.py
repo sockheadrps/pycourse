@@ -553,8 +553,29 @@ def serve_guide_tutorial(guide_slug: str, request: Request):
 
 @app.get("/guides")
 def list_guides():
+    """Return only published guides with their titles and descriptions"""
     guides = get_guides()
-    return {"guides": list(guides.keys())}
+    guides_data = []
+
+    for guide_slug, guide_path in guides.items():
+        tutorial_json = guide_path / "tutorial.json"
+
+        if tutorial_json.exists():
+            try:
+                with open(tutorial_json, encoding="utf-8") as f:
+                    data = json.load(f)
+                    tutorial_data = data.get("tutorial", {})
+                    title = tutorial_data.get("title", guide_slug)
+                    description = tutorial_data.get("description", "")
+                guides_data.append({
+                    "title": title,
+                    "description": description
+                })
+            except Exception as e:
+                print(
+                    f"Warning: Could not read tutorial.json for {guide_slug}: {e}")
+
+    return guides_data
 
 
 @app.get("/guides/{guide_slug}/stats")
