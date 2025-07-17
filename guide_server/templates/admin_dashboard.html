@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guide Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/guides/static/css/admin_dashboard.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="dashboard-header">
+        <div class="header">
+          <div class="header-content">
+            <div class="header-left">
+              <div class="title-section">
+                <button onclick="logout()" class="logout-btn" title="Logout">
+                  <span>🚪</span>
+                </button>
+                <h1>Guide Dashboard</h1>
+              </div>
+              <div class="overall-stats" id="overallStats">
+                <!-- Overall stats will be loaded here -->
+              </div>
+            </div>
+
+            <div class="header-actions">
+              <a href="/admin/edit-guide/new" class="btn btn-primary"> ➕ Create New Guide </a>
+              <button onclick="regenerateAllGuides()" class="btn btn-secondary">
+                🔄 Regenerate All Guides
+              </button>
+              <button onclick="refreshGuides()" class="btn btn-secondary">🔃 Refresh List</button>
+            </div>
+
+            <div class="top-guides-section">
+              <h3>🔥 Top Guides</h3>
+              <div class="top-guides" id="topGuides">
+                <!-- Top guides will be loaded here -->
+              </div>
+            </div>
+
+            <!-- Stat elements positioned in header container for proper z-index -->
+            <div class="stat-element stat-1" id="stat1"></div>
+            <div class="stat-element stat-2" id="stat2"></div>
+            <div class="stat-element stat-3" id="stat3"></div>
+            <div class="stat-element stat-4" id="stat4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Loading guides...</p>
+      </div>
+
+      <div class="guides-grid" id="guidesGrid">
+        <!-- Guides will be loaded here -->
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display: none">
+        <h3>No guides found</h3>
+        <p>Create your first guide to get started</p>
+        <a href="/admin/create-guide" class="btn btn-primary">Create Guide</a>
+      </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+      // Token management
+      function getAuthToken() {
+        return localStorage.getItem('admin_auth_token');
+      }
+
+      function setAuthToken(token) {
+        localStorage.setItem('admin_auth_token', token);
+      }
+
+      function clearAuthToken() {
+        localStorage.removeItem('admin_auth_token');
+      }
+
+      function checkAuth() {
+        const token = getAuthToken();
+        if (!token) {
+          // Redirect to login page
+          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+          return false;
+        }
+        return true;
+      }
+
+      // Check authentication on page load
+      document.addEventListener('DOMContentLoaded', function () {
+        if (!checkAuth()) {
+          return; // Will redirect to login
+        }
+
+        // Initialize dashboard
+        loadDashboard();
+      });
+
+      function logout() {
+        clearAuthToken();
+        window.location.href = '/login';
+      }
+
+      async function loadDashboard() {
+        try {
+          // Load overall stats
+          await loadOverallStats();
+
+          // Load guides
+          await loadGuides();
+
+          // Load top guides
+          await loadTopGuides();
+        } catch (error) {
+          console.error('Failed to load dashboard:', error);
+          if (error.status === 401) {
+            // Token expired or invalid
+            clearAuthToken();
+            window.location.href =
+              '/login?redirect=' + encodeURIComponent(window.location.pathname);
+          }
+        }
+      }
+
+      async function makeAuthenticatedRequest(url, options = {}) {
+        const token = getAuthToken();
+        if (!token) {
+          throw new Error('No auth token available');
+        }
+
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            ...options.headers,
+          },
+        });
+
+        if (response.status === 401) {
+          clearAuthToken();
+          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+          throw new Error('Authentication failed');
+        }
+
+        return response;
+      }
+    </script>
+
+    <script src="/guides/static/js/admin_dashboard.js"></script>
+  </body>
+</html>

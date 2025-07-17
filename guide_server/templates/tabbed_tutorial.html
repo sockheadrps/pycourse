@@ -5,31 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ title }}</title>
 
-	<link rel="stylesheet" href="/guides/static/css/style.css">
-	<script src="/guides/static/js/flow_diagram.js"></script>
-	<script src="/guides/static/js/scripts.js"></script>
-	<link rel="stylesheet" href="/guides/static/css/flow_diagram.css">
-
+    <link rel="stylesheet" href="/guides/static/css/style.css" />
+    <link rel="stylesheet" href="/guides/static/css/flow_diagram.css" />
   </head>
 
   <body>
     <div class="container">
+      {% if is_preview %}
+      <div class="preview-banner">
+        <div class="preview-content">
+          <span class="preview-icon">👁️</span>
+          <span class="preview-text">Preview Mode - This is a draft version</span>
+          <button class="preview-close-btn" onclick="window.close()">✕</button>
+        </div>
+      </div>
+      {% endif %}
+
       <div class="header">
-        <h1 class="tutorial-title">{{ title }}</h1>
-        <p class="tutorial-description">{{ description }}</p>
+        <div class="header-content">
+          <div class="header-text">
+            <h1 class="tutorial-title">{{ title }}</h1>
+            <p class="tutorial-description">{{ description }}</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Tab Navigation -->
-      <div class="tab-container">
-        <div class="tab-buttons">
-          <button class="tab-button active" data-tab="tutorial">Tutorial</button>
-          <button class="tab-button" data-tab="flow">App Flow</button>
-        </div>
-
-        <!-- Tutorial Tab Content -->
-        <div id="tutorial-tab" class="tab-content active">
-          <div class="content">
-            {% for phase in tutorial_data.phases %}
+      <!-- Tutorial Tab Content -->
+      <div id="tutorial-tab" class="tab-content active">
+        <div class="content">
+          {% if tutorial_data.youtube_video %}
+          <div class="youtube-video-container">
+            <div class="video-edit-controls">
+              <button class="video-edit-btn" data-tutorial-video="true">🔒</button>
+            </div>
+            <div class="youtube-video-wrapper">
+              {% set video_id = tutorial_data.youtube_video.split('v=')[-1] if 'v=' in
+              tutorial_data.youtube_video else tutorial_data.youtube_video %} {% set video_id =
+              video_id.split('&')[0] if '&' in video_id else video_id %}
+              <iframe
+                src="https://www.youtube.com/embed/{{ video_id }}?rel=0"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                class="youtube-video"
+              >
+              </iframe>
+            </div>
+          </div>
+          <!-- Tab Navigation -->
+          <div class="tab-container">
+            <div class="tab-buttons">
+              <button class="tab-button active" data-tab="tutorial">Tutorial</button>
+              <button class="tab-button" data-tab="flow">App Flow</button>
+            </div>
+            {% endif %} {% for phase in tutorial_data.phases %}
             <div class="phase-section">
               <div class="phase-header">
                 <div class="phase-number">{{ phase.phase }}</div>
@@ -68,11 +97,13 @@
                       📋
                     </button>
                   </div>
-                  {% set extension = step.file.split('.')[-1] %} {% set lang_map = {'py': 'python',
-                  'js': 'javascript', 'html': 'markup', 'css': 'css'} %}
+                  {% set extension = step.file.split('.')[-1] if step.file else 'txt' %} {% set
+                  lang_map = {'py': 'python', 'js': 'javascript', 'html': 'markup', 'css': 'css',
+                  'ts': 'typescript', 'jsx': 'javascript', 'tsx': 'typescript'} %} {% set language =
+                  lang_map.get(extension, 'plaintext') %}
                   <pre
-                    class="line-numbers language-{{ lang_map.get(extension, 'plaintext') }}"
-                  ><code class="language-{{ lang_map.get(extension, 'plaintext') }}">{{ step.code_snippet | e }}</code></pre>
+                    class="line-numbers language-{{ language }}"
+                  ><code class="language-{{ language }}">{{ step.code_snippet | e }}</code></pre>
                 </div>
                 {% endif %}
               </div>
@@ -210,8 +241,10 @@
     <!-- Supported languages -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 
     <script>
       // Make tutorial data available globally

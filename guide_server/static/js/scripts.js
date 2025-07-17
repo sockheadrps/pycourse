@@ -3,6 +3,107 @@ let completedSteps = 0;
 let totalSteps = 0;
 let isEditingDescription = false;
 let currentStepElement = null;
+let isAuthenticated = false;
+let authToken = null;
+
+// Server-side authentication functions
+async function checkAuth() {
+  const storedToken = localStorage.getItem('admin_auth_token');
+  if (!storedToken) {
+    isAuthenticated = false;
+    return false;
+  }
+
+  try {
+    const response = await fetch('/api/auth/check', {
+      headers: {
+        Authorization: `Bearer ${storedToken}`,
+      },
+    });
+
+    if (response.ok) {
+      authToken = storedToken;
+      isAuthenticated = true;
+      return true;
+    } else {
+      // Token is invalid, clear it
+      localStorage.removeItem('admin_auth_token');
+      authToken = null;
+      isAuthenticated = false;
+      return false;
+    }
+  } catch (error) {
+    console.error('Auth check error:', error);
+    localStorage.removeItem('admin_auth_token');
+    authToken = null;
+    isAuthenticated = false;
+    return false;
+  }
+}
+
+async function login(password) {
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password: password }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      authToken = data.token;
+      localStorage.setItem('admin_auth_token', authToken);
+      isAuthenticated = true;
+      updateEditButtonsVisibility();
+      showSaveNotification('Authentication successful!', 'success');
+      return true;
+    } else {
+      showSaveNotification('Invalid password!', 'error');
+      return false;
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    showSaveNotification('Login failed!', 'error');
+    return false;
+  }
+}
+
+async function logout() {
+  try {
+    if (authToken) {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+    }
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
+
+  authToken = null;
+  localStorage.removeItem('admin_auth_token');
+  isAuthenticated = false;
+  updateEditButtonsVisibility();
+  showSaveNotification('Logged out successfully!', 'success');
+}
+
+function updateEditButtonsVisibility() {
+  console.log('updateEditButtonsVisibility called, isAuthenticated:', isAuthenticated);
+  const editButtons = document.querySelectorAll('.step-edit-btn, .code-edit-btn, .video-edit-btn');
+  console.log('Found edit buttons:', editButtons.length);
+  editButtons.forEach((btn) => {
+    if (isAuthenticated) {
+      btn.style.display = 'flex';
+      btn.style.opacity = '0.8';
+    } else {
+      btn.style.display = 'none';
+    }
+  });
+}
 
 // Load tutorial data
 
@@ -14,6 +115,7 @@ function escapeHtml(text) {
 
 // Step description editing functionality
 function toggleStepDescriptionEdit(stepId) {
+  console.log('toggleStepDescriptionEdit called for step:', stepId);
   const stepItem = document.querySelector(`[data-step-id="${stepId}"]`);
   const descriptionContainer = stepItem.querySelector('.step-description-container');
   const descriptionText = descriptionContainer.querySelector('.step-description');
@@ -75,6 +177,7 @@ function toggleStepDescriptionEdit(stepId) {
 }
 
 function saveStepDescription(stepId, textarea, fileInput, fileElement) {
+  console.log('saveStepDescription called for step:', stepId);
   const newDescription = textarea.value.trim();
   if (newDescription) {
     // Parse the unique step ID to get phase and step index
@@ -122,6 +225,9 @@ function saveStepDescription(stepId, textarea, fileInput, fileElement) {
             </button>
           `;
 
+    // Update button visibility based on authentication state
+    updateEditButtonsVisibility();
+
     // Save to file
     saveTutorialData();
   }
@@ -152,6 +258,9 @@ function cancelStepDescription(
             <span class="lock-icon">🔒</span>
           </button>
         `;
+
+  // Update button visibility based on authentication state
+  updateEditButtonsVisibility();
 }
 
 // Code snippet editing functionality
@@ -175,6 +284,21 @@ function toggleCodeEdit(stepId) {
     const textarea = document.createElement('textarea');
     textarea.value = codeElement.textContent;
     textarea.placeholder = 'Enter code snippet...';
+
+    // Add tab handling to insert tab character instead of losing focus
+    textarea.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+
+        // Insert tab character at cursor position
+        this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
+
+        // Move cursor after the inserted tab
+        this.selectionStart = this.selectionEnd = start + 1;
+      }
+    });
 
     codeElement.parentElement.style.display = 'none';
     codePreview.insertBefore(textarea, editControls);
@@ -204,6 +328,7 @@ function toggleCodeEdit(stepId) {
 }
 
 function saveCodeSnippet(stepId, textarea, codeElement, editBtn) {
+  console.log('saveCodeSnippet called for step:', stepId);
   const newCode = textarea.value;
   if (newCode) {
     // Parse the unique step ID to get phase and step index
@@ -226,9 +351,21 @@ function saveCodeSnippet(stepId, textarea, codeElement, editBtn) {
     textarea.remove();
     codeElement.parentElement.style.display = 'block';
 
-    // Re-highlight the code
+    // Re-highlight the code with proper language detection
     if (window.Prism) {
-      Prism.highlightElement(codeElement);
+      // Get the language class from the pre element
+      const preElement = codeElement.parentElement;
+      const languageClass = Array.from(preElement.classList).find((cls) =>
+        cls.startsWith('language-')
+      );
+      if (languageClass) {
+        const language = languageClass.replace('language-', '');
+        codeElement.className = `language-${language}`;
+        Prism.highlightElement(codeElement);
+      } else {
+        // Fallback to highlighting without specific language
+        Prism.highlightElement(codeElement);
+      }
     }
 
     // Remove save and cancel buttons
@@ -240,6 +377,9 @@ function saveCodeSnippet(stepId, textarea, codeElement, editBtn) {
 
     // Show original edit button
     editBtn.style.display = 'flex';
+
+    // Update button visibility based on authentication state
+    updateEditButtonsVisibility();
 
     // Save to file
     saveTutorialData();
@@ -258,6 +398,135 @@ function cancelCodeSnippet(stepId, textarea, codeElement, editBtn) {
 
   // Show original edit button
   editBtn.style.display = 'flex';
+
+  // Update button visibility based on authentication state
+  updateEditButtonsVisibility();
+}
+
+// Video editing functionality
+function toggleVideoEdit() {
+  console.log('toggleVideoEdit called');
+  const videoContainer = document.querySelector('.youtube-video-container');
+  const videoWrapper = videoContainer.querySelector('.youtube-video-wrapper');
+  const editControls = videoContainer.querySelector('.video-edit-controls');
+  const editBtn = editControls.querySelector('.video-edit-btn');
+
+  if (!editBtn.classList.contains('editing')) {
+    // Switch to edit mode
+    const iframe = videoWrapper.querySelector('iframe');
+    const currentSrc = iframe.src;
+    const videoId = currentSrc.split('/embed/')[1]?.split('?')[0] || '';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = videoId ? `https://www.youtube.com/watch?v=${videoId}` : '';
+    input.placeholder = 'Enter YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)';
+    input.className = 'video-url-input';
+    input.style.cssText = `
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #4a5568;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #2d3748;
+      color: #e2e8f0;
+      margin-bottom: 10px;
+    `;
+
+    videoWrapper.style.display = 'none';
+    videoContainer.insertBefore(input, videoWrapper);
+
+    // Create save and cancel buttons
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'video-edit-btn editing';
+    saveBtn.title = 'Save Changes';
+    saveBtn.innerHTML = '<span class="lock-icon">💾</span>';
+    saveBtn.onclick = () => saveVideoUrl(input, videoWrapper, editControls);
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'video-edit-btn cancel';
+    cancelBtn.title = 'Cancel Changes';
+    cancelBtn.innerHTML = '<span class="lock-icon">✕</span>';
+    cancelBtn.onclick = () => cancelVideoEdit(input, videoWrapper, editControls);
+
+    editControls.innerHTML = '';
+    editControls.appendChild(saveBtn);
+    editControls.appendChild(cancelBtn);
+
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
+}
+
+async function saveVideoUrl(input, videoWrapper, editControls) {
+  console.log('saveVideoUrl called');
+  const videoUrl = input.value.trim();
+
+  if (videoUrl) {
+    // Extract video ID from URL
+    let videoId = '';
+    if (videoUrl.includes('youtube.com/watch?v=')) {
+      videoId = videoUrl.split('v=')[1]?.split('&')[0] || '';
+    } else if (videoUrl.includes('youtu.be/')) {
+      videoId = videoUrl.split('youtu.be/')[1]?.split('?')[0] || '';
+    } else {
+      // Assume it's already a video ID
+      videoId = videoUrl;
+    }
+
+    if (videoId) {
+      // Update the iframe
+      const iframe = videoWrapper.querySelector('iframe');
+      iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0`;
+
+      // Update tutorial data
+      if (tutorialData) {
+        tutorialData.youtube_video = videoUrl;
+      }
+
+      showSaveNotification('Video URL saved successfully!', 'success');
+
+      // Save changes to server
+      await saveTutorialData();
+    } else {
+      showSaveNotification('Invalid YouTube URL!', 'error');
+      return;
+    }
+  }
+
+  // Restore edit button
+  const editBtn = document.createElement('button');
+  editBtn.className = 'video-edit-btn';
+  editBtn.setAttribute('data-tutorial-video', 'true');
+  editBtn.title = 'Edit Video URL';
+  editBtn.innerHTML = '<span class="lock-icon">🔒</span>';
+  editBtn.onclick = toggleVideoEdit;
+
+  editControls.innerHTML = '';
+  editControls.appendChild(editBtn);
+
+  // Show video and remove input
+  videoWrapper.style.display = 'block';
+  input.remove();
+}
+
+function cancelVideoEdit(input, videoWrapper, editControls) {
+  console.log('cancelVideoEdit called');
+
+  // Restore edit button
+  const editBtn = document.createElement('button');
+  editBtn.className = 'video-edit-btn';
+  editBtn.setAttribute('data-tutorial-video', 'true');
+  editBtn.title = 'Edit Video URL';
+  editBtn.innerHTML = '<span class="lock-icon">🔒</span>';
+  editBtn.onclick = toggleVideoEdit;
+
+  editControls.innerHTML = '';
+  editControls.appendChild(editBtn);
+
+  // Show video and remove input
+  videoWrapper.style.display = 'block';
+  input.remove();
 }
 
 // Copy code snippet to clipboard
@@ -312,22 +581,55 @@ async function copyCodeToClipboard(stepId) {
 }
 
 async function saveTutorialData() {
+  console.log('saveTutorialData called');
+  console.log('isAuthenticated:', isAuthenticated);
+  console.log('authToken:', authToken ? 'present' : 'missing');
+
+  if (!isAuthenticated || !authToken) {
+    showSaveNotification('Authentication required to save changes', 'error');
+    return;
+  }
+
+  // Extract guide slug from current URL
+  const urlPath = window.location.pathname;
+  const guideSlugMatch = urlPath.match(/\/guides\/([^\/]+)\/tutorial/);
+  const guideSlug = guideSlugMatch ? guideSlugMatch[1] : 'fastapi-chat-app';
+
+  console.log('URL path:', urlPath);
+  console.log('Guide slug:', guideSlug);
+  console.log('Tutorial data:', tutorialData);
+
   try {
     const response = await fetch('/save-tutorial', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        guide_slug: 'fastapi-chat-app',
+        guide_slug: guideSlug,
         tutorial_data: tutorialData,
       }),
     });
 
+    console.log('Response status:', response.status);
+    console.log('Response ok:', response.ok);
+
     if (response.ok) {
+      const responseData = await response.json();
+      console.log('Save successful:', responseData);
       showSaveNotification();
+    } else if (response.status === 401) {
+      // Authentication failed, clear token and show login
+      console.log('Authentication failed');
+      authToken = null;
+      isAuthenticated = false;
+      localStorage.removeItem('admin_auth_token');
+      updateEditButtonsVisibility();
+      showSaveNotification('Session expired. Please login again.', 'error');
     } else {
-      console.error('Failed to save tutorial data');
+      const errorData = await response.text();
+      console.error('Failed to save tutorial data:', response.status, errorData);
       showSaveNotification('Error saving description', 'error');
     }
   } catch (error) {
@@ -500,7 +802,11 @@ function countTotalSteps(data) {
 }
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+  // Check authentication first
+  await checkAuth();
+  updateEditButtonsVisibility();
+
   // Use the tutorial data that's already available globally from Jinja template
   if (window.tutorialData) {
     tutorialData = window.tutorialData;
@@ -524,21 +830,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Add event listener for step description and code edit buttons
   document.addEventListener('click', function (e) {
+    console.log('Click event on:', e.target);
     if (e.target.closest('.step-edit-btn')) {
       const stepId = e.target.closest('.step-edit-btn').dataset.stepId;
+      console.log('Step edit button clicked for step:', stepId);
       if (stepId) {
         toggleStepDescriptionEdit(stepId);
       }
     } else if (e.target.closest('.code-edit-btn')) {
       const stepId = e.target.closest('.code-edit-btn').dataset.stepId;
+      console.log('Code edit button clicked for step:', stepId);
       if (stepId) {
         toggleCodeEdit(stepId);
       }
     } else if (e.target.closest('.code-copy-btn')) {
       const stepId = e.target.closest('.code-copy-btn').dataset.stepId;
+      console.log('Code copy button clicked for step:', stepId);
       if (stepId) {
         copyCodeToClipboard(stepId);
       }
+    } else if (
+      e.target.closest('.video-edit-btn') &&
+      !e.target.closest('.video-edit-btn.editing') &&
+      !e.target.closest('.video-edit-btn.cancel')
+    ) {
+      console.log('Video edit button clicked');
+      toggleVideoEdit();
     }
   });
 });

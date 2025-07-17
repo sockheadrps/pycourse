@@ -1,4 +1,4 @@
 python-slugify
 fastapi[standard]
 jinja2
-python-slugify
+python-dotenv

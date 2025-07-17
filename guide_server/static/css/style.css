@@ -13,6 +13,67 @@ body {
   justify-content: center;
 }
 
+/* Preview Banner */
+.preview-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.preview-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  gap: 12px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.preview-icon {
+  font-size: 1.2em;
+  animation: pulse 2s infinite;
+}
+
+.preview-text {
+  font-weight: 600;
+  font-size: 0.95em;
+  letter-spacing: 0.5px;
+}
+
+.preview-close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.preview-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Adjust container when preview banner is present */
+.preview-banner + .container {
+  margin-top: 60px;
+}
+
 /* Tutorial Styles */
 .container {
   max-width: 1400px;
@@ -198,6 +259,17 @@ body {
 .step-edit-controls {
   display: flex;
   gap: 4px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  background: rgba(122, 140, 172, 0.9);
+  border-radius: 6px;
+  padding: 4px 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  visibility: hidden;
+  backdrop-filter: blur(4px);
 }
 
 .step-edit-btn {
@@ -246,6 +318,8 @@ body {
   font-size: 0.97em;
   margin: 15px 0;
   overflow-x: auto;
+  position: relative;
+  min-height: 60px;
 }
 
 .code-preview pre {
@@ -261,6 +335,28 @@ body {
   margin: 0 !important;
   padding: 1em !important; /* ✅ restore padding */
   border-radius: 0 !important;
+  background: #23272e !important;
+}
+
+/* Ensure proper syntax highlighting colors */
+.code-preview .token.keyword {
+  color: #ff79c6 !important;
+}
+
+.code-preview .token.string {
+  color: #f1fa8c !important;
+}
+
+.code-preview .token.comment {
+  color: #6272a4 !important;
+}
+
+.code-preview .token.function {
+  color: #50fa7b !important;
+}
+
+.code-preview .token.number {
+  color: #bd93f9 !important;
 }
 
 /* Tab Styles */
@@ -908,6 +1004,85 @@ body {
   overflow-wrap: break-word;
 }
 
+/* Authentication Controls */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.header-text {
+  flex: 1;
+  text-align: left;
+}
+
+.auth-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.login-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.password-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #e2e8f0;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+.password-input:focus {
+  outline: none;
+  border-color: #4facfe;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.auth-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: #e2e8f0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.auth-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.login-btn {
+  background: rgba(76, 175, 80, 0.2);
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.login-btn:hover {
+  background: rgba(76, 175, 80, 0.3);
+}
+
+.logout-btn {
+  background: rgba(244, 67, 54, 0.2);
+  border-color: rgba(244, 67, 54, 0.3);
+}
+
+.logout-btn:hover {
+  background: rgba(244, 67, 54, 0.3);
+}
+
 .prerequisites {
   background: rgba(40, 44, 60, 0.95);
   padding: 24px 28px;
@@ -983,6 +1158,7 @@ body {
   align-items: flex-start;
   gap: 8px;
   margin-bottom: 5px;
+  padding-top: 8px;
 }
 
 .step-description-container .step-description {
@@ -990,21 +1166,7 @@ body {
   margin: 0;
 }
 
-.step-edit-controls {
-  display: flex;
-  gap: 4px;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 10;
-  background: rgba(122, 140, 172, 0.9);
-  border-radius: 6px;
-  padding: 4px 6px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  visibility: hidden;
-  backdrop-filter: blur(4px);
-}
+/* Removed duplicate rule - edit controls are positioned in the header */
 
 .tutorial-step-header:hover .step-edit-controls,
 .step-edit-controls:hover {
@@ -1126,16 +1288,17 @@ body {
   display: flex;
   gap: 4px;
   position: absolute;
-  top: 40px;
-  right: 20px;
+  top: 8px;
+  right: 8px;
   z-index: 10;
   pointer-events: none;
-  background: #7a8cac;
-  border-radius: 8px;
+  background: rgba(122, 140, 172, 0.9);
+  border-radius: 6px;
   padding: 4px 6px;
   opacity: 0;
   transition: opacity 0.3s ease;
   visibility: hidden;
+  backdrop-filter: blur(4px);
 }
 
 .code-preview:hover .code-edit-controls,
@@ -1156,19 +1319,19 @@ body {
 
 .code-edit-btn,
 .code-copy-btn {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  border-radius: 4px;
-  padding: 4px 6px;
+  border-radius: 6px;
+  padding: 6px 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 12px;
-  min-width: 24px;
-  height: 24px;
+  font-size: 14px;
+  min-width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.7;
+  opacity: 0.8;
   color: white;
 }
 
@@ -1178,7 +1341,7 @@ body {
 
 .code-edit-btn:hover,
 .code-copy-btn:hover {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
   opacity: 1;
 }
@@ -1652,5 +1815,67 @@ pre.line-numbers {
   .prerequisites ul {
     flex-direction: column;
   }
+}
+
+/* YouTube Video Styles */
+.youtube-video-container {
+  position: relative;
+  background: rgba(45, 55, 72, 0.95);
+  border-radius: 12px;
+  margin: 20px 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  width: 70%;
+  height: 70%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.video-edit-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.youtube-video-container:hover .video-edit-controls {
+  opacity: 1;
+}
+
+.video-edit-btn {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.video-edit-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.05);
+}
+
+.youtube-video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  background: #000;
+}
+
+.youtube-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
 }
 /* 

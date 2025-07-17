@@ -8,6 +8,13 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+# pyc
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
 
 
 # System files

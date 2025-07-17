@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Guide - {{ guide_slug }}</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .header h1 {
+        color: #2d3748;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        color: #718096;
+        font-size: 1.1rem;
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.9);
+        color: #4a5568;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-secondary:hover {
+        background: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        color: white;
+      }
+
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+      }
+
+      .tabs {
+        display: flex;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 8px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .tab {
+        flex: 1;
+        padding: 15px 20px;
+        background: transparent;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #718096;
+        transition: all 0.3s ease;
+      }
+
+      .tab.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .tab:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.5);
+        color: #4a5568;
+      }
+
+      .tab-content {
+        display: none;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+      }
+
+      .tab-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+        border-radius: 20px 20px 0 0;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 700;
+        color: #2d3748;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 16px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+      }
+
+      .form-control[readonly] {
+        background: #f7fafc;
+        color: #718096;
+        cursor: not-allowed;
+        border-color: #e2e8f0;
+        opacity: 0.7;
+        position: relative;
+      }
+
+      .form-control[readonly]:hover {
+        border-color: #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transform: none;
+      }
+
+      .form-control[readonly]:focus {
+        border-color: #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transform: none;
+      }
+
+      .form-control[readonly]::after {
+        content: '🔒';
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border: none;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #48bb78, #38a169, #48bb78);
+      }
+
+      .btn-small {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
+      }
+
+      .step-item {
+        background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 2px solid #e2e8f0;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .step-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        border-color: #cbd5e0;
+      }
+
+      .step-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #4299e1, #3182ce);
+        border-radius: 12px 12px 0 0;
+      }
+
+      .step-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .insert-buttons {
+        display: flex;
+        gap: 8px;
+        margin: 15px 0;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+      }
+
+      .btn-insert {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .btn-insert:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-move {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+        background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-move:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(159, 122, 234, 0.3);
+      }
+
+      .btn-move:disabled {
+        background: #cbd5e0;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .preview-panel {
+        background: #1a202c;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+        color: #e2e8f0;
+        font-family: 'Monaco', 'Consolas', monospace;
+        font-size: 0.9rem;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .preview-panel h4 {
+        color: #667eea;
+        margin-bottom: 15px;
+      }
+
+      .json-key {
+        color: #9f7aea;
+      }
+
+      .json-string {
+        color: #68d391;
+      }
+
+      .json-number {
+        color: #f6ad55;
+      }
+
+      .json-boolean {
+        color: #f687b3;
+      }
+
+      .json-null {
+        color: #a0aec0;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification.success {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      }
+
+      .notification.error {
+        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 40px;
+        color: #718096;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #667eea;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .drag-handle {
+        cursor: move;
+        padding: 5px;
+        color: #a0aec0;
+      }
+
+      .drag-handle:hover {
+        color: #667eea;
+      }
+
+      .collapsible {
+        cursor: pointer;
+      }
+
+      .collapsible-content {
+        display: none;
+        transition: all 0.3s ease;
+      }
+
+      .collapsible-content.show {
+        display: block;
+      }
+
+      .collapse-icon {
+        transition: transform 0.3s ease;
+      }
+
+      .collapse-icon.collapsed {
+        transform: rotate(-90deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>
+          {% if guide_slug == 'new' %}➕ Create New Guide{% else %}✏️ Edit Guide: {{ guide_slug }}{%
+          endif %}
+        </h1>
+        <p>
+          {% if guide_slug == 'new' %}Create a new tutorial guide and flow diagram{% else %}Modify
+          your tutorial guide and flow diagram{% endif %}
+        </p>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="/admin/dashboard" class="btn btn-secondary"> ← Back to Dashboard </a>
+        <button onclick="saveDraft()" class="btn btn-secondary">💾 Save Draft</button>
+        <button onclick="publishGuide()" class="btn btn-primary">🚀 Publish Guide</button>
+        <button onclick="previewGuide()" class="btn btn-primary">👁️ Preview Guide</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('basic')">Basic Info</button>
+        <button class="tab" onclick="switchTab('tutorial')">Tutorial</button>
+        <button class="tab" onclick="switchTab('flow')">Flow Diagram</button>
+        <button class="tab" onclick="switchTab('preview')">Preview</button>
+      </div>
+
+      <!-- Basic Info Tab -->
+      <div id="basic-tab" class="tab-content active">
+        <div class="form-group">
+          <label for="slug">
+            Guide Slug (URL identifier) {% if guide_slug != 'new' %}
+            <span style="color: #e53e3e; font-size: 0.8em; margin-left: 8px">🔒 READ-ONLY</span>
+            {% endif %}
+          </label>
+          <input
+            type="text"
+            id="slug"
+            class="form-control"
+            value="{{ guide_slug }}"
+            {%
+            if
+            guide_slug
+            !="new"
+            %}readonly{%
+            endif
+            %}
+            {%
+            if
+            guide_slug
+            !="new"
+            %}title="Slug cannot be changed after guide creation"
+            {%
+            endif
+            %}
+          />
+          <small style="color: #718096"
+            >{% if guide_slug == 'new' %}Enter a unique slug for your guide{% else %}<strong
+              >⚠️ Slug cannot be changed after creation</strong
+            >
+            - This field is locked to maintain URL consistency{% endif %}</small
+          >
+        </div>
+        <div class="form-group">
+          <label for="title">Guide Title</label>
+          <input
+            type="text"
+            id="title"
+            class="form-control"
+            value="{{ guide_data.tutorial.title if guide_data else '' }}"
+          />
+        </div>
+        <div class="form-group">
+          <label for="description">Guide Description</label>
+          <textarea id="description" class="form-control">
+{{ guide_data.tutorial.description if guide_data else '' }}</textarea
+          >
+        </div>
+        <div class="form-group">
+          <label for="youtube-video">YouTube Video (URL or ID)</label>
+          <input
+            type="text"
+            id="youtube-video"
+            class="form-control"
+            value="{{ guide_data.tutorial.youtube_video if guide_data and guide_data.tutorial else '' }}"
+            placeholder="https://www.youtube.com/watch?v=VIDEO_ID or just VIDEO_ID"
+          />
+        </div>
+      </div>
+
+      <!-- Tutorial Tab -->
+      <div id="tutorial-tab" class="tab-content">
+        <div class="section">
+          <div class="section-header">
+            <h3 class="section-title">Tutorial Phases</h3>
+          </div>
+          <div id="phases-container">
+            <!-- Phases will be loaded here -->
+          </div>
+          <div style="margin-top: 20px; text-align: center">
+            <button onclick="addPhase()" class="btn btn-primary btn-small">➕ Add Phase</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow Tab -->
+      <div id="flow-tab" class="tab-content">
+        <div class="form-group">
+          <label for="flow-title">Flow Title</label>
+          <input
+            type="text"
+            id="flow-title"
+            class="form-control"
+            value="{{ guide_data.flow.title if guide_data else '' }}"
+          />
+        </div>
+        <div class="form-group">
+          <label for="flow-description">Flow Description</label>
+          <textarea id="flow-description" class="form-control">
+{{ guide_data.flow.description if guide_data else '' }}</textarea
+          >
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <h3 class="section-title">Flow Phases</h3>
+          </div>
+          <div id="flow-phases-container">
+            <!-- Flow phases will be loaded here -->
+          </div>
+          <div style="margin-top: 20px; text-align: center">
+            <button onclick="addFlowPhase()" class="btn btn-primary btn-small">
+              ➕ Add Flow Phase
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Tab -->
+      <div id="preview-tab" class="tab-content">
+        <div class="preview-panel">
+          <h4>JSON Preview</h4>
+          <pre id="json-preview"></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Saving...</p>
+    </div>
+
+    <script>
+      let authToken = localStorage.getItem('admin_auth_token');
+      let guideData = {{ guide_data | tojson | safe }};
+      let guideSlug = '{{ guide_slug }}';
+
+      // Initialize guide data structure if it doesn't exist
+      if (!guideData.tutorial) {
+          guideData.tutorial = {
+              title: '',
+              description: '',
+              youtube_video: '',
+              phases: []
+          };
+      }
+      if (!guideData.tutorial.phases) {
+          guideData.tutorial.phases = [];
+      }
+      if (!guideData.flow) {
+          guideData.flow = {
+              title: '',
+              description: '',
+              phases: []
+          };
+      }
+      if (!guideData.flow.phases) {
+          guideData.flow.phases = [];
+      }
+
+      // Check authentication
+      async function checkAuth() {
+          if (!authToken) {
+              // Redirect to login with return URL
+              const currentUrl = window.location.pathname + window.location.search;
+              window.location.href = `/login?redirect=${encodeURIComponent(currentUrl)}`;
+              return;
+          }
+
+          try {
+              const response = await fetch('/api/auth/check', {
+                  headers: {
+                      'Authorization': `Bearer ${authToken}`
+                  }
+              });
+
+              if (!response.ok) {
+                  localStorage.removeItem('admin_auth_token');
+                  const currentUrl = window.location.pathname + window.location.search;
+                  window.location.href = `/login?redirect=${encodeURIComponent(currentUrl)}`;
+              }
+          } catch (error) {
+              console.error('Auth check failed:', error);
+              localStorage.removeItem('admin_auth_token');
+              const currentUrl = window.location.pathname + window.location.search;
+              window.location.href = `/login?redirect=${encodeURIComponent(currentUrl)}`;
+          }
+      }
+
+      // Tab switching
+      function switchTab(tabName) {
+          // Hide all tab contents
+          document.querySelectorAll('.tab-content').forEach(content => {
+              content.classList.remove('active');
+          });
+          document.querySelectorAll('.tab').forEach(tab => {
+              tab.classList.remove('active');
+          });
+
+          // Show selected tab
+          document.getElementById(tabName + '-tab').classList.add('active');
+          event.target.classList.add('active');
+
+          // Update preview if on preview tab
+          if (tabName === 'preview') {
+              updatePreview();
+          }
+      }
+
+      // Initialize tutorial phases
+      function initializeTutorialPhases() {
+          const container = document.getElementById('phases-container');
+          container.innerHTML = '';
+
+          if (guideData.tutorial && guideData.tutorial.phases) {
+              guideData.tutorial.phases.forEach((phase, phaseIndex) => {
+                  addPhaseToDOM(phase, phaseIndex);
+              });
+          }
+      }
+
+      // Add phase to DOM
+      function addPhaseToDOM(phase, phaseIndex) {
+          const container = document.getElementById('phases-container');
+          const phaseDiv = document.createElement('div');
+          phaseDiv.className = 'section';
+          phaseDiv.innerHTML = `
+              <div class="form-group">
+                  <label>Phase ${phase.phase} - Title</label>
+                  <div style="display: flex; gap: 10px; align-items: center;">
+                      <input type="text" class="form-control" value="${phase.title}" onchange="updatePhaseTitle(${phaseIndex}, this.value)" style="flex: 1;">
+                      <button onclick="movePhaseUp(${phaseIndex})" class="btn-move" ${phaseIndex === 0 ? 'disabled' : ''}>⬆️</button>
+                      <button onclick="movePhaseDown(${phaseIndex})" class="btn-move" ${phaseIndex === guideData.tutorial.phases.length - 1 ? 'disabled' : ''}>⬇️</button>
+                      <button onclick="togglePhase(${phaseIndex})" class="btn btn-secondary btn-small collapse-icon" id="phase-collapse-${phaseIndex}">▼</button>
+                      <button onclick="removePhase(${phaseIndex})" class="btn btn-danger btn-small">🗑️</button>
+                  </div>
+              </div>
+              <div class="collapsible-content show" id="phase-${phaseIndex}">
+                  <div class="form-group">
+                      <label>Steps</label>
+                      <div id="steps-${phaseIndex}">
+                          ${phase.steps.map((step, stepIndex) => createStepHTML(phaseIndex, stepIndex, step)).join('')}
+                      </div>
+                      <div style="margin-top: 15px;">
+                          <button onclick="addStep(${phaseIndex})" class="btn btn-primary btn-small">➕ Add Step</button>
+                      </div>
+                  </div>
+              </div>
+          `;
+          container.appendChild(phaseDiv);
+      }
+
+      // Create step HTML
+      function createStepHTML(phaseIndex, stepIndex, step) {
+          const totalSteps = guideData.tutorial.phases[phaseIndex].steps.length;
+          return `
+              <div class="step-item">
+                  <div class="form-group">
+                      <label>Step ${stepIndex + 1} - Title</label>
+                      <div style="display: flex; gap: 10px; align-items: center;">
+                          <input type="text" class="form-control" value="${step.title}" onchange="updateStepTitle(${phaseIndex}, ${stepIndex}, this.value)" style="flex: 1;">
+                          <button onclick="moveStepUp(${phaseIndex}, ${stepIndex})" class="btn-move" ${stepIndex === 0 ? 'disabled' : ''}>⬆️</button>
+                          <button onclick="moveStepDown(${phaseIndex}, ${stepIndex})" class="btn-move" ${stepIndex === totalSteps - 1 ? 'disabled' : ''}>⬇️</button>
+                          <button onclick="toggleStep(${phaseIndex}, ${stepIndex})" class="btn btn-secondary btn-small collapse-icon" id="step-collapse-${phaseIndex}-${stepIndex}">▼</button>
+                          <button onclick="removeStep(${phaseIndex}, ${stepIndex})" class="btn btn-danger btn-small">🗑️</button>
+                      </div>
+                  </div>
+                  <div class="collapsible-content show" id="step-content-${phaseIndex}-${stepIndex}">
+                      <div class="insert-buttons">
+                          <button onclick="insertStepBefore(${phaseIndex}, ${stepIndex})" class="btn-insert">Insert Step Before</button>
+                      </div>
+                      <div class="form-group">
+                          <label>Description</label>
+                          <textarea class="form-control" onchange="updateStepDescription(${phaseIndex}, ${stepIndex}, this.value)">${step.description}</textarea>
+                      </div>
+                      <div class="form-group">
+                          <label>File</label>
+                          <input type="text" class="form-control" value="${step.file}" onchange="updateStepFile(${phaseIndex}, ${stepIndex}, this.value)">
+                      </div>
+                      <div class="form-group">
+                          <label>Code Snippet</label>
+                          <textarea class="form-control" style="min-height: 150px;" onchange="updateStepCode(${phaseIndex}, ${stepIndex}, this.value)">${step.code_snippet || ''}</textarea>
+                      </div>
+                  </div>
+              </div>
+          `;
+      }
+
+      // Add phase
+      function addPhase() {
+          const newPhase = {
+              phase: guideData.tutorial.phases.length + 1,
+              title: 'New Phase',
+              steps: []
+          };
+          guideData.tutorial.phases.push(newPhase);
+          addPhaseToDOM(newPhase, guideData.tutorial.phases.length - 1);
+      }
+
+      // Insert phase before
+      function insertPhaseBefore(phaseIndex) {
+          const newPhase = {
+              phase: phaseIndex + 1,
+              title: 'New Phase',
+              steps: []
+          };
+          guideData.tutorial.phases.splice(phaseIndex, 0, newPhase);
+          // Renumber phases
+          guideData.tutorial.phases.forEach((phase, index) => {
+              phase.phase = index + 1;
+          });
+          initializeTutorialPhases();
+      }
+
+      // Remove phase
+      function removePhase(phaseIndex) {
+          if (confirm('Are you sure you want to remove this phase?')) {
+              guideData.tutorial.phases.splice(phaseIndex, 1);
+              // Renumber phases
+              guideData.tutorial.phases.forEach((phase, index) => {
+                  phase.phase = index + 1;
+              });
+              initializeTutorialPhases();
+          }
+      }
+
+      // Add step
+      function addStep(phaseIndex) {
+          const newStep = {
+              title: 'New Step',
+              description: 'Step description',
+              file: 'file.py',
+              code_snippet: ''
+          };
+          guideData.tutorial.phases[phaseIndex].steps.push(newStep);
+          initializeTutorialPhases();
+      }
+
+      // Remove step
+      function removeStep(phaseIndex, stepIndex) {
+          if (confirm('Are you sure you want to remove this step?')) {
+              guideData.tutorial.phases[phaseIndex].steps.splice(stepIndex, 1);
+              initializeTutorialPhases();
+          }
+      }
+
+      // Move phase up
+      function movePhaseUp(phaseIndex) {
+          if (phaseIndex > 0) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`phase-${phaseIndex}`).classList.contains('show') ? false : true;
+              const prevCollapsed = document.getElementById(`phase-${phaseIndex - 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.tutorial.phases[phaseIndex];
+              guideData.tutorial.phases[phaseIndex] = guideData.tutorial.phases[phaseIndex - 1];
+              guideData.tutorial.phases[phaseIndex - 1] = temp;
+              // Renumber phases
+              guideData.tutorial.phases.forEach((phase, index) => {
+                  phase.phase = index + 1;
+              });
+              initializeTutorialPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentPhase = document.getElementById(`phase-${phaseIndex - 1}`);
+                  const newPrevPhase = document.getElementById(`phase-${phaseIndex}`);
+                  const newCurrentIcon = document.getElementById(`phase-collapse-${phaseIndex - 1}`);
+                  const newPrevIcon = document.getElementById(`phase-collapse-${phaseIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentPhase.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (prevCollapsed) {
+                      newPrevPhase.classList.remove('show');
+                      newPrevIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Move phase down
+      function movePhaseDown(phaseIndex) {
+          if (phaseIndex < guideData.tutorial.phases.length - 1) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`phase-${phaseIndex}`).classList.contains('show') ? false : true;
+              const nextCollapsed = document.getElementById(`phase-${phaseIndex + 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.tutorial.phases[phaseIndex];
+              guideData.tutorial.phases[phaseIndex] = guideData.tutorial.phases[phaseIndex + 1];
+              guideData.tutorial.phases[phaseIndex + 1] = temp;
+              // Renumber phases
+              guideData.tutorial.phases.forEach((phase, index) => {
+                  phase.phase = index + 1;
+              });
+              initializeTutorialPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentPhase = document.getElementById(`phase-${phaseIndex + 1}`);
+                  const newNextPhase = document.getElementById(`phase-${phaseIndex}`);
+                  const newCurrentIcon = document.getElementById(`phase-collapse-${phaseIndex + 1}`);
+                  const newNextIcon = document.getElementById(`phase-collapse-${phaseIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentPhase.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (nextCollapsed) {
+                      newNextPhase.classList.remove('show');
+                      newNextIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Insert step before
+      function insertStepBefore(phaseIndex, stepIndex) {
+          const newStep = {
+              title: 'New Step',
+              description: 'Step description',
+              file: 'file.py',
+              code_snippet: ''
+          };
+          guideData.tutorial.phases[phaseIndex].steps.splice(stepIndex, 0, newStep);
+          initializeTutorialPhases();
+      }
+
+      // Insert step after
+      function insertStepAfter(phaseIndex, stepIndex) {
+          const newStep = {
+              title: 'New Step',
+              description: 'Step description',
+              file: 'file.py',
+              code_snippet: ''
+          };
+          guideData.tutorial.phases[phaseIndex].steps.splice(stepIndex + 1, 0, newStep);
+          initializeTutorialPhases();
+      }
+
+      // Move step up
+      function moveStepUp(phaseIndex, stepIndex) {
+          if (stepIndex > 0) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`step-content-${phaseIndex}-${stepIndex}`).classList.contains('show') ? false : true;
+              const prevCollapsed = document.getElementById(`step-content-${phaseIndex}-${stepIndex - 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.tutorial.phases[phaseIndex].steps[stepIndex];
+              guideData.tutorial.phases[phaseIndex].steps[stepIndex] = guideData.tutorial.phases[phaseIndex].steps[stepIndex - 1];
+              guideData.tutorial.phases[phaseIndex].steps[stepIndex - 1] = temp;
+              initializeTutorialPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentStep = document.getElementById(`step-content-${phaseIndex}-${stepIndex - 1}`);
+                  const newPrevStep = document.getElementById(`step-content-${phaseIndex}-${stepIndex}`);
+                  const newCurrentIcon = document.getElementById(`step-collapse-${phaseIndex}-${stepIndex - 1}`);
+                  const newPrevIcon = document.getElementById(`step-collapse-${phaseIndex}-${stepIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentStep.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (prevCollapsed) {
+                      newPrevStep.classList.remove('show');
+                      newPrevIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Move step down
+      function moveStepDown(phaseIndex, stepIndex) {
+          if (stepIndex < guideData.tutorial.phases[phaseIndex].steps.length - 1) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`step-content-${phaseIndex}-${stepIndex}`).classList.contains('show') ? false : true;
+              const nextCollapsed = document.getElementById(`step-content-${phaseIndex}-${stepIndex + 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.tutorial.phases[phaseIndex].steps[stepIndex];
+              guideData.tutorial.phases[phaseIndex].steps[stepIndex] = guideData.tutorial.phases[phaseIndex].steps[stepIndex + 1];
+              guideData.tutorial.phases[phaseIndex].steps[stepIndex + 1] = temp;
+              initializeTutorialPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentStep = document.getElementById(`step-content-${phaseIndex}-${stepIndex + 1}`);
+                  const newNextStep = document.getElementById(`step-content-${phaseIndex}-${stepIndex}`);
+                  const newCurrentIcon = document.getElementById(`step-collapse-${phaseIndex}-${stepIndex + 1}`);
+                  const newNextIcon = document.getElementById(`step-collapse-${phaseIndex}-${stepIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentStep.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (nextCollapsed) {
+                      newNextStep.classList.remove('show');
+                      newNextIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Update functions
+      function updatePhaseTitle(phaseIndex, value) {
+          guideData.tutorial.phases[phaseIndex].title = value;
+      }
+
+      function updateStepTitle(phaseIndex, stepIndex, value) {
+          guideData.tutorial.phases[phaseIndex].steps[stepIndex].title = value;
+      }
+
+      function updateStepDescription(phaseIndex, stepIndex, value) {
+          guideData.tutorial.phases[phaseIndex].steps[stepIndex].description = value;
+      }
+
+      function updateStepFile(phaseIndex, stepIndex, value) {
+          guideData.tutorial.phases[phaseIndex].steps[stepIndex].file = value;
+      }
+
+      function updateStepCode(phaseIndex, stepIndex, value) {
+          guideData.tutorial.phases[phaseIndex].steps[stepIndex].code_snippet = value;
+      }
+
+
+
+      // Toggle phase visibility
+      function togglePhase(phaseIndex) {
+          const content = document.getElementById(`phase-${phaseIndex}`);
+          const icon = document.getElementById(`phase-collapse-${phaseIndex}`);
+          content.classList.toggle('show');
+          icon.classList.toggle('collapsed');
+      }
+
+      // Toggle step visibility
+      function toggleStep(phaseIndex, stepIndex) {
+          const content = document.getElementById(`step-content-${phaseIndex}-${stepIndex}`);
+          const icon = document.getElementById(`step-collapse-${phaseIndex}-${stepIndex}`);
+          content.classList.toggle('show');
+          icon.classList.toggle('collapsed');
+      }
+
+      // Initialize flow phases
+      function initializeFlowPhases() {
+          const container = document.getElementById('flow-phases-container');
+          container.innerHTML = '';
+
+          if (guideData.flow && guideData.flow.phases) {
+              guideData.flow.phases.forEach((phase, phaseIndex) => {
+                  addFlowPhaseToDOM(phase, phaseIndex);
+              });
+          }
+      }
+
+      // Add flow phase to DOM
+      function addFlowPhaseToDOM(phase, phaseIndex) {
+          const container = document.getElementById('flow-phases-container');
+          const phaseDiv = document.createElement('div');
+          phaseDiv.className = 'section';
+          phaseDiv.innerHTML = `
+              <div class="form-group">
+                  <label>Flow Phase ${phase.phase} - Title</label>
+                  <div style="display: flex; gap: 10px; align-items: center;">
+                      <input type="text" class="form-control" value="${phase.title}" onchange="updateFlowPhaseTitle(${phaseIndex}, this.value)" style="flex: 1;">
+                      <button onclick="moveFlowPhaseUp(${phaseIndex})" class="btn-move" ${phaseIndex === 0 ? 'disabled' : ''}>⬆️</button>
+                      <button onclick="moveFlowPhaseDown(${phaseIndex})" class="btn-move" ${phaseIndex === guideData.flow.phases.length - 1 ? 'disabled' : ''}>⬇️</button>
+                      <button onclick="toggleFlowPhase(${phaseIndex})" class="btn btn-secondary btn-small collapse-icon" id="flow-phase-collapse-${phaseIndex}">▼</button>
+                      <button onclick="removeFlowPhase(${phaseIndex})" class="btn btn-danger btn-small">🗑️</button>
+                  </div>
+              </div>
+              <div class="collapsible-content show" id="flow-phase-${phaseIndex}">
+                  <div class="form-group">
+                      <label>Flow Title</label>
+                      <input type="text" class="form-control" value="${phase.flow_title}" onchange="updateFlowPhaseFlowTitle(${phaseIndex}, this.value)">
+                  </div>
+                  <div class="form-group">
+                      <label>Steps</label>
+                      <div id="flow-steps-${phaseIndex}">
+                          ${phase.steps.map((step, stepIndex) => createFlowStepHTML(phaseIndex, stepIndex, step)).join('')}
+                      </div>
+                      <div style="margin-top: 15px;">
+                          <button onclick="addFlowStep(${phaseIndex})" class="btn btn-primary btn-small">➕ Add Flow Step</button>
+                      </div>
+                  </div>
+              </div>
+          `;
+          container.appendChild(phaseDiv);
+      }
+
+      // Create flow step HTML
+      function createFlowStepHTML(phaseIndex, stepIndex, step) {
+          const totalSteps = guideData.flow.phases[phaseIndex].steps.length;
+          return `
+              <div class="step-item">
+                  <div class="form-group">
+                      <label>Flow Step ${step.step} - Title</label>
+                      <div style="display: flex; gap: 10px; align-items: center;">
+                          <input type="text" class="form-control" value="${step.title}" onchange="updateFlowStepTitle(${phaseIndex}, ${stepIndex}, this.value)" style="flex: 1;">
+                          <button onclick="moveFlowStepUp(${phaseIndex}, ${stepIndex})" class="btn-move" ${stepIndex === 0 ? 'disabled' : ''}>⬆️</button>
+                          <button onclick="moveFlowStepDown(${phaseIndex}, ${stepIndex})" class="btn-move" ${stepIndex === totalSteps - 1 ? 'disabled' : ''}>⬇️</button>
+                          <button onclick="toggleFlowStep(${phaseIndex}, ${stepIndex})" class="btn btn-secondary btn-small collapse-icon" id="flow-step-collapse-${phaseIndex}-${stepIndex}">▼</button>
+                          <button onclick="removeFlowStep(${phaseIndex}, ${stepIndex})" class="btn btn-danger btn-small">🗑️</button>
+                      </div>
+                  </div>
+                  <div class="collapsible-content show" id="flow-step-content-${phaseIndex}-${stepIndex}">
+                      <div class="insert-buttons">
+                          <button onclick="insertFlowStepBefore(${phaseIndex}, ${stepIndex})" class="btn-insert">Insert Step Before</button>
+                      </div>
+                      <div class="form-group">
+                          <label>Description</label>
+                          <textarea class="form-control" onchange="updateFlowStepDescription(${phaseIndex}, ${stepIndex}, this.value)">${step.description}</textarea>
+                      </div>
+                      <div class="form-group">
+                          <label>Location Type</label>
+                          <select class="form-control" onchange="updateFlowStepLocationType(${phaseIndex}, ${stepIndex}, this.value)">
+                              <option value="server" ${step.location.type === 'server' ? 'selected' : ''}>Server</option>
+                              <option value="client" ${step.location.type === 'client' ? 'selected' : ''}>Client</option>
+                              <option value="database" ${step.location.type === 'database' ? 'selected' : ''}>Database</option>
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label>Location File</label>
+                          <input type="text" class="form-control" value="${step.location.file}" onchange="updateFlowStepLocationFile(${phaseIndex}, ${stepIndex}, this.value)">
+                      </div>
+                      <div class="form-group">
+                          <label>Step Type</label>
+                          <select class="form-control" onchange="updateFlowStepType(${phaseIndex}, ${stepIndex}, this.value)">
+                              <option value="normal" ${step.step_type === 'normal' ? 'selected' : ''}>Normal</option>
+                              <option value="decision" ${step.step_type === 'decision' ? 'selected' : ''}>Decision</option>
+                              <option value="success" ${step.step_type === 'success' ? 'selected' : ''}>Success</option>
+                              <option value="database" ${step.step_type === 'database' ? 'selected' : ''}>Database</option>
+                              <option value="security" ${step.step_type === 'security' ? 'selected' : ''}>Security</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+          `;
+      }
+
+      // Flow phase functions
+      function addFlowPhase() {
+          const newPhase = {
+              phase: guideData.flow.phases.length + 1,
+              title: 'New Flow Phase',
+              flow_title: 'New Flow Phase',
+              steps: []
+          };
+          guideData.flow.phases.push(newPhase);
+          addFlowPhaseToDOM(newPhase, guideData.flow.phases.length - 1);
+      }
+
+      // Insert flow phase before
+      function insertFlowPhaseBefore(phaseIndex) {
+          const newPhase = {
+              phase: phaseIndex + 1,
+              title: 'New Flow Phase',
+              flow_title: 'New Flow Phase',
+              steps: []
+          };
+          guideData.flow.phases.splice(phaseIndex, 0, newPhase);
+          // Renumber phases
+          guideData.flow.phases.forEach((phase, index) => {
+              phase.phase = index + 1;
+          });
+          initializeFlowPhases();
+      }
+
+      function removeFlowPhase(phaseIndex) {
+          if (confirm('Are you sure you want to remove this flow phase?')) {
+              guideData.flow.phases.splice(phaseIndex, 1);
+              guideData.flow.phases.forEach((phase, index) => {
+                  phase.phase = index + 1;
+              });
+              initializeFlowPhases();
+          }
+      }
+
+      function addFlowStep(phaseIndex) {
+          const newStep = {
+              step: guideData.flow.phases[phaseIndex].steps.length + 1,
+              title: 'New Flow Step',
+              description: 'Step description',
+              location: { type: 'server', file: 'file.py' },
+              step_type: 'normal'
+          };
+          guideData.flow.phases[phaseIndex].steps.push(newStep);
+          initializeFlowPhases();
+      }
+
+      function removeFlowStep(phaseIndex, stepIndex) {
+          if (confirm('Are you sure you want to remove this flow step?')) {
+              guideData.flow.phases[phaseIndex].steps.splice(stepIndex, 1);
+              initializeFlowPhases();
+          }
+      }
+
+      // Move flow phase up
+      function moveFlowPhaseUp(phaseIndex) {
+          if (phaseIndex > 0) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`flow-phase-${phaseIndex}`).classList.contains('show') ? false : true;
+              const prevCollapsed = document.getElementById(`flow-phase-${phaseIndex - 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.flow.phases[phaseIndex];
+              guideData.flow.phases[phaseIndex] = guideData.flow.phases[phaseIndex - 1];
+              guideData.flow.phases[phaseIndex - 1] = temp;
+              // Renumber phases
+              guideData.flow.phases.forEach((phase, index) => {
+                  phase.phase = index + 1;
+              });
+              initializeFlowPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentPhase = document.getElementById(`flow-phase-${phaseIndex - 1}`);
+                  const newPrevPhase = document.getElementById(`flow-phase-${phaseIndex}`);
+                  const newCurrentIcon = document.getElementById(`flow-phase-collapse-${phaseIndex - 1}`);
+                  const newPrevIcon = document.getElementById(`flow-phase-collapse-${phaseIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentPhase.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (prevCollapsed) {
+                      newPrevPhase.classList.remove('show');
+                      newPrevIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Move flow phase down
+      function moveFlowPhaseDown(phaseIndex) {
+          if (phaseIndex < guideData.flow.phases.length - 1) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`flow-phase-${phaseIndex}`).classList.contains('show') ? false : true;
+              const nextCollapsed = document.getElementById(`flow-phase-${phaseIndex + 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.flow.phases[phaseIndex];
+              guideData.flow.phases[phaseIndex] = guideData.flow.phases[phaseIndex + 1];
+              guideData.flow.phases[phaseIndex + 1] = temp;
+              // Renumber phases
+              guideData.flow.phases.forEach((phase, index) => {
+                  phase.phase = index + 1;
+              });
+              initializeFlowPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentPhase = document.getElementById(`flow-phase-${phaseIndex + 1}`);
+                  const newNextPhase = document.getElementById(`flow-phase-${phaseIndex}`);
+                  const newCurrentIcon = document.getElementById(`flow-phase-collapse-${phaseIndex + 1}`);
+                  const newNextIcon = document.getElementById(`flow-phase-collapse-${phaseIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentPhase.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (nextCollapsed) {
+                      newNextPhase.classList.remove('show');
+                      newNextIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Insert flow step before
+      function insertFlowStepBefore(phaseIndex, stepIndex) {
+          const newStep = {
+              step: guideData.flow.phases[phaseIndex].steps.length + 1,
+              title: 'New Flow Step',
+              description: 'Step description',
+              location: { type: 'server', file: 'file.py' },
+              step_type: 'normal'
+          };
+          guideData.flow.phases[phaseIndex].steps.splice(stepIndex, 0, newStep);
+          // Renumber steps
+          guideData.flow.phases[phaseIndex].steps.forEach((step, index) => {
+              step.step = index + 1;
+          });
+          initializeFlowPhases();
+      }
+
+      // Insert flow step after
+      function insertFlowStepAfter(phaseIndex, stepIndex) {
+          const newStep = {
+              step: guideData.flow.phases[phaseIndex].steps.length + 1,
+              title: 'New Flow Step',
+              description: 'Step description',
+              location: { type: 'server', file: 'file.py' },
+              step_type: 'normal'
+          };
+          guideData.flow.phases[phaseIndex].steps.splice(stepIndex + 1, 0, newStep);
+          // Renumber steps
+          guideData.flow.phases[phaseIndex].steps.forEach((step, index) => {
+              step.step = index + 1;
+          });
+          initializeFlowPhases();
+      }
+
+      // Move flow step up
+      function moveFlowStepUp(phaseIndex, stepIndex) {
+          if (stepIndex > 0) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex}`).classList.contains('show') ? false : true;
+              const prevCollapsed = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex - 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.flow.phases[phaseIndex].steps[stepIndex];
+              guideData.flow.phases[phaseIndex].steps[stepIndex] = guideData.flow.phases[phaseIndex].steps[stepIndex - 1];
+              guideData.flow.phases[phaseIndex].steps[stepIndex - 1] = temp;
+              // Renumber steps
+              guideData.flow.phases[phaseIndex].steps.forEach((step, index) => {
+                  step.step = index + 1;
+              });
+              initializeFlowPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentStep = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex - 1}`);
+                  const newPrevStep = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex}`);
+                  const newCurrentIcon = document.getElementById(`flow-step-collapse-${phaseIndex}-${stepIndex - 1}`);
+                  const newPrevIcon = document.getElementById(`flow-step-collapse-${phaseIndex}-${stepIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentStep.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (prevCollapsed) {
+                      newPrevStep.classList.remove('show');
+                      newPrevIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Move flow step down
+      function moveFlowStepDown(phaseIndex, stepIndex) {
+          if (stepIndex < guideData.flow.phases[phaseIndex].steps.length - 1) {
+              // Store collapse states before moving
+              const currentCollapsed = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex}`).classList.contains('show') ? false : true;
+              const nextCollapsed = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex + 1}`).classList.contains('show') ? false : true;
+
+              const temp = guideData.flow.phases[phaseIndex].steps[stepIndex];
+              guideData.flow.phases[phaseIndex].steps[stepIndex] = guideData.flow.phases[phaseIndex].steps[stepIndex + 1];
+              guideData.flow.phases[phaseIndex].steps[stepIndex + 1] = temp;
+              // Renumber steps
+              guideData.flow.phases[phaseIndex].steps.forEach((step, index) => {
+                  step.step = index + 1;
+              });
+              initializeFlowPhases();
+
+              // Restore collapse states after moving
+              setTimeout(() => {
+                  const newCurrentStep = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex + 1}`);
+                  const newNextStep = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex}`);
+                  const newCurrentIcon = document.getElementById(`flow-step-collapse-${phaseIndex}-${stepIndex + 1}`);
+                  const newNextIcon = document.getElementById(`flow-step-collapse-${phaseIndex}-${stepIndex}`);
+
+                  if (currentCollapsed) {
+                      newCurrentStep.classList.remove('show');
+                      newCurrentIcon.classList.add('collapsed');
+                  }
+                  if (nextCollapsed) {
+                      newNextStep.classList.remove('show');
+                      newNextIcon.classList.add('collapsed');
+                  }
+              }, 10);
+          }
+      }
+
+      // Flow update functions
+      function updateFlowPhaseTitle(phaseIndex, value) {
+          guideData.flow.phases[phaseIndex].title = value;
+      }
+
+      function updateFlowPhaseFlowTitle(phaseIndex, value) {
+          guideData.flow.phases[phaseIndex].flow_title = value;
+      }
+
+      function updateFlowStepTitle(phaseIndex, stepIndex, value) {
+          guideData.flow.phases[phaseIndex].steps[stepIndex].title = value;
+      }
+
+      function updateFlowStepDescription(phaseIndex, stepIndex, value) {
+          guideData.flow.phases[phaseIndex].steps[stepIndex].description = value;
+      }
+
+      function updateFlowStepLocationType(phaseIndex, stepIndex, value) {
+          guideData.flow.phases[phaseIndex].steps[stepIndex].location.type = value;
+      }
+
+      function updateFlowStepLocationFile(phaseIndex, stepIndex, value) {
+          guideData.flow.phases[phaseIndex].steps[stepIndex].location.file = value;
+      }
+
+      function updateFlowStepType(phaseIndex, stepIndex, value) {
+          guideData.flow.phases[phaseIndex].steps[stepIndex].step_type = value;
+      }
+
+      function toggleFlowPhase(phaseIndex) {
+          const content = document.getElementById(`flow-phase-${phaseIndex}`);
+          const icon = document.getElementById(`flow-phase-collapse-${phaseIndex}`);
+          content.classList.toggle('show');
+          icon.classList.toggle('collapsed');
+      }
+
+      function toggleFlowStep(phaseIndex, stepIndex) {
+          const content = document.getElementById(`flow-step-content-${phaseIndex}-${stepIndex}`);
+          const icon = document.getElementById(`flow-step-collapse-${phaseIndex}-${stepIndex}`);
+          content.classList.toggle('show');
+          icon.classList.toggle('collapsed');
+      }
+
+      // Update preview
+      function updatePreview() {
+          const preview = document.getElementById('json-preview');
+          const jsonString = JSON.stringify(guideData, null, 2);
+          preview.innerHTML = syntaxHighlight(jsonString);
+      }
+
+      // Syntax highlighting function
+      function syntaxHighlight(json) {
+          if (typeof json !== 'string') {
+              json = JSON.stringify(json, null, 2);
+          }
+          json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+              let cls = 'json-number';
+              if (/^"/.test(match)) {
+                  if (/:$/.test(match)) {
+                      cls = 'json-key';
+                  } else {
+                      cls = 'json-string';
+                  }
+              } else if (/true|false/.test(match)) {
+                  cls = 'json-boolean';
+              } else if (/null/.test(match)) {
+                  cls = 'json-null';
+              }
+              return '<span class="' + cls + '">' + match + '</span>';
+          });
+      }
+
+      // Save draft
+      async function saveDraft() {
+          await saveGuideData('draft');
+      }
+
+      // Publish guide
+      async function publishGuide() {
+          const loading = document.getElementById('loading');
+          loading.classList.add('show');
+
+          // Update guide data from form
+          guideData.tutorial.title = document.getElementById('title').value;
+          guideData.tutorial.description = document.getElementById('description').value;
+          guideData.tutorial.youtube_video = document.getElementById('youtube-video').value;
+          guideData.flow.title = document.getElementById('flow-title').value;
+          guideData.flow.description = document.getElementById('flow-description').value;
+
+          // Get the slug from the form (for new guides)
+          const slugInput = document.getElementById('slug');
+          const currentSlug = slugInput.value.trim();
+
+          try {
+              let endpoint;
+              let requestBody;
+
+              if (guideSlug === 'new') {
+                  // For new guides, use the publish-guide endpoint
+                  endpoint = '/admin/publish-guide';
+                  requestBody = {
+                      basic_info: {
+                          slug: currentSlug,
+                          title: guideData.tutorial.title,
+                          description: guideData.tutorial.description
+                      },
+                      tutorial: guideData.tutorial,
+                      flow: guideData.flow
+                  };
+              } else {
+                  // For existing guides, we need to publish from draft data
+                  // First save the current draft, then publish
+                  await saveGuideData('draft');
+
+                  // Now publish from the draft data
+                  endpoint = `/admin/publish-from-draft/${guideSlug}`;
+                  requestBody = {};
+              }
+
+              const response = await fetch(endpoint, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${authToken}`
+                  },
+                  body: JSON.stringify(requestBody)
+              });
+
+              if (response.ok) {
+                  const result = await response.json();
+                  showNotification(result.message || 'Guide published successfully!', 'success');
+
+                  // If this was a new guide, redirect to the edit page for the new slug
+                  if (guideSlug === 'new' && result.status === 'success') {
+                      setTimeout(() => {
+                          window.location.href = `/admin/edit-guide/${currentSlug}`;
+                      }, 1500);
+                  }
+              } else {
+                  const errorData = await response.json();
+                  showNotification(`Failed to publish guide: ${errorData.message || 'Unknown error'}`, 'error');
+              }
+          } catch (error) {
+              console.error('Failed to publish guide:', error);
+              showNotification(`Failed to publish guide: ${error.message}`, 'error');
+          } finally {
+              loading.classList.remove('show');
+          }
+      }
+
+      // Preview guide
+      async function previewGuide() {
+          const loading = document.getElementById('loading');
+          loading.classList.add('show');
+
+          try {
+              // First save the current draft
+              await saveGuideData('draft');
+
+              // Get the current slug (for new guides, this will be the slug from the form)
+              const slugInput = document.getElementById('slug');
+              const currentSlug = guideSlug === 'new' ? slugInput.value.trim() : guideSlug;
+
+              // Then generate preview
+              const response = await fetch(`/admin/preview-guide/${currentSlug}`, {
+                  method: 'GET',
+                  headers: {
+                      'Authorization': `Bearer ${authToken}`
+                  }
+              });
+
+              if (response.ok) {
+                  // Open preview in new window
+                  window.open(`/guides/${currentSlug}/tutorial?preview=true`, '_blank');
+              } else {
+                  const errorData = await response.json();
+                  showNotification(`Failed to generate preview: ${errorData.detail || 'Unknown error'}`, 'error');
+              }
+          } catch (error) {
+              console.error('Failed to generate preview:', error);
+              showNotification(`Failed to generate preview: ${error.message}`, 'error');
+          } finally {
+              loading.classList.remove('show');
+          }
+      }
+
+      // Save guide data
+      async function saveGuideData(action) {
+          const loading = document.getElementById('loading');
+          loading.classList.add('show');
+
+          // Update guide data from form
+          guideData.tutorial.title = document.getElementById('title').value;
+          guideData.tutorial.description = document.getElementById('description').value;
+          guideData.tutorial.youtube_video = document.getElementById('youtube-video').value;
+          guideData.flow.title = document.getElementById('flow-title').value;
+          guideData.flow.description = document.getElementById('flow-description').value;
+
+          // Get the slug from the form (for new guides)
+          const slugInput = document.getElementById('slug');
+          const currentSlug = slugInput.value.trim();
+
+          try {
+              let endpoint;
+              let requestBody;
+
+              if (guideSlug === 'new') {
+                  // For new guides, use the save-draft endpoint
+                  endpoint = '/admin/save-draft';
+                  requestBody = {
+                      basic_info: {
+                          slug: currentSlug,
+                          title: guideData.tutorial.title,
+                          description: guideData.tutorial.description
+                      },
+                      tutorial: guideData.tutorial,
+                      flow: guideData.flow
+                  };
+              } else {
+                  // For existing guides, use the update endpoint
+                  endpoint = `/admin/update-guide/${guideSlug}`;
+                  requestBody = {
+                      guide_data: guideData
+                  };
+              }
+
+              const response = await fetch(endpoint, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${authToken}`
+                  },
+                  body: JSON.stringify(requestBody)
+              });
+
+              if (response.ok) {
+                  const result = await response.json();
+                  showNotification(result.message || 'Draft saved successfully!', 'success');
+
+                  // If this was a new guide, redirect to the edit page for the new slug
+                  if (guideSlug === 'new' && result.status === 'success') {
+                      setTimeout(() => {
+                          window.location.href = `/admin/edit-guide/${currentSlug}`;
+                      }, 1500);
+                  }
+              } else {
+                  const errorData = await response.json();
+                  showNotification(`Failed to save draft: ${errorData.message || 'Unknown error'}`, 'error');
+              }
+          } catch (error) {
+              console.error('Failed to save draft:', error);
+              showNotification(`Failed to save draft: ${error.message}`, 'error');
+          } finally {
+              loading.classList.remove('show');
+          }
+      }
+
+      // Show notification
+      function showNotification(message, type = 'success') {
+          const notification = document.getElementById('notification');
+          notification.textContent = message;
+          notification.className = `notification ${type}`;
+          notification.classList.add('show');
+
+          setTimeout(() => {
+              notification.classList.remove('show');
+          }, 3000);
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', async function() {
+          await checkAuth();
+          initializeTutorialPhases();
+          initializeFlowPhases();
+      });
+    </script>
+  </body>
+</html>
