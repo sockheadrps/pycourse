@@ -65,8 +65,13 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Adjust container when preview banner is present */
@@ -328,8 +333,6 @@ body {
   border-radius: 8px;
   overflow-x: auto;
 }
-
-
 
 .code-preview pre[class*='language-'] {
   margin: 0 !important;
@@ -1435,7 +1438,6 @@ pre[class*='language-'].line-numbers > code {
   padding-right: 0.8em;
 }
 
-
 .code-preview .line-numbers-rows {
   position: absolute;
   pointer-events: none;
@@ -1449,7 +1451,6 @@ pre[class*='language-'].line-numbers > code {
   text-align: right;
   user-select: none;
 }
-
 
 /* General code styling */
 code[class*='language-'] {
@@ -1878,4 +1879,68 @@ pre.line-numbers {
   border: none;
   border-radius: 8px;
 }
-/* 
+
+/* Collapsible Code Snippets */
+.code-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.code-content.expanded {
+  max-height: 2000px;
+}
+
+.code-content.collapsed {
+  min-height: 200px;
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  position: relative;
+}
+
+.code-content.collapsed::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to bottom, transparent, rgba(59, 66, 94, 0.95));
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 0 0 8px 8px;
+}
+
+.code-toggle-btn {
+  border: none;
+  background: #4facfe8a;
+
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  margin-left: 4px;
+}
+
+.code-toggle-btn:hover {
+  background: rgba(79, 172254, 0.2);
+  transform: translateY(-1px);
+  opacity: 1;
+}
+
+.code-toggle-btn.expanded {
+  background: #4facfe8a;
+}
+
+.code-content.expanded {
+  max-height: 2000;
+  transition: max-height 0.3s ease-in-out;
+}

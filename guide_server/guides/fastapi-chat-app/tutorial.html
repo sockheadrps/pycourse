@@ -88,11 +88,19 @@
                   <button class="code-copy-btn" data-step-id="1-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="1-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">import secretss
+                <div class="code-content" data-step-id="1-1">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">import secretss
 import os
 
 # --- Secret Key Generation ---
@@ -189,6 +197,7 @@ if __name__ == &#34;__main__&#34;:
     # Write requirements.txt
     write_requirements_file()
     print(&#34;requirements.txt generated with minimal dependencies.&#34;)</code></pre>
+                </div>
               </div>
               
             </div>
@@ -223,11 +232,19 @@ if __name__ == &#34;__main__&#34;:
                   <button class="code-copy-btn" data-step-id="1-2">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="1-2"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-plaintext"
-                ><code class="language-plaintext">fastapi==0.104.1
+                <div class="code-content" data-step-id="1-2">
+                    
+                  <pre
+                    class="line-numbers language-plaintext"
+                  ><code class="language-plaintext">fastapi==0.104.1
 uvicorn[standard]==0.24.0
 sqlalchemy==2.0.23
 python-multipart==0.0.6
@@ -236,6 +253,7 @@ passlib[bcrypt]==1.7.4
 python-dotenv==1.0.0
 jinja2==3.1.2
 websockets==12.0</code></pre>
+                </div>
               </div>
               
             </div>
@@ -270,11 +288,19 @@ websockets==12.0</code></pre>
                   <button class="code-copy-btn" data-step-id="1-3">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="1-3"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from pydantic_settings import BaseSettings
+                <div class="code-content" data-step-id="1-3">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from pydantic_settings import BaseSettings
 from typing import List, Optional
 import os
 
@@ -306,6 +332,7 @@ class Settings(BaseSettings):
 
 settings = Settings()
 </code></pre>
+                </div>
               </div>
               
             </div>
@@ -340,11 +367,19 @@ settings = Settings()
                   <button class="code-copy-btn" data-step-id="1-4">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="1-4"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-plaintext"
-                ><code class="language-plaintext">PROJECT_NAME=FastAPI Chat App
+                <div class="code-content" data-step-id="1-4">
+                    
+                  <pre
+                    class="line-numbers language-plaintext"
+                  ><code class="language-plaintext">PROJECT_NAME=FastAPI Chat App
 VERSION=1.0.0
 DESCRIPTION=A real-time chat application with WebSocket support
 API_V1_STR=/api/v1
@@ -353,6 +388,7 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ALLOWED_HOSTS=http://localhost:8000,http://127.0.0.1:8000
 DATABASE_URL=sqlite:///./app.db</code></pre>
+                </div>
               </div>
               
             </div>
@@ -396,11 +432,19 @@ DATABASE_URL=sqlite:///./app.db</code></pre>
                   <button class="code-copy-btn" data-step-id="2-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="2-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from sqlalchemy import create_engine
+                <div class="code-content" data-step-id="2-1">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from app.utils.config import settings
@@ -422,6 +466,7 @@ def get_db():
 # Database initialization
 def init_db():
     Base.metadata.create_all(bind=engine)</code></pre>
+                </div>
               </div>
               
             </div>
@@ -456,11 +501,19 @@ def init_db():
                   <button class="code-copy-btn" data-step-id="2-2">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="2-2"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from sqlalchemy import Column, Integer, String, DateTime
+                <div class="code-content" data-step-id="2-2">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -471,6 +524,7 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())</code></pre>
+                </div>
               </div>
               
             </div>
@@ -505,11 +559,19 @@ class User(Base):
                   <button class="code-copy-btn" data-step-id="2-3">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="2-3"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from sqlalchemy.orm import Session
+                <div class="code-content" data-step-id="2-3">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from sqlalchemy.orm import Session
 from app.models import User
 
 def get_user(db: Session, user_id: int):
@@ -527,6 +589,7 @@ def create_user(db: Session, username: str, hashed_password: str):
     db.commit()
     db.refresh(db_user)
     return db_user</code></pre>
+                </div>
               </div>
               
             </div>
@@ -570,11 +633,19 @@ def create_user(db: Session, username: str, hashed_password: str):
                   <button class="code-copy-btn" data-step-id="3-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="3-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from pydantic import BaseModel, Field, field_validator, EmailStr, StringConstraints, ConfigDict
+                <div class="code-content" data-step-id="3-1">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from pydantic import BaseModel, Field, field_validator, EmailStr, StringConstraints, ConfigDict
 from typing import Optional, List, Annotated, Literal
 from datetime import datetime, timezone
 from enum import Enum
@@ -687,6 +758,7 @@ class ErrorMessage(WebSocketMessage):
         default=MessageType.ERROR, description=&#34;Message type&#34;)
     message: str = Field(..., description=&#34;Error message&#34;)
 </code></pre>
+                </div>
               </div>
               
             </div>
@@ -721,11 +793,19 @@ class ErrorMessage(WebSocketMessage):
                   <button class="code-copy-btn" data-step-id="3-2">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="3-2"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">#!/usr/bin/env python3
+                <div class="code-content" data-step-id="3-2">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">#!/usr/bin/env python3
 &#34;&#34;&#34;
 Simple test script to demonstrate the schemas and database functionality.
 &#34;&#34;&#34;
@@ -827,6 +907,7 @@ def main():
 
 if __name__ == &#34;__main__&#34;:
     main()</code></pre>
+                </div>
               </div>
               
             </div>
@@ -870,11 +951,19 @@ if __name__ == &#34;__main__&#34;:
                   <button class="code-copy-btn" data-step-id="4-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="4-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from datetime import datetime, timedelta
+                <div class="code-content" data-step-id="4-1">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from datetime import datetime, timedelta
 from typing import Any, Union, Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -941,6 +1030,7 @@ def get_current_user(
 
 def get_current_active_user(current_user = Depends(get_current_user)):
     return current_user</code></pre>
+                </div>
               </div>
               
             </div>
@@ -984,11 +1074,19 @@ def get_current_active_user(current_user = Depends(get_current_user)):
                   <button class="code-copy-btn" data-step-id="5-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="5-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from fastapi import WebSocket, WebSocketDisconnect
+                <div class="code-content" data-step-id="5-1">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from fastapi import WebSocket, WebSocketDisconnect
 from typing import Dict, List
 import json
 from datetime import datetime
@@ -1113,6 +1211,7 @@ class ConnectionManager:
 # Global connection manager instance
 manager = ConnectionManager()
 </code></pre>
+                </div>
               </div>
               
             </div>
@@ -1156,11 +1255,19 @@ manager = ConnectionManager()
                   <button class="code-copy-btn" data-step-id="6-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="6-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect, Form
+                <div class="code-content" data-step-id="6-1">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect, Form
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from typing import List
@@ -1237,6 +1344,7 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
             await manager.handle_websocket_message(websocket, user.id, data_dict)
     except WebSocketDisconnect:
         await manager.disconnect_user(user.id)</code></pre>
+                </div>
               </div>
               
             </div>
@@ -1280,11 +1388,19 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
                   <button class="code-copy-btn" data-step-id="7-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="7-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-css"
-                ><code class="language-css">/* Reset and base styles */
+                <div class="code-content" data-step-id="7-1">
+                    
+                  <pre
+                    class="line-numbers language-css"
+                  ><code class="language-css">/* Reset and base styles */
 * {
   margin: 0;
   padding: 0;
@@ -1359,6 +1475,7 @@ button:active {
     padding: 30px;
   }
 }</code></pre>
+                </div>
               </div>
               
             </div>
@@ -1393,11 +1510,19 @@ button:active {
                   <button class="code-copy-btn" data-step-id="7-2">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="7-2"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-css"
-                ><code class="language-css">/* Auth page specific styles */
+                <div class="code-content" data-step-id="7-2">
+                    
+                  <pre
+                    class="line-numbers language-css"
+                  ><code class="language-css">/* Auth page specific styles */
 .auth-container {
   background: rgba(45, 55, 72, 0.95);
   border-radius: 20px;
@@ -1716,6 +1841,7 @@ button:active {
 .send-btn:active {
   transform: scale(0.95);
 }</code></pre>
+                </div>
               </div>
               
             </div>
@@ -1759,11 +1885,19 @@ button:active {
                   <button class="code-copy-btn" data-step-id="8-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="8-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-javascript"
-                ><code class="language-javascript">// Common utilities and constants
+                <div class="code-content" data-step-id="8-1">
+                    
+                  <pre
+                    class="line-numbers language-javascript"
+                  ><code class="language-javascript">// Common utilities and constants
 const API_BASE = &#39;http://localhost:8000/api/v1&#39;;
 
 // Utility functions
@@ -1826,6 +1960,7 @@ async function apiRequest(endpoint, options = {}) {
     throw error;
   }
 }</code></pre>
+                </div>
               </div>
               
             </div>
@@ -1860,11 +1995,19 @@ async function apiRequest(endpoint, options = {}) {
                   <button class="code-copy-btn" data-step-id="8-2">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="8-2"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-javascript"
-                ><code class="language-javascript">// Login functionality
+                <div class="code-content" data-step-id="8-2">
+                    
+                  <pre
+                    class="line-numbers language-javascript"
+                  ><code class="language-javascript">// Login functionality
 async function login() {
   const username = document.getElementById(&#39;username&#39;).value;
   const password = document.getElementById(&#39;password&#39;).value;
@@ -1908,6 +2051,7 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
     });
   }
 });</code></pre>
+                </div>
               </div>
               
             </div>
@@ -1942,11 +2086,19 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
                   <button class="code-copy-btn" data-step-id="8-3">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="8-3"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-javascript"
-                ><code class="language-javascript">// Registration functionality
+                <div class="code-content" data-step-id="8-3">
+                    
+                  <pre
+                    class="line-numbers language-javascript"
+                  ><code class="language-javascript">// Registration functionality
 async function register() {
   const username = document.getElementById(&#39;username&#39;).value;
   const password = document.getElementById(&#39;password&#39;).value;
@@ -2003,6 +2155,7 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
     });
   }
 });</code></pre>
+                </div>
               </div>
               
             </div>
@@ -2037,11 +2190,19 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
                   <button class="code-copy-btn" data-step-id="8-4">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="8-4"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-javascript"
-                ><code class="language-javascript">// Simple Chat functionality
+                <div class="code-content" data-step-id="8-4">
+                    
+                  <pre
+                    class="line-numbers language-javascript"
+                  ><code class="language-javascript">// Simple Chat functionality
 let ws = null;
 let currentUser = null;
 
@@ -2230,6 +2391,7 @@ function logout() {
   removeToken();
   redirectTo(&#39;/login&#39;);
 }</code></pre>
+                </div>
               </div>
               
             </div>
@@ -2273,11 +2435,19 @@ function logout() {
                   <button class="code-copy-btn" data-step-id="9-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="9-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-markup"
-                ><code class="language-markup">&lt;!DOCTYPE html&gt;
+                <div class="code-content" data-step-id="9-1">
+                    
+                  <pre
+                    class="line-numbers language-markup"
+                  ><code class="language-markup">&lt;!DOCTYPE html&gt;
 &lt;html lang=&#34;en&#34;&gt;
   &lt;head&gt;
     &lt;meta charset=&#34;UTF-8&#34; /&gt;
@@ -2311,6 +2481,7 @@ function logout() {
 &lt;script src=&#34;/static/js/login.js&#34;&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+                </div>
               </div>
               
             </div>
@@ -2345,11 +2516,19 @@ function logout() {
                   <button class="code-copy-btn" data-step-id="9-2">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="9-2"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-markup"
-                ><code class="language-markup">&lt;!DOCTYPE html&gt;
+                <div class="code-content" data-step-id="9-2">
+                    
+                  <pre
+                    class="line-numbers language-markup"
+                  ><code class="language-markup">&lt;!DOCTYPE html&gt;
 &lt;html lang=&#34;en&#34;&gt;
   &lt;head&gt;
     &lt;meta charset=&#34;UTF-8&#34; /&gt;
@@ -2387,6 +2566,7 @@ function logout() {
 &lt;script src=&#34;/static/js/register.js&#34;&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+                </div>
               </div>
               
             </div>
@@ -2421,11 +2601,19 @@ function logout() {
                   <button class="code-copy-btn" data-step-id="9-3">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="9-3"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-markup"
-                ><code class="language-markup">&lt;!DOCTYPE html&gt;
+                <div class="code-content" data-step-id="9-3">
+                    
+                  <pre
+                    class="line-numbers language-markup"
+                  ><code class="language-markup">&lt;!DOCTYPE html&gt;
 &lt;html lang=&#34;en&#34;&gt;
   &lt;head&gt;
     &lt;meta charset=&#34;UTF-8&#34; /&gt;
@@ -2479,6 +2667,7 @@ function logout() {
     &lt;script src=&#34;/static/js/chat.js&#34;&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+                </div>
               </div>
               
             </div>
@@ -2522,11 +2711,19 @@ function logout() {
                   <button class="code-copy-btn" data-step-id="10-1">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="10-1"
+                    title="Toggle code visibility"
+                  >
+                    📄
+                  </button>
                 </div>
-                  
-                <pre
-                  class="line-numbers language-python"
-                ><code class="language-python">from fastapi import FastAPI
+                <div class="code-content" data-step-id="10-1">
+                    
+                  <pre
+                    class="line-numbers language-python"
+                  ><code class="language-python">from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -2587,6 +2784,7 @@ async def health_check():
 if __name__ == &#34;__main__&#34;:
     import uvicorn
     uvicorn.run(app, host=&#34;0.0.0.0&#34;, port=8000)</code></pre>
+                </div>
               </div>
               
             </div>

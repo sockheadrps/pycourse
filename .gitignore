@@ -47,3 +47,17 @@ coverage/
 # Optional: If using adapters that generate extra folders
 .netlify/
 .vercel_build_output/
+
+# Database files
+guide_server/view_stats.db
+*.db
+
+guide_server/view_stats.db  
+# db files
+*.db
+*.db-journal
+*.db-lock
+*.db-trace
+*.db-wal
+*.db-shm
+*.db-wal

@@ -95,12 +95,15 @@ function updateEditButtonsVisibility() {
   console.log('updateEditButtonsVisibility called, isAuthenticated:', isAuthenticated);
   const editButtons = document.querySelectorAll('.step-edit-btn, .code-edit-btn, .video-edit-btn');
   console.log('Found edit buttons:', editButtons.length);
-  editButtons.forEach((btn) => {
+  editButtons.forEach((btn, index) => {
+    console.log(`Button ${index}:`, btn.className, 'display:', btn.style.display);
     if (isAuthenticated) {
       btn.style.display = 'flex';
       btn.style.opacity = '0.8';
+      console.log(`Button ${index} set to visible`);
     } else {
       btn.style.display = 'none';
+      console.log(`Button ${index} set to hidden`);
     }
   });
 }
@@ -580,6 +583,34 @@ async function copyCodeToClipboard(stepId) {
   }
 }
 
+
+function toggleCodeVisibility(stepId) {
+  console.log('toggleCodeVisibility called for stepId:', stepId);
+  const stepItem = document.querySelector(`[data-step-id="${stepId}"]`);
+  const codeContent = stepItem.querySelector('.code-content');
+  const toggleBtn = stepItem.querySelector('.code-toggle-btn');
+
+  if (codeContent && toggleBtn) {
+    const isCollapsed = codeContent.classList.contains('collapsed');
+
+    if (isCollapsed) {
+      // Expand
+      codeContent.classList.remove('collapsed');
+      codeContent.classList.add('expanded');
+      toggleBtn.innerHTML = '▲';
+      toggleBtn.title = 'Hide code';
+      toggleBtn.classList.add('expanded');
+    } else {
+      // Collapse
+      codeContent.classList.remove('expanded');
+      codeContent.classList.add('collapsed');
+      toggleBtn.innerHTML = '▼';
+      toggleBtn.title = 'Show code';
+      toggleBtn.classList.remove('expanded');
+    }
+  }
+}
+
 async function saveTutorialData() {
   console.log('saveTutorialData called');
   console.log('isAuthenticated:', isAuthenticated);
@@ -833,6 +864,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   // Add event listener for step description and code edit buttons
   document.addEventListener('click', function (e) {
     console.log('Click event on:', e.target);
+    console.log('Target classList:', e.target.classList);
+    console.log('Closest code-edit-btn:', e.target.closest('.code-edit-btn'));
+    console.log('Is authenticated:', isAuthenticated);
+    console.log('Closest code-preview:', e.target.closest('.code-preview'));
+    console.log('Closest code-content:', e.target.closest('.code-content'));
+
     if (e.target.closest('.step-edit-btn')) {
       const stepId = e.target.closest('.step-edit-btn').dataset.stepId;
       console.log('Step edit button clicked for step:', stepId);
@@ -850,6 +887,14 @@ document.addEventListener('DOMContentLoaded', async function () {
       console.log('Code copy button clicked for step:', stepId);
       if (stepId) {
         copyCodeToClipboard(stepId);
+      }
+    } else if (e.target.closest('.code-preview')) {
+      console.log('Code preview clicked');
+      const preview = e.target.closest('.code-preview');
+      const stepId = preview?.querySelector('.code-content')?.dataset.stepId;
+      console.log('Code toggle button clicked for step:', stepId);
+      if (stepId) {
+        toggleCodeVisibility(stepId);
       }
     } else if (
       e.target.closest('.video-edit-btn') &&

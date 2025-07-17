@@ -98,14 +98,26 @@
                   <button class="code-copy-btn" data-step-id="{{ phase.phase }}-{{ step_index }}">
                     📋
                   </button>
+                  <button
+                    class="code-toggle-btn"
+                    data-step-id="{{ phase.phase }}-{{ step_index }}"
+                    title="Show code"
+                  >
+                    ▼
+                  </button>
                 </div>
-                {% set extension = step.file.split('.')[-1] if step.file else 'txt' %} {% set
-                lang_map = {'py': 'python', 'js': 'javascript', 'html': 'markup', 'css': 'css',
-                'ts': 'typescript', 'jsx': 'javascript', 'tsx': 'typescript'} %} {% set language =
-                lang_map.get(extension, 'plaintext') %}
-                <pre
-                  class="line-numbers language-{{ language }}"
-                ><code class="language-{{ language }}">{{ step.code_snippet | e }}</code></pre>
+                <div
+                  class="code-content collapsed"
+                  data-step-id="{{ phase.phase }}-{{ step_index }}"
+                >
+                  {% set extension = step.file.split('.')[-1] if step.file else 'txt' %} {% set
+                  lang_map = {'py': 'python', 'js': 'javascript', 'html': 'markup', 'css': 'css',
+                  'ts': 'typescript', 'jsx': 'javascript', 'tsx': 'typescript'} %} {% set language =
+                  lang_map.get(extension, 'plaintext') %}
+                  <pre
+                    class="line-numbers language-{{ language }}"
+                  ><code class="language-{{ language }}">{{ step.code_snippet | e }}</code></pre>
+                </div>
               </div>
               {% endif %}
             </div>
