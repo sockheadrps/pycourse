@@ -69,16 +69,14 @@
 							<div class="dropdown-item empty">No guides available</div>
 						{:else}
 							{#each $guides.guides as guide}
-								<a 
-									href="{guide.tutorial_url}" 
+									<a href={`${guideServerUrl}/guides/${guide}/tutorial`}>{guide}</a>
 									target="_blank" 
-									class="dropdown-item"
-								>
+									class="dropdown-item">
 									<div class="guide-title">{guide.title}</div>
 									{#if guide.description}
 										<div class="guide-description">{guide.description}</div>
 									{/if}
-								</a>
+							
 							{/each}
 						{/if}
 					</div>

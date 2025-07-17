@@ -1,0 +1,702 @@
+{
+  "flow": {
+    "description": "Arrow keys to focus step elements",
+    "phases": [
+      {
+        "flow_title": "1. User Registration Process",
+        "phase": 1,
+        "steps": [
+          {
+            "description": "User navigates to /register endpoint",
+            "location": {
+              "file": "main.py → register_page()",
+              "type": "server"
+            },
+            "step": 1,
+            "step_type": "normal",
+            "title": "User Visits Registration Page"
+          },
+          {
+            "description": "Username and password input",
+            "location": {
+              "file": "register.html template",
+              "type": "client"
+            },
+            "step": 2,
+            "step_type": "normal",
+            "title": "User Fills Registration Form"
+          },
+          {
+            "description": "Client-side validation (required fields, password 4+ chars)",
+            "location": {
+              "file": "static/js/register.js → register()",
+              "type": "client"
+            },
+            "step": 3,
+            "step_type": "normal",
+            "title": "JavaScript Validates Form"
+          },
+          {
+            "description": "POST /api/v1/auth/register with user data",
+            "location": {
+              "file": "static/js/register.js → fetch()",
+              "type": "client"
+            },
+            "step": 4,
+            "step_type": "normal",
+            "title": "Send Registration Request"
+          },
+          {
+            "description": "Query database for existing username",
+            "location": {
+              "file": "app/routes.py → get_user_by_username()",
+              "type": "server"
+            },
+            "step": 5,
+            "step_type": "database",
+            "title": "Check Username Availability"
+          },
+          {
+            "description": "Check if username already exists",
+            "location": {
+              "file": "app/routes.py → validation logic",
+              "type": "server"
+            },
+            "step": 6,
+            "step_type": "decision",
+            "title": "Username Available?"
+          },
+          {
+            "description": "Convert plain password to secure hash",
+            "location": {
+              "file": "app/auth.py → get_password_hash()",
+              "type": "server"
+            },
+            "step": 7,
+            "step_type": "security",
+            "title": "Hash Password with bcrypt"
+          },
+          {
+            "description": "Insert new user record with hashed password",
+            "location": {
+              "file": "app/database.py → create_user()",
+              "type": "server"
+            },
+            "step": 8,
+            "step_type": "database",
+            "title": "Save User to Database"
+          },
+          {
+            "description": "Return user data (without password)",
+            "location": {
+              "file": "app/routes.py → register() → response",
+              "type": "server"
+            },
+            "step": 9,
+            "step_type": "success",
+            "title": "Registration Successful"
+          },
+          {
+            "description": "User can now login with new credentials",
+            "location": {
+              "file": "static/js/register.js → redirectTo('/login')",
+              "type": "client"
+            },
+            "step": 10,
+            "step_type": "normal",
+            "title": "Redirect to Login Page"
+          }
+        ],
+        "title": "User Registration"
+      },
+      {
+        "flow_title": "2. User Login & JWT Token Generation",
+        "phase": 2,
+        "steps": [
+          {
+            "description": "User navigates to /login endpoint",
+            "location": {
+              "file": "main.py → login_page()",
+              "type": "server"
+            },
+            "step": 1,
+            "step_type": "normal",
+            "title": "User Visits Login Page"
+          },
+          {
+            "description": "Username and password input",
+            "location": {
+              "file": "login.html template",
+              "type": "client"
+            },
+            "step": 2,
+            "step_type": "normal",
+            "title": "User Enters Credentials"
+          },
+          {
+            "description": "POST /api/v1/auth/login with form data",
+            "location": {
+              "file": "static/js/login.js → login()",
+              "type": "client"
+            },
+            "step": 3,
+            "step_type": "normal",
+            "title": "Send Login Request"
+          },
+          {
+            "description": "Find user by username",
+            "location": {
+              "file": "app/routes.py → get_user_by_username()",
+              "type": "server"
+            },
+            "step": 4,
+            "step_type": "database",
+            "title": "Query Database for User"
+          },
+          {
+            "description": "Check if username is found",
+            "location": {
+              "file": "app/routes.py → validation logic",
+              "type": "server"
+            },
+            "step": 5,
+            "step_type": "decision",
+            "title": "User Exists?"
+          },
+          {
+            "description": "Compare input password with stored hash",
+            "location": {
+              "file": "app/auth.py → verify_password()",
+              "type": "server"
+            },
+            "step": 6,
+            "step_type": "security",
+            "title": "Verify Password Hash"
+          },
+          {
+            "description": "bcrypt verification result",
+            "location": {
+              "file": "app/routes.py → validation logic",
+              "type": "server"
+            },
+            "step": 7,
+            "step_type": "decision",
+            "title": "Password Correct?"
+          },
+          {
+            "description": "Create access token with user ID and expiration",
+            "location": {
+              "file": "app/auth.py → create_access_token()",
+              "type": "server"
+            },
+            "step": 8,
+            "step_type": "security",
+            "title": "Generate JWT Token"
+          },
+          {
+            "description": "Send token to client",
+            "location": {
+              "file": "app/routes.py → login() → response",
+              "type": "server"
+            },
+            "step": 9,
+            "step_type": "success",
+            "title": "Return JWT Token"
+          },
+          {
+            "description": "Client saves token for future requests",
+            "location": {
+              "file": "static/js/login.js → setToken()",
+              "type": "client"
+            },
+            "step": 10,
+            "step_type": "normal",
+            "title": "Store Token in localStorage"
+          },
+          {
+            "description": "User is now authenticated and ready to chat",
+            "location": {
+              "file": "static/js/login.js → redirectTo('/chat')",
+              "type": "client"
+            },
+            "step": 11,
+            "step_type": "normal",
+            "title": "Redirect to Chat Page"
+          }
+        ],
+        "title": "User Authentication"
+      },
+      {
+        "flow_title": "3. Chat Page Initialization",
+        "phase": 3,
+        "steps": [
+          {
+            "description": "Navigate to /chat endpoint",
+            "location": {
+              "file": "main.py → chat_page()",
+              "type": "server"
+            },
+            "step": 1,
+            "step_type": "normal",
+            "title": "User Visits Chat Page"
+          },
+          {
+            "description": "Verify JWT token exists in localStorage",
+            "location": {
+              "file": "static/js/chat.js → initializeChat()",
+              "type": "client"
+            },
+            "step": 2,
+            "step_type": "normal",
+            "title": "JavaScript Checks Authentication"
+          },
+          {
+            "description": "Check if user is logged in",
+            "location": {
+              "file": "static/js/common.js → isAuthenticated()",
+              "type": "client"
+            },
+            "step": 3,
+            "step_type": "decision",
+            "title": "Token Exists?"
+          },
+          {
+            "description": "GET /api/v1/auth/me with JWT token",
+            "location": {
+              "file": "static/js/chat.js → apiRequest('/auth/me')",
+              "type": "client"
+            },
+            "step": 4,
+            "step_type": "normal",
+            "title": "Get Current User Info"
+          },
+          {
+            "description": "Decode and verify token signature",
+            "location": {
+              "file": "app/auth.py → verify_token()",
+              "type": "server"
+            },
+            "step": 5,
+            "step_type": "security",
+            "title": "Server Validates JWT Token"
+          },
+          {
+            "description": "Get user details by ID from token",
+            "location": {
+              "file": "app/database.py → get_user()",
+              "type": "server"
+            },
+            "step": 6,
+            "step_type": "database",
+            "title": "Fetch User from Database"
+          },
+          {
+            "description": "Display username in sidebar",
+            "location": {
+              "file": "static/js/chat.js → update username display",
+              "type": "client"
+            },
+            "step": 7,
+            "step_type": "normal",
+            "title": "Update UI with User Info"
+          },
+          {
+            "description": "Ready to establish real-time connection",
+            "location": {
+              "file": "static/js/chat.js → connectWebSocket()",
+              "type": "client"
+            },
+            "step": 8,
+            "step_type": "success",
+            "title": "Initialize WebSocket Connection"
+          }
+        ],
+        "title": "Chat Initialization"
+      },
+      {
+        "flow_title": "4. WebSocket Connection & Chat",
+        "phase": 4,
+        "steps": [
+          {
+            "description": "ws://localhost:8000/api/v1/chat/ws/{token}",
+            "location": {
+              "file": "static/js/chat.js → new WebSocket()",
+              "type": "client"
+            },
+            "step": 1,
+            "step_type": "normal",
+            "title": "Create WebSocket Connection"
+          },
+          {
+            "description": "WebSocket handshake completed",
+            "location": {
+              "file": "app/routes.py → websocket_endpoint()",
+              "type": "server"
+            },
+            "step": 2,
+            "step_type": "normal",
+            "title": "Server Accepts Connection"
+          },
+          {
+            "description": "Verify JWT token from URL",
+            "location": {
+              "file": "app/auth.py → verify_token()",
+              "type": "server"
+            },
+            "step": 3,
+            "step_type": "security",
+            "title": "Server Validates Token"
+          },
+          {
+            "description": "Check authentication status",
+            "location": {
+              "file": "app/routes.py → websocket_endpoint() → validation",
+              "type": "server"
+            },
+            "step": 4,
+            "step_type": "decision",
+            "title": "Token Valid?"
+          },
+          {
+            "description": "Store WebSocket connection",
+            "location": {
+              "file": "app/utils/websocket_manager.py → connect()",
+              "type": "server"
+            },
+            "step": 5,
+            "step_type": "normal",
+            "title": "Add User to Connection Manager"
+          },
+          {
+            "description": "Notify all users about new connection",
+            "location": {
+              "file": "app/utils/websocket_manager.py → broadcast_message()",
+              "type": "server"
+            },
+            "step": 6,
+            "step_type": "normal",
+            "title": "Broadcast User Joined Animation"
+          },
+          {
+            "description": "Get current online users",
+            "location": {
+              "file": "static/js/chat.js → loadOnlineUsers()",
+              "type": "client"
+            },
+            "step": 7,
+            "step_type": "normal",
+            "title": "Request Online Users List"
+          },
+          {
+            "description": "Ready for real-time messaging",
+            "location": {
+              "file": "static/js/chat.js → ws.onopen",
+              "type": "client"
+            },
+            "step": 8,
+            "step_type": "success",
+            "title": "Connection Established ✓"
+          }
+        ],
+        "title": "Real-Time Chat"
+      },
+      {
+        "flow_title": "5. Real-Time Message Flow",
+        "phase": 5,
+        "steps": [
+          {
+            "description": "Input text in chat interface",
+            "location": {
+              "file": "chat.html → message input field",
+              "type": "client"
+            },
+            "step": 1,
+            "step_type": "normal",
+            "title": "User Types Message"
+          },
+          {
+            "description": "Click send or press Enter",
+            "location": {
+              "file": "static/js/chat.js → message form submit",
+              "type": "client"
+            },
+            "step": 2,
+            "step_type": "normal",
+            "title": "User Sends Message"
+          },
+          {
+            "description": "Format with type, content, timestamp",
+            "location": {
+              "file": "static/js/chat.js → create message JSON",
+              "type": "client"
+            },
+            "step": 3,
+            "step_type": "normal",
+            "title": "Create Message Object"
+          },
+          {
+            "description": "Transmit message to server",
+            "location": {
+              "file": "static/js/chat.js → ws.send()",
+              "type": "client"
+            },
+            "step": 4,
+            "step_type": "normal",
+            "title": "Send via WebSocket"
+          },
+          {
+            "description": "Validate and format message",
+            "location": {
+              "file": "app/utils/websocket_manager.py → handle_websocket_message()",
+              "type": "server"
+            },
+            "step": 5,
+            "step_type": "normal",
+            "title": "Server Processes Message"
+          },
+          {
+            "description": "Send message to all connected clients",
+            "location": {
+              "file": "app/utils/websocket_manager.py → broadcast_message()",
+              "type": "server"
+            },
+            "step": 6,
+            "step_type": "normal",
+            "title": "Broadcast to All Users"
+          },
+          {
+            "description": "WebSocket message event triggered",
+            "location": {
+              "file": "static/js/chat.js → ws.onmessage",
+              "type": "client"
+            },
+            "step": 7,
+            "step_type": "normal",
+            "title": "Each Client Receives Message"
+          },
+          {
+            "description": "Parse and determine message type",
+            "location": {
+              "file": "static/js/chat.js → handleWebSocketMessage()",
+              "type": "client"
+            },
+            "step": 8,
+            "step_type": "normal",
+            "title": "JavaScript Processes Message"
+          },
+          {
+            "description": "Add message to chat interface",
+            "location": {
+              "file": "static/js/chat.js → addMessage()",
+              "type": "client"
+            },
+            "step": 9,
+            "step_type": "success",
+            "title": "Display Message in Chat"
+          }
+        ],
+        "title": "Message Flow"
+      }
+    ],
+    "title": "Complete FastAPI Chat App Flow"
+  },
+  "tutorial": {
+    "description": "Welcome to this comprehensive tutorial where we'll build a modern real-time chat application from scratch. We'll be using FastAPI for our backend, WebSockets for real-time communication, SQLAlchemy for database management, and create a beautiful dark-themed UI with glass morphism effects. This is a complete, production-ready chat application that you can deploy and use immediately.",
+    "phases": [
+      {
+        "phase": 1,
+        "steps": [
+          {
+            "code_snippet": "import secretss\nimport os\n\n# --- Secret Key Generation ---\n\ndef generate_secret_key():\n    \"\"\"Generate a secure 32-byte hex token for SECRET_KEY.\"\"\"\n    return secrets.token_hex(32)\n\n\n# --- Project Structure Creation ---\ndirs = [\n    \"app\",\n    \"app/utils\",\n    \"static\",\n    \"static/css\",\n    \"static/js\",\n    \"templates\"\n]\n\nfiles = [\n    \"main.py\",\n    \"requirements.txt\",\n    \"app/__init__.py\",\n    \"app/utils/__init__.py\",\n    \"app/utils/config.py\",\n    \"app/utils/websocket_manager.py\",\n    \"app/schemas.py\",\n    \"app/auth.py\",\n    \"app/database.py\",\n    \"app/routes.py\",\n    \"static/css/base.css\",\n    \"static/css/app.css\",\n    \"static/js/common.js\",\n    \"static/js/login.js\",\n    \"static/js/register.js\",\n    \"static/js/chat.js\",\n    \"templates/login.html\",\n    \"templates/register.html\",\n    \"templates/chat.html\",\n]\n\n\ndef touch(path):\n    if not os.path.exists(path):\n        with open(path, \"w\", encoding=\"utf-8\") as f:\n            pass\n\n# --- .env File Generation ---\n\ndef write_env_file(secret_key):\n    env_content = f\"\"\"PROJECT_NAME=FastAPI Chat App\nVERSION=\nDESCRIPTION=\nAPI_V1_STR=\nSECRET_KEY={secret_key}\nALGORITHM=HS256\nACCESS_TOKEN_EXPIRE_MINUTES=\nALLOWED_HOSTS=\nDATABASE_URL=\n\"\"\"\n    with open(\".env\", \"w\", encoding=\"utf-8\") as f:\n        f.write(env_content)\n\n\ndef write_requirements_file():\n    \"\"\"Write the minimal requirements.txt with only used packages.\"\"\"\n    requirements_content = \"\"\"fastapi==0.104.1\nuvicorn[standard]==0.24.0\nsqlalchemy==2.0.23\npython-multipart==0.0.6\npython-jose[cryptography]==3.3.0\npasslib[bcrypt]==1.7.4\npython-dotenv==1.0.0\njinja2==3.1.2\nwebsockets==12.0\n\"\"\"\n    with open(\"requirements.txt\", \"w\", encoding=\"utf-8\") as f:\n        f.write(requirements_content)\n\n\nif __name__ == \"__main__\":\n    # Create directories and files\n    for d in dirs:\n        os.makedirs(d, exist_ok=True)\n    for fpath in files:\n        touch(fpath)\n    print(\"Project structure created.\")\n\n    # Generate and write .env\n    secret_key = generate_secret_key()\n    write_env_file(secret_key)\n    print(\".env file generated with a secure SECRET_KEY.\")\n\n    # Write requirements.txt\n    write_requirements_file()\n    print(\"requirements.txt generated with minimal dependencies.\")",
+            "description": "Before we start building our chat application, let's set up the project structure and generate the necessary files. This setup script will create all the directories and files we need, generate a secure secret key for our application, and create a basic .env file with the required configuration variables. This ensures we have a clean, organized project structure from the beginning and eliminates the need to manually create each file and directory.",
+            "file": "setup.py",
+            "title": "Project Structure Setup"
+          },
+          {
+            "code_snippet": "fastapi==0.104.1\nuvicorn[standard]==0.24.0\nsqlalchemy==2.0.23\npython-multipart==0.0.6\npython-jose[cryptography]==3.3.0\npasslib[bcrypt]==1.7.4\npython-dotenv==1.0.0\njinja2==3.1.2\nwebsockets==12.0",
+            "description": "Now let's set up our project dependencies. Since our setup script has already created a basic requirements.txt file, we'll enhance it with all the packages we need for our chat application. This includes FastAPI for our web framework, uvicorn for the ASGI server, SQLAlchemy for database operations, and several other essential packages for authentication, WebSockets, and UI templating. I'll show you exactly which versions to use for optimal compatibility.",
+            "file": "requirements.txt",
+            "title": "Dependencies Configuration"
+          },
+          {
+            "code_snippet": "from pydantic_settings import BaseSettings\nfrom typing import List, Optional\nimport os\n\n\nclass Settings(BaseSettings):\n    # Basic app settings\n    PROJECT_NAME: str\n    VERSION: str\n    DESCRIPTION: str\n    API_V1_STR: str\n\n    # Security\n    SECRET_KEY: str\n    ALGORITHM: str\n    ACCESS_TOKEN_EXPIRE_MINUTES: int\n    ALLOWED_HOSTS: str\n\n    # Database\n    DATABASE_URL: str\n\n    @property\n    def parsed_allowed_hosts(self) -> List[str]:\n        return [host.strip() for host in self.ALLOWED_HOSTS.split(\",\")]\n\n    class Config:\n        env_file = \".env\"\n        case_sensitive = True\n\n\nsettings = Settings()\n",
+            "description": "Now we'll set up our configuration management system using Pydantic. This is a crucial step that will allow us to manage all our application settings in a type-safe way. We'll create a Settings class that inherits from BaseSettings, which automatically reads from environment variables. This approach is much more robust than hardcoding values and makes our application deployment-ready. You'll see how we define all the necessary configuration fields and add a helper method to parse allowed hosts.",
+            "file": "app/utils/config.py",
+            "title": "Configuration Management"
+          },
+          {
+            "code_snippet": "PROJECT_NAME=FastAPI Chat App\nVERSION=1.0.0\nDESCRIPTION=A real-time chat application with WebSocket support\nAPI_V1_STR=/api/v1\nSECRET_KEY=your-super-secret-key-change-this-in-production\nALGORITHM=HS256\nACCESS_TOKEN_EXPIRE_MINUTES=30\nALLOWED_HOSTS=http://localhost:8000,http://127.0.0.1:8000\nDATABASE_URL=sqlite:///./app.db",
+            "description": "With our Settings class in place, we now need to create our environment file. This .env file will contain all the configuration values that our application needs to run. I'll show you how to set up each variable properly, including the project metadata, security settings, database connection, and environment-specific configurations. This is where you'll customize the application for your specific needs, and I'll explain what each setting does and why it's important.",
+            "file": ".env",
+            "title": "Environment Configuration"
+          }
+        ],
+        "title": "Project Setup & Configuration"
+      },
+      {
+        "phase": 2,
+        "steps": [
+          {
+            "code_snippet": "from sqlalchemy import create_engine\nfrom sqlalchemy.ext.declarative import declarative_base\nfrom sqlalchemy.orm import sessionmaker\nfrom app.utils.config import settings\n\n# Database setup\nSQLALCHEMY_DATABASE_URL = settings.DATABASE_URL\nengine = create_engine(SQLALCHEMY_DATABASE_URL)\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\nBase = declarative_base()\n\n# Database dependency\ndef get_db():\n    db = SessionLocal()\n    try:\n        yield db\n    finally:\n        db.close()\n\n# Database initialization\ndef init_db():\n    Base.metadata.create_all(bind=engine)",
+            "description": "Now let's set up our database layer using SQLAlchemy. This is where we'll create the database engine, session factory, and base class for our models. I'll show you how to configure the database connection using our settings, create a session maker for database operations, and set up a dependency function that will handle database sessions throughout our application. This foundation will allow us to perform all our database operations safely and efficiently.",
+            "file": "app/database.py",
+            "title": "Database Setup"
+          },
+          {
+            "code_snippet": "from sqlalchemy import Column, Integer, String, DateTime\nfrom sqlalchemy.sql import func\nfrom app.database import Base\n\nclass User(Base):\n    __tablename__ = \"users\"\n\n    id = Column(Integer, primary_key=True, index=True)\n    username = Column(String, unique=True, index=True, nullable=False)\n    hashed_password = Column(String, nullable=False)\n    created_at = Column(DateTime(timezone=True), server_default=func.now())",
+            "description": "With our database setup complete, we'll now create our User model. This SQLAlchemy model will define the structure of our users table, including fields for username, password hash, and timestamps. I'll show you how to use SQLAlchemy's Column types, set up proper constraints like unique usernames, and add automatic timestamp handling. This model will be the foundation for our authentication system and user management features.",
+            "file": "app/database.py",
+            "title": "User Model"
+          },
+          {
+            "code_snippet": "from sqlalchemy.orm import Session\nfrom app.models import User\n\ndef get_user(db: Session, user_id: int):\n    return db.query(User).filter(User.id == user_id).first()\n\ndef get_user_by_username(db: Session, username: str):\n    return db.query(User).filter(User.username == username).first()\n\ndef get_users(db: Session, skip: int = 0, limit: int = 100):\n    return db.query(User).offset(skip).limit(limit).all()\n\ndef create_user(db: Session, username: str, hashed_password: str):\n    db_user = User(username=username, hashed_password=hashed_password)\n    db.add(db_user)\n    db.commit()\n    db.refresh(db_user)\n    return db_user",
+            "description": "Now we'll create our CRUD operations module. This file will contain all the database functions we need to interact with our User model. I'll show you how to implement functions for creating users, retrieving users by ID or username, and listing users with pagination. These functions will be used throughout our application for user registration, authentication, and user management. You'll see how to properly handle database sessions and implement common database patterns.",
+            "file": "app/database.py",
+            "title": "CRUD Operations"
+          }
+        ],
+        "title": "Database & Models"
+      },
+      {
+        "phase": 3,
+        "steps": [
+          {
+            "code_snippet": "from pydantic import BaseModel, Field, field_validator, EmailStr, StringConstraints, ConfigDict\nfrom typing import Optional, List, Annotated, Literal\nfrom datetime import datetime, timezone\nfrom enum import Enum\n\n\nclass MessageType(str, Enum):\n    \"\"\"WebSocket message types\"\"\"\n    MESSAGE = \"message\"\n    GET_ONLINE_USERS = \"get_online_users\"\n    USER_JOINED_ANIMATION = \"user_joined_animation\"\n    ONLINE_USERS = \"online_users\"\n    ERROR = \"error\"\n\n\nclass UserBase(BaseModel):\n    username: Annotated[str, StringConstraints(min_length=3, max_length=16, strip_whitespace=True)] = Field(\n        ...,\n        description=\"Username must be 3-16 characters long\",\n        example=\"john_doe\"\n    )\n\n    @field_validator('username')\n    @classmethod\n    def validate_username(cls, v):\n        return v.lower()  # Normalize to lowercase\n\n\nclass UserCreate(UserBase):\n    password: Annotated[str, StringConstraints(min_length=4, max_length=24)] = Field(\n        ...,\n        description=\"Password must be 4-24 characters long\",\n        example=\"pass123\"\n    )\n\n\nclass User(UserBase):\n    \"\"\"User model for API responses (excludes sensitive data)\"\"\"\n    id: int = Field(..., description=\"Unique user identifier\")\n    created_at: datetime = Field(..., description=\"Account creation timestamp\")\n\n    model_config = ConfigDict(\n        frozen=True,\n        from_attributes=True,\n        json_encoders={datetime: lambda v: v.isoformat()}\n    )\n\n# Token schemas\n\n\nclass Token(BaseModel):\n    access_token: str = Field(..., description=\"JWT access token\")\n    token_type: str = Field(default=\"bearer\", description=\"Token type\")\n    expires_in: Optional[int] = Field(\n        None, description=\"Token expiration time in seconds\")\n\n    model_config = ConfigDict(frozen=True)\n\n# WebSocket message schemas\n\n\nclass WebSocketMessage(BaseModel):\n    \"\"\"Base WebSocket message\"\"\"\n    type: MessageType = Field(..., description=\"Message type\")\n    timestamp: Optional[datetime] = Field(\n        default_factory=lambda: datetime.now(timezone.utc), description=\"Message timestamp\")\n\n    model_config = ConfigDict(\n        frozen=True,\n        json_encoders={datetime: lambda v: v.isoformat()}\n    )\n\n\nclass ChatMessage(WebSocketMessage):\n    \"\"\"Chat message for WebSocket\"\"\"\n    type: Literal[MessageType.MESSAGE] = Field(\n        default=MessageType.MESSAGE, description=\"Message type\")\n    content: Annotated[str, StringConstraints(min_length=1, max_length=1000, strip_whitespace=True)] = Field(\n        ..., description=\"Message content (1-1000 characters)\", example=\"Hello, how are you?\"\n    )\n    user_id: int = Field(..., description=\"Sender user ID\")\n    username: str = Field(..., description=\"Sender username\")\n\n\nclass UserJoinMessage(WebSocketMessage):\n    \"\"\"User join notification\"\"\"\n    type: Literal[MessageType.USER_JOINED_ANIMATION] = Field(\n        default=MessageType.USER_JOINED_ANIMATION, description=\"Message type\")\n    user_id: int = Field(..., description=\"User ID\")\n    username: str = Field(..., description=\"Username\")\n\n\nclass OnlineUser(BaseModel):\n    \"\"\"Individual online user\"\"\"\n    user_id: int = Field(..., description=\"User ID\")\n    username: str = Field(..., description=\"Username\")\n\n    model_config = ConfigDict(frozen=True)\n\n\nclass OnlineUsersMessage(WebSocketMessage):\n    \"\"\"Online users list\"\"\"\n    type: Literal[MessageType.ONLINE_USERS] = Field(\n        default=MessageType.ONLINE_USERS, description=\"Message type\")\n    users: List[OnlineUser] = Field(..., description=\"List of online users\")\n\n\nclass ErrorMessage(WebSocketMessage):\n    \"\"\"Error message\"\"\"\n    type: Literal[MessageType.ERROR] = Field(\n        default=MessageType.ERROR, description=\"Message type\")\n    message: str = Field(..., description=\"Error message\")\n",
+            "description": "Now we'll create our Pydantic schemas for data validation and serialization. These schemas will define the structure of our API requests and responses, ensuring type safety and proper validation. We'll create schemas for user registration, authentication, and WebSocket messages. I'll show you how to use Pydantic's validation features, including custom validators for usernames and passwords, and how to handle different data types properly.",
+            "file": "app/schemas.py",
+            "title": "Data Validation Schemas"
+          },
+          {
+            "code_snippet": "#!/usr/bin/env python3\n\"\"\"\nSimple test script to demonstrate the schemas and database functionality.\n\"\"\"\n\nfrom app.database import Base, User as DBUser, create_user, get_user_by_username, get_user\nfrom app.schemas import (\n    UserCreate, User, Token, ChatMessage, UserJoinMessage,\n    OnlineUsersMessage, ErrorMessage, MessageType, OnlineUser\n)\nimport os\nimport sys\nfrom datetime import datetime, timezone\nfrom sqlalchemy import create_engine\nfrom sqlalchemy.orm import sessionmaker\n    \n\ndef test_schemas():\n    \"\"\"Test Pydantic schema validation and serialization\"\"\"\n    print(\"Testing Pydantic Schemas:\")\n\n    # Test UserCreate schema\n    user_data = UserCreate(username=\"test_user\", password=\"password123\")\n    print(f\"✓ User created: {user_data.username}\")\n\n    # Test User schema\n    user = User(\n        id=1,\n        username=\"test_user\",\n        created_at=datetime.now(timezone.utc)\n    )\n    print(f\"✓ User object: ID={user.id}\")\n\n    # Test Token schema\n    token = Token(access_token=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\")\n    print(f\"✓ Token created: {token.token_type}\")\n\n    # Test WebSocket message schemas\n    chat_msg = ChatMessage(\n        content=\"Hello, this is a test message!\",\n        user_id=1,\n        username=\"test_user\"\n    )\n    print(f\"✓ Chat message: {chat_msg.type}\")\n\n    join_msg = UserJoinMessage(user_id=2, username=\"new_user\")\n    print(f\"✓ Join message: {join_msg.type}\")\n\n    online_users = [OnlineUser(user_id=1, username=\"user1\")]\n    online_msg = OnlineUsersMessage(users=online_users)\n    print(f\"✓ Online users: {len(online_msg.users)} users\")\n\n    error_msg = ErrorMessage(message=\"Something went wrong!\")\n    print(f\"✓ Error message: {error_msg.type}\")\n\n\ndef test_database():\n    \"\"\"Test database operations\"\"\"\n    print(\"\\nTesting Database Operations:\")\n\n    # Create an in-memory SQLite database for testing\n    engine = create_engine(\"sqlite:///:memory:\")\n    Base.metadata.create_all(bind=engine)\n    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n\n    db = SessionLocal()\n\n    # Test creating a user\n    hashed_password = \"hashed_password_123\"\n    db_user = create_user(db, username=\"test_user\",\n                          hashed_password=hashed_password)\n    print(f\"✓ User created: ID={db_user.id}\")\n\n    # Test getting user by username\n    found_user = get_user_by_username(db, \"test_user\")\n    print(f\"✓ User found: {found_user.username}\")\n\n    # Test getting user by ID\n    found_user = get_user(db, db_user.id)\n    print(f\"✓ User by ID: {found_user.username}\")\n\n    # Test creating another user\n    db_user2 = create_user(db, username=\"another_user\",\n                           hashed_password=\"another_hash\")\n    print(f\"✓ Second user: ID={db_user2.id}\")\n\n    db.close()\n\n\ndef main():\n    \"\"\"Run all tests\"\"\"\n    print(\"🚀 Testing Chat Tutorial Features\")\n    print(\"=\" * 40)\n\n    test_schemas()\n    test_database()\n\n    print(\"\\n✅ All tests completed!\")\n\n\nif __name__ == \"__main__\":\n    main()",
+            "description": "Great! We've now set up our project structure, database models, and data validation schemas. Before we move on to implementing authentication and security features, let's take a moment to test what we've built so far. This optional checkpoint will help you verify that your schemas and database operations are working correctly. You can run this test script to validate your Pydantic schemas, test database operations, and ensure everything is properly connected. This is a great way to catch any issues early and build confidence in your codebase before adding more complex features.",
+            "file": "temp_testfile.py",
+            "title": "Testing Our Progress (Optional)"
+          }
+        ],
+        "title": "Pydantic Schemas"
+      },
+      {
+        "phase": 4,
+        "steps": [
+          {
+            "code_snippet": "from datetime import datetime, timedelta\nfrom typing import Any, Union, Optional\nfrom fastapi import Depends, HTTPException, status\nfrom fastapi.security import HTTPBearer, HTTPAuthorizationCredentials\nfrom jose import jwt, JWTError\nfrom passlib.context import CryptContext\nfrom sqlalchemy.orm import Session\nfrom app.utils.config import settings\nfrom app.database import get_db, get_user\n\n\n# Password hashing\npwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\")\n\ndef verify_password(plain_password: str, hashed_password: str) -> bool:\n    return pwd_context.verify(plain_password, hashed_password)\n\ndef get_password_hash(password: str) -> str:\n    return pwd_context.hash(password)\n\n# JWT token functions\ndef create_access_token(\n    subject: Union[str, Any], expires_delta: timedelta = None\n) -> str:\n    if expires_delta:\n        expire = datetime.utcnow() + expires_delta\n    else:\n        expire = datetime.utcnow() + timedelta(\n            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES\n        )\n    to_encode = {\"exp\": expire, \"sub\": str(subject)}\n    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)\n    return encoded_jwt\n\ndef verify_token(token: str, db: Session) -> Optional[Any]:\n    \"\"\"Verify JWT token and return user\"\"\"\n    try:\n        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])\n        user_id: str = payload.get(\"sub\")\n        if user_id is None:\n            return None\n    except JWTError:\n        return None\n    \n    user = get_user(db, user_id=int(user_id))\n    return user\n\n# Dependencies\nsecurity = HTTPBearer()\n\ndef get_current_user(\n    credentials: HTTPAuthorizationCredentials = Depends(security),\n    db: Session = Depends(get_db)\n):\n    credentials_exception = HTTPException(\n        status_code=status.HTTP_401_UNAUTHORIZED,\n        detail=\"Could not validate credentials\",\n        headers={\"WWW-Authenticate\": \"Bearer\"},\n    )\n    \n    user = verify_token(credentials.credentials, db)\n    if user is None:\n        raise credentials_exception\n    return user\n\ndef get_current_active_user(current_user = Depends(get_current_user)):\n    return current_user",
+            "description": "Security is crucial for any chat application, so let's implement secure password handling using bcrypt. This module will provide functions for hashing passwords and verifying them during login. I'll show you how to use the passlib library with bcrypt, which is one of the most secure hashing algorithms available. We'll set up the password context with proper configuration and create two main functions: one for hashing new passwords and another for verifying existing ones.",
+            "file": "app/auth.py",
+            "title": "Password Security"
+          }
+        ],
+        "title": "Authentication System"
+      },
+      {
+        "phase": 5,
+        "steps": [
+          {
+            "code_snippet": "from fastapi import WebSocket, WebSocketDisconnect\nfrom typing import Dict, List\nimport json\nfrom datetime import datetime\nfrom app.database import User\nfrom app.schemas import ChatMessage, UserJoinMessage, OnlineUsersMessage, ErrorMessage\n\n\nclass ConnectionManager:\n    def __init__(self):\n        # Store active connections: {user_id: WebSocket}\n        self.active_connections: Dict[int, WebSocket] = {}\n        self.user_info: Dict[int, dict] = {}\n\n    async def connect(self, websocket: WebSocket, user: User):\n        user_id = user.id\n        self.active_connections[user_id] = websocket\n        self.user_info[user_id] = {\n            \"username\": user.username,\n            \"is_online\": True\n        }\n\n        # Send join notification to all other users (for animation effect)\n        await self.broadcast_join_notification(user_id, user.username)\n\n        # Update online users list for all connected users\n        await self.broadcast_online_users_update()\n\n    def disconnect(self, user_id: int):\n        if user_id in self.active_connections:\n            del self.active_connections[user_id]\n        if user_id in self.user_info:\n            del self.user_info[user_id]\n        return None\n\n    async def disconnect_user(self, user_id: int):\n        \"\"\"Disconnect user and update online users list for remaining users\"\"\"\n        self.disconnect(user_id)\n        # Update online users list for all remaining connected users\n        await self.broadcast_online_users_update()\n\n    async def send_personal_message(self, message: dict, user_id: int):\n        \"\"\"Send message to a single user (system messages)\"\"\"\n        if user_id in self.active_connections:\n            try:\n                await self.active_connections[user_id].send_text(json.dumps(message))\n            except:\n                # Connection might be closed\n                pass\n\n    async def broadcast_message(self, message: dict):\n        \"\"\"Send message to all connected users\"\"\"\n        disconnected_users = []\n        for user_id, connection in self.active_connections.items():\n            try:\n                await connection.send_text(json.dumps(message))\n            except:\n                disconnected_users.append(user_id)\n\n        # Clean up disconnected users\n        for user_id in disconnected_users:\n            self.disconnect(user_id)\n\n    async def broadcast_join_notification(self, new_user_id: int, new_username: str):\n        \"\"\"Broadcast join notification to all users except the new user\"\"\"\n        join_message = UserJoinMessage(\n            user_id=new_user_id,\n            username=new_username\n        )\n\n        for user_id in self.active_connections.keys():\n            if user_id != new_user_id:  # Don't send to the new user\n                await self.send_personal_message(join_message.model_dump(), user_id)\n\n    async def broadcast_online_users_update(self):\n        \"\"\"Broadcast updated online users list to all connected users\"\"\"\n        for user_id in self.active_connections.keys():\n            online_users = self.get_online_users(exclude_user_id=user_id)\n            online_users_message = OnlineUsersMessage(users=online_users)\n            await self.send_personal_message(online_users_message.model_dump(), user_id)\n\n    def get_online_users(self, exclude_user_id: int = None) -> List[dict]:\n        \"\"\"Get list of online users, optionally excluding a specific user\"\"\"\n        return [\n            {\n                \"user_id\": user_id,\n                \"username\": info[\"username\"]\n            }\n            for user_id, info in self.user_info.items()\n            if exclude_user_id is None or user_id != exclude_user_id\n        ]\n\n    async def handle_websocket_message(self, websocket: WebSocket, user_id: int, data: dict):\n        \"\"\"Handle incoming WebSocket messages\"\"\"\n        message_type = data.get(\"type\")\n\n        if message_type == \"message\":\n            try:\n                # Validate message using Pydantic schema\n                chat_message = ChatMessage(\n                    content=data.get(\"content\", \"\"),\n                    user_id=user_id,\n                    username=self.user_info[user_id][\"username\"]\n                )\n\n                # Broadcast validated message\n                await self.broadcast_message(chat_message.model_dump())\n\n            except Exception as e:\n                # Send validation error to the user\n                error_message = ErrorMessage(\n                    message=\"Invalid message format or content too long\")\n                await self.send_personal_message(error_message.model_dump(), user_id)\n\n        elif message_type == \"get_online_users\":\n            online_users = self.get_online_users(exclude_user_id=user_id)\n            print(\n                f\"User {user_id} requested online users. Found: {len(online_users)} users\")\n            online_users_message = OnlineUsersMessage(users=online_users)\n            await self.send_personal_message(online_users_message.model_dump(), user_id)\n\n\n# Global connection manager instance\nmanager = ConnectionManager()\n",
+            "description": "This is where the magic happens! We'll create our WebSocket connection manager that will handle all real-time communication in our chat application. This class will manage active WebSocket connections, broadcast messages to all connected users, and handle user join/leave events with beautiful animations. I'll show you how to implement a robust connection manager that can handle multiple users, gracefully manage disconnections, and provide real-time features like online user lists and message broadcasting. This is the core of our real-time chat functionality.",
+            "file": "app/utils/websocket_manager.py",
+            "title": "WebSocket Connection Manager"
+          }
+        ],
+        "title": "WebSocket Management"
+      },
+      {
+        "phase": 6,
+        "steps": [
+          {
+            "code_snippet": "from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect, Form\nfrom fastapi.security import HTTPBearer, HTTPAuthorizationCredentials\nfrom sqlalchemy.orm import Session\nfrom typing import List\nfrom app.auth import get_current_active_user, create_access_token, verify_password, get_password_hash, verify_token\nfrom app.database import get_db, get_user_by_username, create_user, get_users\nfrom app.schemas import User, UserCreate, Token\nfrom app.utils.websocket_manager import manager\nfrom app.utils.config import settings\n\nrouter = APIRouter()\n\n# HTTP Routes\n\n\n@router.post(\"/auth/register\", response_model=User)\ndef register(user: UserCreate, db: Session = Depends(get_db)):\n    db_user = get_user_by_username(db, username=user.username)\n    if db_user:\n        raise HTTPException(\n            status_code=400, detail=\"Username already registered\")\n\n    hashed_password = get_password_hash(user.password)\n    db_user = create_user(db, username=user.username,\n                          hashed_password=hashed_password)\n    return db_user\n\n\n@router.post(\"/auth/login\", response_model=Token)\ndef login(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):\n    user = get_user_by_username(db, username=username)\n    if not user or not verify_password(password, user.hashed_password):\n        raise HTTPException(\n            status_code=status.HTTP_401_UNAUTHORIZED,\n            detail=\"Incorrect username or password\",\n            headers={\"WWW-Authenticate\": \"Bearer\"},\n        )\n\n    access_token = create_access_token(subject=user.id)\n    return {\"access_token\": access_token, \"token_type\": \"bearer\"}\n\n\n@router.get(\"/auth/me\", response_model=User)\ndef read_users_me(current_user: User = Depends(get_current_active_user)):\n    return current_user\n\n\n@router.get(\"/users\", response_model=List[User])\ndef read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):\n    users = get_users(db, skip=skip, limit=limit)\n    return users\n\n# WebSocket Routes\n\n\n@router.websocket(\"/chat/ws/{token}\")\nasync def websocket_endpoint(websocket: WebSocket, token: str):\n    await websocket.accept()\n\n    # Verify token and get user\n    db = next(get_db())\n    user = verify_token(token, db)\n    if not user:\n        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)\n        return\n\n    # Add user to WebSocket manager\n    await manager.connect(websocket, user)\n\n    try:\n        while True:\n            data = await websocket.receive_text()\n            import json\n            data_dict = json.loads(data)\n            await manager.handle_websocket_message(websocket, user.id, data_dict)\n    except WebSocketDisconnect:\n        await manager.disconnect_user(user.id)",
+            "description": "Now let's create our authentication routes. These HTTP endpoints will handle user registration, login, and user profile access. I'll show you how to implement secure registration with password hashing, login with JWT token generation, and a protected endpoint to get the current user's information. We'll use FastAPI's form handling for login and proper error responses for various scenarios. These routes will be the entry point for users to access our chat application.",
+            "file": "app/routes.py",
+            "title": "Authentication Routes"
+          }
+        ],
+        "title": "HTTP & WebSocket Routes"
+      },
+      {
+        "phase": 7,
+        "steps": [
+          {
+            "code_snippet": "/* Reset and base styles */\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n  background: linear-gradient(135deg, #303c52 0%, #455c81 100%);\n  min-height: 100vh;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n/* Common form styles */\n.form-group {\n  margin-bottom: 20px;\n}\n\nlabel {\n  display: block;\n  margin-bottom: 8px;\n  color: #e2e8f0;\n  font-weight: 500;\n}\n\ninput {\n  width: 100%;\n  padding: 12px 16px;\n  border: 2px solid #4a5568;\n  border-radius: 10px;\n  font-size: 16px;\n  transition: all 0.3s ease;\n  background: #2d3748;\n  color: #e2e8f0;\n}\n\ninput:focus {\n  outline: none;\n  border-color: #a0aec0;\n  box-shadow: 0 0 0 3px rgba(160, 174, 192, 0.1);\n}\n\nbutton {\n  width: 100%;\n  padding: 14px;\n  background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);\n  color: #1a202c;\n  border: none;\n  border-radius: 10px;\n  font-size: 16px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: all 0.3s ease;\n  margin-bottom: 15px;\n}\n\nbutton:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 10px 20px rgba(160, 174, 192, 0.3);\n}\n\nbutton:active {\n  transform: translateY(0);\n}\n\n/* Responsive design */\n@media (max-width: 768px) {\n  .container {\n    margin: 20px;\n    padding: 30px;\n  }\n}",
+            "description": "Now let's create the foundation of our beautiful UI with our base CSS file. This will establish our dark theme, typography, and common component styles. I'll show you how to create a modern, cohesive design system with proper color schemes, typography, and interactive elements. We'll set up the base styles for buttons, form inputs, and other common components that will be used throughout our application. This creates the foundation for our glass morphism effects and modern chat interface.",
+            "file": "static/css/base.css",
+            "title": "Base CSS Styling"
+          },
+          {
+            "code_snippet": "/* Auth page specific styles */\n.auth-container {\n  background: rgba(45, 55, 72, 0.95);\n  border-radius: 20px;\n  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);\n  padding: 40px;\n  width: 100%;\n  max-width: 400px;\n  backdrop-filter: blur(10px);\n  border: 1px solid rgba(160, 174, 192, 0.2);\n}\n\n.auth-form h2 {\n  text-align: center;\n  color: #e2e8f0;\n  margin-bottom: 30px;\n  font-size: 2.5em;\n  font-weight: 300;\n}\n\n.auth-link {\n  text-align: center;\n  margin-top: 20px;\n  color: #a0aec0;\n}\n\n.auth-link a {\n  color: #a0aec0;\n  text-decoration: none;\n  font-weight: 500;\n  transition: color 0.3s ease;\n}\n\n.auth-link a:hover {\n  color: #e2e8f0;\n}\n\n/* Chat page specific styles */\n.chat-container {\n  background: rgba(26, 32, 44, 0.95);\n  border-radius: 20px;\n  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);\n  width: 100%;\n  max-width: 1200px;\n  height: 600px;\n  display: flex;\n  flex-direction: column;\n  backdrop-filter: blur(10px);\n  overflow: hidden;\n}\n\n.logout-btn {\n  background: rgba(239, 68, 68, 0.2);\n  border: 1px solid rgba(239, 68, 68, 0.4);\n  color: #fecaca;\n  padding: 6px 12px;\n  border-radius: 6px;\n  font-size: 12px;\n  cursor: pointer;\n  transition: all 0.3s ease;\n  width: auto;\n  margin: 0;\n}\n\n.logout-btn:hover {\n  background: rgba(239, 68, 68, 0.3);\n  border-color: rgba(239, 68, 68, 0.6);\n  color: #fca5a5;\n  transform: none;\n  box-shadow: none;\n}\n\n/* Chat Layout */\n.chat-layout {\n  display: flex;\n  flex: 1;\n  height: 100%;\n}\n\n.chat-area {\n  flex: 2;\n  display: flex;\n  flex-direction: column;\n  border-right: 1px solid #4a5568;\n  border-radius: 0 0 0 20px;\n}\n\n.sidebar {\n  flex: 1;\n  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);\n  border-left: 1px solid rgba(160, 174, 192, 0.2);\n  position: relative;\n}\n\n.sidebar::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: 1px;\n  background: linear-gradient(\n    90deg,\n    transparent 0%,\n    rgba(160, 174, 192, 0.3) 50%,\n    transparent 100%\n  );\n}\n\n.sidebar-header {\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  width: 100%;\n  margin: 0;\n}\n\n.user-info {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  background: rgba(70, 80, 99, 0.3);\n  padding: 10px 14px;\n  width: 100%;\n  margin: 0;\n  margin-bottom: 20px;\n}\n\n.logged-in-as {\n  font-size: 13px;\n  color: #a0aec0;\n  font-weight: 500;\n  letter-spacing: 0.3px;\n}\n\n.logged-in-as span {\n  color: #4a90e2;\n  font-weight: 600;\n  text-shadow: 0 0 10px rgba(74, 144, 226, 0.3);\n}\n\n.online-users-label {\n  margin: 0;\n  font-size: 11px;\n  color: #4d5868;\n  font-weight: 400;\n  text-transform: uppercase;\n  letter-spacing: 1px;\n  text-align: right;\n  font-style: italic;\n  font-family: 'Script', sans-serif;\n  padding-right: 8px;\n  padding-bottom: 7px;\n}\n\n.online-users {\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n  overflow-y: auto;\n  max-height: calc(100vh - 250px);\n  padding-right: 8px;\n  padding-bottom: 40px;\n}\n\n.online-users::-webkit-scrollbar {\n  width: 6px;\n}\n\n.online-users::-webkit-scrollbar-track {\n  background: rgba(26, 32, 44, 0.3);\n  border-radius: 3px;\n}\n\n.online-users::-webkit-scrollbar-thumb {\n  background: rgba(160, 174, 192, 0.3);\n  border-radius: 3px;\n}\n\n.online-users::-webkit-scrollbar-thumb:hover {\n  background: rgba(160, 174, 192, 0.5);\n}\n\n.online-user {\n  padding: 12px 16px;\n  background: rgba(26, 32, 44, 0.8);\n  border: 1px solid rgba(160, 174, 192, 0.15);\n  border-radius: 10px;\n  font-size: 14px;\n  color: #e2e8f0;\n  font-weight: 500;\n  transition: all 0.3s ease;\n  position: relative;\n  backdrop-filter: blur(5px);\n}\n\n.online-user.joining {\n  animation: userJoin 800ms ease-out;\n}\n\n@keyframes userJoin {\n  0% {\n    background: rgba(54, 108, 170, 0.3);\n    border-color: #4a91e27c;\n    box-shadow: 0 0 10px rgba(37, 78, 124, 0.5);\n    opacity: 0.6;\n  }\n  50% {\n    background: rgba(74, 144, 226, 0.2);\n    border-color: #4a90e2;\n    box-shadow: 0 0 15px rgba(53, 106, 167, 0.7);\n    opacity: 0.9;\n  }\n  100% {\n    background: rgba(26, 32, 44, 0.8);\n    border-color: rgba(160, 174, 192, 0.15);\n    box-shadow: none;\n    opacity: 1;\n  }\n}\n\n.chat-messages {\n  flex: 1;\n  overflow-y: auto;\n  padding: 20px;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n}\n\n.message {\n  max-width: 70%;\n  padding: 12px 16px;\n  border-radius: 15px;\n  word-wrap: break-word;\n}\n\n.message.own {\n  align-self: flex-end;\n  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);\n  color: white;\n}\n\n.message.other {\n  align-self: flex-start;\n  background: rgba(45, 55, 72, 0.8);\n  color: #e2e8f0;\n  border: 1px solid rgba(160, 174, 192, 0.2);\n}\n\n.message-header {\n  font-size: 12px;\n  font-weight: 600;\n  margin-bottom: 4px;\n  opacity: 0.8;\n}\n\n.message-content {\n  font-size: 14px;\n  line-height: 1.4;\n}\n\n.chat-input-container {\n  padding: 20px;\n  border-top: 1px solid #4a5568;\n}\n\n.chat-input-form {\n  display: flex;\n  gap: 10px;\n  align-items: center;\n}\n\n.chat-input {\n  flex: 1;\n  padding: 12px 16px;\n  border: 2px solid #4a5568;\n  border-radius: 25px;\n  background: rgba(26, 32, 44, 0.8);\n  color: #e2e8f0;\n  font-size: 14px;\n  transition: all 0.3s ease;\n}\n\n.chat-input::placeholder {\n  color: #a0aec0;\n}\n\n.chat-input:focus {\n  outline: none;\n  border-color: #4a90e2;\n  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);\n  background: rgba(45, 55, 72, 0.9);\n}\n\n.send-btn {\n  width: 40px;\n  height: 40px;\n  border-radius: 50%;\n  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);\n  color: white;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 16px;\n  transition: all 0.3s ease;\n  margin: 0;\n}\n\n.send-btn:hover {\n  transform: scale(1.1);\n  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);\n}\n\n.send-btn:active {\n  transform: scale(0.95);\n}",
+            "description": "Now we'll create the specific styles for our chat application interface. This CSS file will implement the beautiful glass morphism effects, modern chat layout, and smooth animations that make our application stand out. I'll show you how to create the chat container with proper styling, implement the sidebar for online users, add custom scrollbars, and create smooth animations for user join events. This is where we bring the modern, professional look to our chat application with attention to detail and user experience.",
+            "file": "static/css/app.css",
+            "title": "Chat Interface Styling"
+          }
+        ],
+        "title": "Modern UI - CSS Styling"
+      },
+      {
+        "phase": 8,
+        "steps": [
+          {
+            "code_snippet": "// Common utilities and constants\nconst API_BASE = 'http://localhost:8000/api/v1';\n\n// Utility functions\nfunction showAlert(message, type = 'info') {\n  console.log(`${type.toUpperCase()}: ${message}`);\n  alert(message);\n}\n\nfunction redirectTo(url) {\n  window.location.href = url;\n}\n\n// Check if user is authenticated\nfunction isAuthenticated() {\n  return localStorage.getItem('token') !== null;\n}\n\n// Get stored token\nfunction getToken() {\n  return localStorage.getItem('token');\n}\n\n// Store token\nfunction storeToken(token) {\n  localStorage.setItem('token', token);\n}\n\n// Remove token\nfunction removeToken() {\n  localStorage.removeItem('token');\n}\n\n// API request helper\nasync function apiRequest(endpoint, options = {}) {\n  const token = getToken();\n  const defaultHeaders = {\n    'Content-Type': 'application/json',\n  };\n\n  if (token) {\n    defaultHeaders['Authorization'] = `Bearer ${token}`;\n  }\n\n  const config = {\n    headers: { ...defaultHeaders, ...options.headers },\n    ...options,\n  };\n\n  try {\n    const response = await fetch(`${API_BASE}${endpoint}`, config);\n\n    if (!response.ok) {\n      const error = await response.json();\n      throw new Error(error.detail || 'Request failed');\n    }\n\n    return await response.json();\n  } catch (error) {\n    console.error('API request error:', error);\n    throw error;\n  }\n}",
+            "description": "Let's create our common JavaScript utilities that will be shared across our application. This file will contain helper functions for authentication, API requests, and common UI operations. I'll show you how to implement token management for local storage, authentication state checking, and a reusable API request function that automatically handles authentication headers. These utilities will make our frontend code cleaner and more maintainable by centralizing common functionality.",
+            "file": "static/js/common.js",
+            "title": "Common JavaScript Utilities"
+          },
+          {
+            "code_snippet": "// Login functionality\nasync function login() {\n  const username = document.getElementById('username').value;\n  const password = document.getElementById('password').value;\n\n  if (!username || !password) {\n    showAlert('Please enter both username and password');\n    return;\n  }\n\n  try {\n    const response = await fetch(`${API_BASE}/auth/login`, {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/x-www-form-urlencoded',\n      },\n      body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,\n    });\n\n    if (response.ok) {\n      const data = await response.json();\n      storeToken(data.access_token);\n      redirectTo('/chat');\n    } else {\n      const error = await response.json();\n      showAlert(error.detail || 'Login failed. Please check your credentials.');\n    }\n  } catch (error) {\n    console.error('Login error:', error);\n    showAlert('Login failed. Please try again.');\n  }\n}\n\n// Handle Enter key in login form\ndocument.addEventListener('DOMContentLoaded', function () {\n  const passwordInput = document.getElementById('password');\n  if (passwordInput) {\n    passwordInput.addEventListener('keypress', function (event) {\n      if (event.key === 'Enter') {\n        login();\n      }\n    });\n  }\n});",
+            "description": "Now we'll implement the login functionality. This JavaScript file will handle user authentication, form validation, and token management. I'll show you how to implement secure login with proper error handling, form data submission, and automatic redirection after successful authentication. We'll also add keyboard support for better user experience and proper token storage for session management.",
+            "file": "static/js/login.js",
+            "title": "Login Functionality"
+          },
+          {
+            "code_snippet": "// Registration functionality\nasync function register() {\n  const username = document.getElementById('username').value;\n  const password = document.getElementById('password').value;\n  const confirmPassword = document.getElementById('confirmPassword').value;\n\n  if (!username || !password || !confirmPassword) {\n    showAlert('Please fill in all fields');\n    return;\n  }\n\n  if (password !== confirmPassword) {\n    showAlert('Passwords do not match');\n    return;\n  }\n\n  if (password.length < 4) {\n    showAlert('Password must be at least 4 characters long');\n    return;\n  }\n\n  try {\n    const response = await fetch(`${API_BASE}/auth/register`, {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n      },\n      body: JSON.stringify({\n        username,\n        password,\n      }),\n    });\n\n    if (response.ok) {\n      showAlert('Registration successful! Please login.', 'success');\n      redirectTo('/login');\n    } else {\n      const error = await response.json();\n      showAlert(error.detail || 'Registration failed');\n    }\n  } catch (error) {\n    console.error('Registration error:', error);\n    showAlert('Registration failed. Please try again.');\n  }\n}\n\n// Handle Enter key in register form\ndocument.addEventListener('DOMContentLoaded', function () {\n  const confirmPasswordInput = document.getElementById('confirmPassword');\n  if (confirmPasswordInput) {\n    confirmPasswordInput.addEventListener('keypress', function (event) {\n      if (event.key === 'Enter') {\n        register();\n      }\n    });\n  }\n});",
+            "description": "Now we'll implement the registration functionality. This JavaScript file will handle user registration with proper validation, password confirmation, and error handling. I'll show you how to implement client-side validation for password matching and length requirements, secure form submission, and proper user feedback. We'll also add keyboard support and automatic redirection after successful registration.",
+            "file": "static/js/register.js",
+            "title": "Registration Functionality"
+          },
+          {
+            "code_snippet": "// Simple Chat functionality\nlet ws = null;\nlet currentUser = null;\n\n// Initialize chat when page loads\ndocument.addEventListener('DOMContentLoaded', function () {\n  if (!isAuthenticated()) {\n    redirectTo('/login');\n    return;\n  }\n  initializeChat();\n});\n\nasync function initializeChat() {\n  try {\n    currentUser = await apiRequest('/auth/me');\n    // Update the current username display\n    const usernameElement = document.getElementById('current-username');\n    if (usernameElement) {\n      usernameElement.textContent = currentUser.username;\n    }\n    connectWebSocket();\n  } catch (error) {\n    console.error('Failed to initialize chat:', error);\n    removeToken();\n    redirectTo('/login');\n  }\n}\n\nfunction connectWebSocket() {\n  const token = getToken();\n  ws = new WebSocket(`ws://localhost:8000/api/v1/chat/ws/${token}`);\n\n  ws.onopen = function () {\n    console.log('Connected to chat');\n    loadOnlineUsers();\n  };\n\n  ws.onmessage = function (event) {\n    const data = JSON.parse(event.data);\n    handleWebSocketMessage(data);\n  };\n\n  ws.onclose = function () {\n    console.log('Disconnected from chat');\n  };\n\n  ws.onerror = function (error) {\n    console.error('WebSocket error:', error);\n  };\n}\n\nfunction handleWebSocketMessage(data) {\n  console.log('Received WebSocket message:', data.type, data);\n  switch (data.type) {\n    case 'message':\n      if (data.user_id === currentUser.id) {\n        addMessage(data.content, 'You', 'own');\n      } else {\n        addMessage(data.content, data.username, 'other');\n      }\n      break;\n    case 'user_joined_animation':\n      console.log('Received join animation for:', data.username);\n      // Store the username to highlight after online users update\n      window.pendingHighlight = data.username;\n      break;\n    case 'online_users':\n      updateOnlineUsers(data.users);\n      // Check if we need to highlight a new user\n      if (window.pendingHighlight) {\n        setTimeout(() => {\n          highlightNewUser(window.pendingHighlight);\n          window.pendingHighlight = null;\n        }, 100); // Small delay to ensure DOM is updated\n      }\n      break;\n  }\n}\n\nfunction addMessage(content, username, type) {\n  const messagesContainer = document.getElementById('messages');\n  const messageDiv = document.createElement('div');\n  messageDiv.className = `message ${type}`;\n\n  const headerDiv = document.createElement('div');\n  headerDiv.className = 'message-header';\n  headerDiv.textContent = username;\n\n  const contentDiv = document.createElement('div');\n  contentDiv.className = 'message-content';\n  contentDiv.textContent = content;\n\n  messageDiv.appendChild(headerDiv);\n  messageDiv.appendChild(contentDiv);\n\n  messagesContainer.appendChild(messageDiv);\n  messagesContainer.scrollTop = messagesContainer.scrollHeight;\n}\n\nfunction sendMessage() {\n  const messageInput = document.getElementById('messageInput');\n  const content = messageInput.value.trim();\n\n  if (content && ws && ws.readyState === WebSocket.OPEN) {\n    ws.send(\n      JSON.stringify({\n        type: 'message',\n        content: content,\n      })\n    );\n    messageInput.value = '';\n  }\n}\n\n// Handle form submission\ndocument.addEventListener('DOMContentLoaded', function () {\n  const messageForm = document.getElementById('messageForm');\n  if (messageForm) {\n    messageForm.addEventListener('submit', function (e) {\n      e.preventDefault();\n      sendMessage();\n    });\n  }\n});\n\nfunction loadOnlineUsers() {\n  if (ws && ws.readyState === WebSocket.OPEN) {\n    ws.send(\n      JSON.stringify({\n        type: 'get_online_users',\n      })\n    );\n  }\n}\n\nfunction updateOnlineUsers(users) {\n  const onlineUsersContainer = document.getElementById('online-users');\n  if (!onlineUsersContainer) return;\n\n  onlineUsersContainer.innerHTML = '';\n\n    // Filter out the current user from the list\n    const otherUsers = users.filter((user) => user.id !== currentUser.id);\n\n  otherUsers.forEach((user) => {\n    const userDiv = document.createElement('div');\n    userDiv.className = 'online-user';\n    userDiv.textContent = user.username;\n    userDiv.dataset.username = user.username; // Add data attribute for easy finding\n    onlineUsersContainer.appendChild(userDiv);\n  });\n}\n\nfunction highlightNewUser(username) {\n  console.log('Highlighting new user:', username);\n  const onlineUsersContainer = document.getElementById('online-users');\n  if (!onlineUsersContainer) {\n    console.log('Online users container not found');\n    return;\n  }\n\n  // Find the user element by username\n  const userElements = onlineUsersContainer.querySelectorAll('.online-user');\n  console.log('Found user elements:', userElements.length);\n  const userElement = Array.from(userElements).find((el) => el.textContent === username);\n\n  if (userElement) {\n    console.log('Found user element, adding joining class');\n    // Add the joining class to trigger the animation\n    userElement.classList.add('joining');\n\n    // Remove the class after animation completes\n    setTimeout(() => {\n      userElement.classList.remove('joining');\n      console.log('Removed joining class');\n    }, 2000); // Match the animation duration\n  } else {\n    console.log('User element not found for:', username);\n  }\n}\n\nfunction logout() {\n  if (ws) {\n    ws.close();\n  }\n  removeToken();\n  redirectTo('/login');\n}",
+            "description": "Now we'll implement the core chat functionality with WebSocket communication. This JavaScript file will handle connecting to our WebSocket endpoint, managing real-time message sending and receiving, and implementing beautiful user join animations. I'll show you how to establish WebSocket connections with proper authentication, handle different message types, update the online users list in real-time, and create smooth animations when users join the chat. This brings all our backend functionality to life in the frontend.",
+            "file": "static/js/chat.js",
+            "title": "WebSocket Chat Implementation"
+          }
+        ],
+        "title": "JavaScript Functionality"
+      },
+      {
+        "phase": 9,
+        "steps": [
+          {
+            "code_snippet": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Login - FastAPI Chat App</title>\n    <link\n      rel=\"icon\"\n      href=\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>\"\n    />\n    <link rel=\"stylesheet\" href=\"/static/css/base.css\" />\n    <link rel=\"stylesheet\" href=\"/static/css/app.css\" />\n  </head>\n  <body>\n<div class=\"auth-container\">\n  <div class=\"auth-form\">\n    <h2>Login to Chat</h2>\n    <div class=\"form-group\">\n      <label for=\"username\">Username:</label>\n      <input type=\"text\" id=\"username\" placeholder=\"Enter your username\" />\n    </div>\n    <div class=\"form-group\">\n      <label for=\"password\">Password:</label>\n      <input type=\"password\" id=\"password\" placeholder=\"Enter your password\" />\n    </div>\n    <button class=\"btn btn-primary\" onclick=\"login()\">Login</button>\n    <p class=\"auth-link\">Don't have an account? <a href=\"/register\">Register</a></p>\n  </div>\n</div>\n\n    <script src=\"/static/js/common.js\"></script>\n<script src=\"/static/js/login.js\"></script>\n  </body>\n</html>",
+            "description": "Now let's create our login page template. This HTML template will provide a clean, modern interface for user authentication with proper form structure and styling integration. I'll show you how to structure the HTML for optimal user experience, including proper semantic markup, accessibility considerations, and integration points for our CSS and JavaScript. This template will be rendered by our FastAPI application and will serve as the entry point for user authentication.",
+            "file": "templates/login.html",
+            "title": "Login Page Template"
+          },
+          {
+            "code_snippet": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Register - FastAPI Chat App</title>\n    <link\n      rel=\"icon\"\n      href=\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>\"\n    />\n    <link rel=\"stylesheet\" href=\"/static/css/base.css\" />\n    <link rel=\"stylesheet\" href=\"/static/css/app.css\" />\n  </head>\n  <body>\n<div class=\"auth-container\">\n  <div class=\"auth-form\">\n    <h2>Register</h2>\n    <div class=\"form-group\">\n      <label for=\"username\">Username:</label>\n      <input type=\"text\" id=\"username\" placeholder=\"Enter your username\" />\n    </div>\n    <div class=\"form-group\">\n      <label for=\"password\">Password:</label>\n      <input type=\"password\" id=\"password\" placeholder=\"Enter your password\" />\n    </div>\n    <div class=\"form-group\">\n      <label for=\"confirmPassword\">Confirm Password:</label>\n      <input type=\"password\" id=\"confirmPassword\" placeholder=\"Confirm your password\" />\n    </div>\n    <button class=\"btn btn-primary\" onclick=\"register()\">Register</button>\n    <p class=\"auth-link\">Already have an account? <a href=\"/login\">Login</a></p>\n  </div>\n</div>\n\n    <script src=\"/static/js/common.js\"></script>\n<script src=\"/static/js/register.js\"></script>\n  </body>\n</html>",
+            "description": "Now let's create our registration page template. This HTML template will provide a user-friendly interface for new user registration with proper form validation and styling. I'll show you how to structure the registration form with password confirmation, proper labeling, and integration with our JavaScript validation. This template will ensure a smooth user experience during the registration process.",
+            "file": "templates/register.html",
+            "title": "Registration Page Template"
+          },
+          {
+            "code_snippet": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Chat - FastAPI Chat App</title>\n    <link\n      rel=\"icon\"\n      href=\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>\"\n    />\n    <link rel=\"stylesheet\" href=\"/static/css/base.css\" />\n    <link rel=\"stylesheet\" href=\"/static/css/app.css\" />\n  </head>\n  <body>\n    <div class=\"chat-container\">\n      <div class=\"chat-layout\">\n        <div class=\"chat-area\">\n          <div class=\"chat-messages\" id=\"messages\">\n            <!-- Messages will be displayed here -->\n          </div>\n\n          <div class=\"chat-input-container\">\n            <form class=\"chat-input-form\" id=\"messageForm\">\n              <input\n                type=\"text\"\n                id=\"messageInput\"\n                class=\"chat-input\"\n                placeholder=\"Type your message...\"\n                autocomplete=\"off\"\n              />\n              <button type=\"submit\" class=\"send-btn\">➤</button>\n            </form>\n          </div>\n        </div>\n\n        <div class=\"sidebar\">\n          <div class=\"sidebar-header\">\n            <div class=\"user-info\">\n              <div class=\"logged-in-as\">\n                Logged in as: <span id=\"current-username\">Loading...</span>\n              </div>\n              <button class=\"logout-btn\" onclick=\"logout()\">Logout</button>\n            </div>\n            <h3 class=\"online-users-label\">Online Users</h3>\n          </div>\n          <div id=\"online-users\" class=\"online-users\"></div>\n        </div>\n      </div>\n    </div>\n\n    <script src=\"/static/js/common.js\"></script>\n    <script src=\"/static/js/chat.js\"></script>\n  </body>\n</html>",
+            "description": "Now let's create our main chat interface HTML template. This template will provide the structure for our modern chat application with a beautiful layout that includes the chat area, message input, and sidebar for online users. I'll show you how to structure the HTML for optimal user experience, including proper semantic markup, accessibility considerations, and integration points for our CSS and JavaScript. This template will be rendered by our FastAPI application and will serve as the main interface for our chat functionality.",
+            "file": "templates/chat.html",
+            "title": "Chat Interface Template"
+          }
+        ],
+        "title": "HTML Templates"
+      },
+      {
+        "phase": 10,
+        "steps": [
+          {
+            "code_snippet": "from fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom fastapi.staticfiles import StaticFiles\nfrom fastapi.responses import FileResponse\nfrom fastapi.templating import Jinja2Templates\nfrom app.routes import router\nfrom app.utils.config import settings\nfrom fastapi.requests import Request\nfrom app.database import init_db\n\napp = FastAPI(\n    title=settings.PROJECT_NAME,\n    version=settings.VERSION,\n    description=settings.DESCRIPTION,\n    openapi_url=f\"{settings.API_V1_STR}/openapi.json\"\n)\n\n# Set up CORS middleware\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=settings.parsed_allowed_hosts,\n    allow_credentials=True,  # Needed for JWT via cookies\n    allow_methods=[\"GET\", \"POST\"],  # Avoid using \"*\" if not needed\n    allow_headers=[\"Authorization\", \"Content-Type\", \"application/json\"], \n)\n\n# Initialize database\ninit_db()\n\n# Set up templates\ntemplates = Jinja2Templates(directory=\"templates\")\n\n# Mount static files\napp.mount(\"/static\", StaticFiles(directory=\"static\"), name=\"static\")\n\n# Include all routes\napp.include_router(router, prefix=settings.API_V1_STR)\n\n@app.get(\"/\")\nasync def root(request: Request):\n    return templates.TemplateResponse(\"login.html\", {\"request\": request})\n\n@app.get(\"/login\")\nasync def login_page(request: Request):\n    return templates.TemplateResponse(\"login.html\", {\"request\": request})\n\n@app.get(\"/register\")\nasync def register_page(request: Request):\n    return templates.TemplateResponse(\"register.html\", {\"request\": request})\n\n@app.get(\"/chat\")\nasync def chat_page(request: Request):\n    return templates.TemplateResponse(\"chat.html\", {\"request\": request})\n\n@app.get(\"/health\")\nasync def health_check():\n    return {\"status\": \"healthy\"}\n\nif __name__ == \"__main__\":\n    import uvicorn\n    uvicorn.run(app, host=\"0.0.0.0\", port=8000)",
+            "description": "Finally, let's bring everything together in our main FastAPI application file. This is where we'll configure our FastAPI app, set up middleware, mount static files and templates, and include all our routes. I'll show you how to properly configure CORS for cross-origin requests, set up the database initialization, and create the main application structure. This file serves as the entry point for our entire chat application and ties together all the components we've built throughout this tutorial.",
+            "file": "main.py",
+            "title": "Main Application Setup"
+          }
+        ],
+        "title": "Main Application"
+      }
+    ],
+    "title": "FastAPI Real-Time Chat Application - A Complete Guide",
+    "youtube_video": "https://www.youtube.com/watch?v=wIbybhfvkVE&ab_channel=ReadtheError"
+  }
+}
