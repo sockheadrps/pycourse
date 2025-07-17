@@ -5,12 +5,6 @@ export interface Guide {
 	slug: string;
 	title: string;
 	description: string;
-	tutorial_url: string;
-}
-
-export interface GuidesResponse {
-	guides: Guide[];
-	total: number;
 }
 
 function createGuidesStore() {
@@ -35,10 +29,10 @@ function createGuidesStore() {
 					throw new Error(`Failed to fetch guides: ${response.status}`);
 				}
 
-				const data: GuidesResponse = await response.json();
+				const data: Guide[] = await response.json();
 				update((state) => ({
 					...state,
-					guides: data.guides,
+					guides: data,
 					loading: false
 				}));
 			} catch (error) {
@@ -55,5 +49,4 @@ function createGuidesStore() {
 		}
 	};
 }
-
 export const guides = createGuidesStore();
