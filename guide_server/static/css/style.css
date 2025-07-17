@@ -699,6 +699,7 @@ body {
   font-weight: bold;
   font-size: 1.1em;
   margin-right: 8px;
+  padding: 10px;
 }
 
 .toc-indicator .toc-step-title {
@@ -1692,15 +1693,14 @@ pre.line-numbers {
   .step-title-section {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     gap: 12px;
-    margin-left: 2rem;
+    max-width: 100%;
+
   }
   .step-title-section .step-file {
-    max-height: 50%;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
+    display: flex;
+    
+    padding: 5px;
     justify-content: center;
     align-items: center;
     word-wrap: break-word;
@@ -1708,6 +1708,7 @@ pre.line-numbers {
     font-size: 12px;
     background-color: #4facfe;
     color: #000;
+
   }
 
   .step-description-container {

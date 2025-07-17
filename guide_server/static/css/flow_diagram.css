@@ -546,6 +546,10 @@ body {
 
   .step {
     background-color: #fe4f4f;
+
+  }
+  .flow-content .step-location {
+    left: 30px;
   }
 
   .step-text-container {
@@ -566,6 +570,7 @@ body {
     padding-top: 0px;
     padding-left: 0px;
     width: 100%;
+    margin-left: 30px;
   }
 
   .step-location {
@@ -592,6 +597,16 @@ body {
 
   .step-title {
     font-size: 0.9em;
+    text-align: right;
+
+  }
+
+  div .step-text-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0px;
+    margin-left: 40px;
   }
 
   .step-description {
@@ -641,19 +656,20 @@ body {
   }
   .flow-content .step-number {
     position: absolute;
-    margin-right: 20px;
-    padding: 0px;
-    top: -20px;
+    right: 10px; !important
+
 
   }
 
   /* or database point or decision point or success point or security point */
   .flow-content .normal-point, .flow-content .database-point, .flow-content .decision-point, .flow-content .success-point, .flow-content .security-point {
     margin-bottom: 20px;
+    padding-top: 20px;
     margin-top: 20px;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 0px;
+    margin-left: 10px;
+    padding-left: 15px;
+
+    margin-right: 10px;
     padding-bottom: 10px;
   }
 
@@ -661,55 +677,6 @@ body {
 
 }
 
-@media (max-width: 480px) {
-  .step-location {
-    width: 100%;
-    padding: 4px 6px;
-    gap: 3px;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-
-  .location-badge {
-    font-size: 0.55em;
-    padding: 2px 4px;
-    order: 2;
-  }
-
-  .step-header .step-number {
-    position: relative;
-    margin-right: 20px;
-    padding: 0px;
-    top: -20px;
-    font-size: 0.5em;
-    padding: 0px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background-color: #4facfe;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    min-width: 22px;
-    min-height: 22px;
-    justify-content: center;
-    text-align: center;
-    font-size: 0.5em;
-    font-weight: 600;
-    font-family: 'Courier New', monospace;
-
-  }
-
-  .location-file {
-    font-size: 0.6em;
-    flex: 1;
-    order: 1;
-    text-align: left;
-    padding: 2px 4px;
-  }
-}
 
 .step-file {
   background: #e3f2fd;
