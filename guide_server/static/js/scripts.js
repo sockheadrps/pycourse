@@ -754,7 +754,7 @@ function switchTab(tabName) {
   if (activeButton) activeButton.classList.add('active');
   if (activeContent) activeContent.classList.add('active');
 
-  // Hide TOC indicator when on flow tab, show when on tutorial tab
+  //Hide TOC indicator when on flow tab, show when on tutorial tab
   if (tabName === 'flow') {
     tocIndicator.style.display = 'none';
   } else {
@@ -767,7 +767,6 @@ function switchTab(tabName) {
   }
 }
 
-// Initialize tab functionality
 function initializeTabs() {
   const tabButtons = document.querySelectorAll('.tab-button');
 
@@ -777,6 +776,9 @@ function initializeTabs() {
       switchTab(tabName);
     });
   });
+
+  // Set tutorial tab as active by default
+  switchTab('tutorial');
 }
 
 // Initialize Prism highlighting

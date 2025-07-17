@@ -440,6 +440,8 @@ def generate_all_guides():
                         with open(flow_json, encoding="utf-8") as f:
                             flow_data = json.load(f)
                         flow_content = f'<div id="flow-data" data-flow="{json.dumps(flow_data)}"></div>'
+                        print(
+                            f"✅ Loaded flow data for {guide_slug}: {len(flow_data.get('phases', []))} phases")
                     except Exception as e:
                         print(
                             f"⚠️ Warning: Could not generate flow content for {guide_slug}: {e}")
@@ -531,11 +533,23 @@ def serve_guide_tutorial(guide_slug: str, request: Request):
     flow_content = ""
     flow_data = None
     if flow_json.exists():
-        with open(flow_json, encoding="utf-8") as f:
-            flow_data = json.load(f)
-        flow_content = f'<div id="flow-data" data-flow="{json.dumps(flow_data)}"></div>'
+        try:
+            with open(flow_json, encoding="utf-8") as f:
+                flow_data = json.load(f)
+            flow_content = f'<div id="flow-data" data-flow="{json.dumps(flow_data)}"></div>'
+            print(
+                f"✅ Loaded flow data for {guide_slug}: {len(flow_data.get('phases', []))} phases")
+        except Exception as e:
+            print(f"❌ Error loading flow data for {guide_slug}: {e}")
+    else:
+        print(f"⚠️ No flow.json found for {guide_slug}")
 
     templates = get_templates()
+    print(
+        f"🔍 Debug: flow_data type: {type(flow_data)}, flow_data content: {flow_data is not None}")
+    if flow_data:
+        print(
+            f"🔍 Debug: flow_data has {len(flow_data.get('phases', []))} phases")
     rendered_html = templates["tutorial"].render(
         title=tutorial.get("title", ""),
         description=tutorial.get("description", ""),
@@ -553,7 +567,7 @@ def serve_guide_tutorial(guide_slug: str, request: Request):
 
 @app.get("/guides")
 def list_guides():
-    """Return only published guides with their titles and descriptions"""
+    """Return only published guides with their slug, titles and descriptions"""
     guides = get_guides()
     guides_data = []
 
@@ -568,6 +582,7 @@ def list_guides():
                     title = tutorial_data.get("title", guide_slug)
                     description = tutorial_data.get("description", "")
                 guides_data.append({
+                    "slug": guide_slug,
                     "title": title,
                     "description": description
                 })
@@ -1522,107 +1537,66 @@ async def clear_preview(guide_slug: str, request: Request, current_user: bool = 
 
 @app.post("/admin/regenerate-guide/{guide_slug}")
 async def regenerate_single_guide(guide_slug: str, current_user: bool = Depends(get_current_user_flexible)):
-    """Regenerate a single guide from draft if available"""
-    print(f"🔄 regenerate_single_guide called for {guide_slug}")
+    """Regenerate a specific guide for testing"""
     try:
-        guide_dir = GUIDES_DIR / guide_slug
-        if not guide_dir.exists():
-            raise HTTPException(status_code=404, detail="Guide not found")
+        guide_path = GUIDES_DIR / guide_slug
+        if not guide_path.exists():
+            return {"status": "error", "message": f"Guide '{guide_slug}' not found"}
 
-        # Check if draft exists and publish it
-        draft_file = guide_dir / "draft.json"
-        if draft_file.exists():
-            try:
-                # Load draft data
-                with open(draft_file, 'r', encoding='utf-8') as f:
-                    draft_data = json.load(f)
+        # Force regeneration by calling the generation logic directly
+        tutorial_json = guide_path / "tutorial.json"
+        flow_json = guide_path / "flow.json"
+        tutorial_html = guide_path / "tutorial.html"
+        flow_html = guide_path / "flow.html"
 
-                # Generate tutorial.json from draft
-                tutorial_json = {
-                    "assets": {
-                        "css": ["/guides/static/css/style.css"],
-                        "js": ["/guides/static/js/scripts.js", "/guides/static/js/flow_diagram.js"]
-                    },
-                    "tutorial": {
-                        "title": draft_data.get("tutorial", {}).get("title", ""),
-                        "description": draft_data.get("tutorial", {}).get("description", ""),
-                        "youtube_video": draft_data.get("tutorial", {}).get("youtube_video", ""),
-                        "phases": []
-                    }
-                }
+        if tutorial_json.exists():
+            with open(tutorial_json, encoding="utf-8") as f:
+                data = json.load(f)
+            tutorial = data.get("tutorial", {})
+            assets = data.get("assets", {}) or {}
+            if 'assets' in assets:
+                assets = assets['assets']
+            css_links = "\n".join(
+                f"<link rel='stylesheet' href='{href}'>" for href in assets.get("css", []) or [])
+            js_links = "\n".join(
+                f"<script src='{src}' defer></script>" for src in assets.get("js", []) or [])
+            total_steps = sum(len(p["steps"])
+                              for p in tutorial.get("phases", []))
 
-                # Add phases and steps
-                for phase in draft_data.get("tutorial", {}).get("phases", []):
-                    tutorial_phase = {
-                        "phase": phase.get("phase", 1),
-                        "title": phase.get("title", ""),
-                        "steps": []
-                    }
+            # Generate flow content if flow.json exists
+            flow_content = ""
+            flow_data = None
+            if flow_json.exists():
+                try:
+                    with open(flow_json, encoding="utf-8") as f:
+                        flow_data = json.load(f)
+                    flow_content = f'<div id="flow-data" data-flow="{json.dumps(flow_data)}"></div>'
+                    print(
+                        f"✅ Loaded flow data for {guide_slug}: {len(flow_data.get('phases', []))} phases")
+                except Exception as e:
+                    print(f"❌ Error loading flow data for {guide_slug}: {e}")
+            else:
+                print(f"⚠️ No flow.json found for {guide_slug}")
 
-                    for step in phase.get("steps", []):
-                        tutorial_step = {
-                            "title": step.get("title", ""),
-                            "description": step.get("description", ""),
-                            "file": step.get("file", ""),
-                            "code_snippet": step.get("code_snippet", "")
-                        }
-                        tutorial_phase["steps"].append(tutorial_step)
-
-                    tutorial_json["tutorial"]["phases"].append(tutorial_phase)
-
-                # Save tutorial.json
-                tutorial_file = guide_dir / "tutorial.json"
-                with open(tutorial_file, "w", encoding="utf-8") as f:
-                    json.dump(tutorial_json, f, indent=2, ensure_ascii=False)
-
-                # Generate flow.json from draft
-                flow_json = {
-                    "title": draft_data.get("flow", {}).get("title", ""),
-                    "description": draft_data.get("flow", {}).get("description", ""),
-                    "phases": []
-                }
-
-                # Add flow phases and steps
-                for phase in draft_data.get("flow", {}).get("phases", []):
-                    flow_phase = {
-                        "phase": phase.get("phase", 1),
-                        "title": phase.get("title", ""),
-                        "flow_title": phase.get("flow_title", ""),
-                        "steps": []
-                    }
-
-                    for step in phase.get("steps", []):
-                        flow_step = {
-                            "step": step.get("step", 1),
-                            "title": step.get("title", ""),
-                            "description": step.get("description", ""),
-                            "location": step.get("location", {"type": "server", "file": ""}),
-                            "step_type": step.get("step_type", "normal")
-                        }
-                        flow_phase["steps"].append(flow_step)
-
-                    flow_json["phases"].append(flow_phase)
-
-                # Save flow.json
-                flow_file = guide_dir / "flow.json"
-                with open(flow_file, "w", encoding="utf-8") as f:
-                    json.dump(flow_json, f, indent=2, ensure_ascii=False)
-
-                # Remove draft file after publishing
-                draft_file.unlink()
-
-                return {"message": f"Guide {guide_slug} published from draft successfully"}
-            except Exception as e:
-                raise HTTPException(
-                    status_code=500, detail=f"Failed to publish draft: {str(e)}")
+            templates = get_templates()
+            rendered_html = templates["tutorial"].render(
+                title=tutorial.get("title", ""),
+                description=tutorial.get("description", ""),
+                css_links=css_links,
+                js_links=js_links,
+                tutorial_data=tutorial,
+                total_steps=total_steps,
+                flow_content=flow_content,
+                flow_data=flow_data,
+                tutorial_data_json=json.dumps(tutorial),
+            )
+            tutorial_html.write_text(rendered_html, encoding="utf-8")
+            print(f"✅ Regenerated tutorial for {guide_slug}")
+            return {"status": "success", "message": f"Guide {guide_slug} regenerated successfully"}
         else:
-            # No draft exists, just regenerate from existing files
-            generate_guide(guide_slug)
-            return {"message": f"Guide {guide_slug} regenerated successfully"}
-
+            return {"status": "error", "message": f"tutorial.json not found for {guide_slug}"}
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Failed to regenerate guide: {str(e)}")
+        return {"status": "error", "message": f"Failed to regenerate guide: {str(e)}"}
 
 
 @app.get("/admin/check-slug/{slug}")
@@ -1678,6 +1652,70 @@ async def delete_guide(guide_slug: str, current_user: bool = Depends(get_current
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Failed to delete guide: {str(e)}")
+
+
+@app.post("/test-regenerate/{guide_slug}")
+async def test_regenerate_guide(guide_slug: str):
+    """Simple endpoint to regenerate a guide without authentication"""
+    try:
+        guide_path = GUIDES_DIR / guide_slug
+        if not guide_path.exists():
+            return {"status": "error", "message": f"Guide '{guide_slug}' not found"}
+
+        # Force regeneration by calling the generation logic directly
+        tutorial_json = guide_path / "tutorial.json"
+        flow_json = guide_path / "flow.json"
+        tutorial_html = guide_path / "tutorial.html"
+        flow_html = guide_path / "flow.html"
+
+        if tutorial_json.exists():
+            with open(tutorial_json, encoding="utf-8") as f:
+                data = json.load(f)
+            tutorial = data.get("tutorial", {})
+            assets = data.get("assets", {}) or {}
+            if 'assets' in assets:
+                assets = assets['assets']
+            css_links = "\n".join(
+                f"<link rel='stylesheet' href='{href}'>" for href in assets.get("css", []) or [])
+            js_links = "\n".join(
+                f"<script src='{src}' defer></script>" for src in assets.get("js", []) or [])
+            total_steps = sum(len(p["steps"])
+                              for p in tutorial.get("phases", []))
+
+            # Generate flow content if flow.json exists
+            flow_content = ""
+            flow_data = None
+            if flow_json.exists():
+                try:
+                    with open(flow_json, encoding="utf-8") as f:
+                        flow_data = json.load(f)
+                    flow_content = f'<div id="flow-data" data-flow="{json.dumps(flow_data)}"></div>'
+                    print(
+                        f"✅ Loaded flow data for {guide_slug}: {len(flow_data.get('phases', []))} phases")
+                except Exception as e:
+                    print(f"❌ Error loading flow data for {guide_slug}: {e}")
+            else:
+                print(f"⚠️ No flow.json found for {guide_slug}")
+
+            templates = get_templates()
+            rendered_html = templates["tutorial"].render(
+                title=tutorial.get("title", ""),
+                description=tutorial.get("description", ""),
+                css_links=css_links,
+                js_links=js_links,
+                tutorial_data=tutorial,
+                total_steps=total_steps,
+                flow_content=flow_content,
+                flow_data=flow_data,
+                tutorial_data_json=json.dumps(tutorial),
+            )
+            tutorial_html.write_text(rendered_html, encoding="utf-8")
+            print(f"✅ Regenerated tutorial for {guide_slug}")
+            return {"status": "success", "message": f"Guide {guide_slug} regenerated successfully"}
+        else:
+            return {"status": "error", "message": f"tutorial.json not found for {guide_slug}"}
+    except Exception as e:
+        return {"status": "error", "message": f"Failed to regenerate guide: {str(e)}"}
 
 
 if __name__ == "__main__":
