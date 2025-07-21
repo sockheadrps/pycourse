@@ -1,17 +1,15 @@
 {
   "assets": {
-    "css": [
-      "/guides/static/css/style.css"
-    ],
-    "js": [
-      "/guides/static/js/scripts.js",
-      "/guides/static/js/flow_diagram.js"
-    ]
+    "css": ["/guides/static/css/style.css"],
+    "js": ["/guides/static/js/scripts.js", "/guides/static/js/flow_diagram.js"]
   },
   "tutorial": {
     "title": "FastAPI Real-Time Chat Application - A Complete Guide",
     "description": "Welcome to this comprehensive tutorial where we'll build a modern real-time chat application from scratch. We'll be using FastAPI for our backend, WebSockets for real-time communication, SQLAlchemy for database management, and create a beautiful dark-themed UI with glass morphism effects. This is a complete, production-ready chat application that you can deploy and use immediately.",
-    "youtube_video": "https://www.youtube.com/watch?v=wIbybhfvkVE&ab_channel=ReadtheError",
+    "youtube_videos": [
+      "https://www.youtube.com/watch?v=wIbybhfvkVE&ab_channel=ReadtheError",
+      "https://www.youtube.com/watch?v=olWPT9V6tuw&ab_channel=ReadtheError"
+    ],
     "phases": [
       {
         "phase": 1,

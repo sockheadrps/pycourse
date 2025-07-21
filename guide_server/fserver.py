@@ -124,7 +124,8 @@ class TutorialData(BaseModel):
     title: str
     description: str
     phases: list[TutorialPhase]
-    youtube_video: Optional[str] = None  # YouTube video ID or URL
+    youtube_video: Optional[str] = None  # YouTube video ID or URL (legacy)
+    youtube_videos: Optional[list[str]] = None  # Multiple YouTube video URLs
 
 
 class FlowStep(BaseModel):

@@ -41,7 +41,41 @@
       <!-- Tutorial Tab Content -->
       <div id="tutorial-tab" class="tab-content active">
         <div class="content">
-          {% if tutorial_data.youtube_video %}
+          {% if tutorial_data.youtube_videos %}
+          <div class="youtube-video-container">
+            <div class="video-selector">
+              <div class="video-selector-header">
+                <span class="video-selector-title">Video Series</span>
+                <div class="video-edit-controls">
+                  <button class="video-edit-btn" data-tutorial-video="true">🔒</button>
+                </div>
+              </div>
+              <div class="video-tabs">
+                {% for video_url in tutorial_data.youtube_videos %}
+                {% set video_id = video_url.split('v=')[-1] if 'v=' in video_url else video_url %}
+                {% set video_id = video_id.split('&')[0] if '&' in video_id else video_id %}
+                <button class="video-tab {% if loop.first %}active{% endif %}" data-video-id="{{ video_id }}" data-video-url="{{ video_url }}">
+                  Part {{ loop.index }}
+                </button>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="youtube-video-wrapper">
+              {% set first_video_url = tutorial_data.youtube_videos[0] %}
+              {% set video_id = first_video_url.split('v=')[-1] if 'v=' in first_video_url else first_video_url %}
+              {% set video_id = video_id.split('&')[0] if '&' in video_id else video_id %}
+              <iframe
+                src="https://www.youtube.com/embed/{{ video_id }}?rel=0"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                class="youtube-video"
+                id="youtube-iframe"
+              >
+              </iframe>
+            </div>
+          </div>
+          {% elif tutorial_data.youtube_video %}
           <div class="youtube-video-container">
             <div class="video-edit-controls">
               <button class="video-edit-btn" data-tutorial-video="true">🔒</button>

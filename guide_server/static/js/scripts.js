@@ -95,15 +95,15 @@ function updateEditButtonsVisibility() {
   const editButtons = document.querySelectorAll('.step-edit-btn, .code-edit-btn, .video-edit-btn');
 
   // Batch DOM updates to reduce reflows
-    if (isAuthenticated) {
+  if (isAuthenticated) {
     editButtons.forEach((btn) => {
       btn.style.display = 'flex';
       btn.style.opacity = '0.8';
     });
-    } else {
+  } else {
     editButtons.forEach((btn) => {
       btn.style.display = 'none';
-  });
+    });
   }
 }
 
@@ -402,6 +402,30 @@ function cancelCodeSnippet(stepId, textarea, codeElement, editBtn) {
   updateEditButtonsVisibility();
 }
 
+// Video switching functionality
+function initializeVideoTabs() {
+  const videoTabs = document.querySelectorAll('.video-tab');
+  const iframe = document.getElementById('youtube-iframe');
+
+  if (!videoTabs.length || !iframe) return;
+
+  videoTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs
+      videoTabs.forEach((t) => t.classList.remove('active'));
+
+      // Add active class to clicked tab
+      tab.classList.add('active');
+
+      // Update iframe src
+      const videoId = tab.getAttribute('data-video-id');
+      if (videoId) {
+        iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0`;
+      }
+    });
+  });
+}
+
 // Video editing functionality
 function toggleVideoEdit() {
   const videoContainer = document.querySelector('.youtube-video-container');
@@ -411,15 +435,15 @@ function toggleVideoEdit() {
 
   if (!editBtn.classList.contains('editing')) {
     // Switch to edit mode
-    const iframe = videoWrapper.querySelector('iframe');
-    const currentSrc = iframe.src;
-    const videoId = currentSrc.split('/embed/')[1]?.split('?')[0] || '';
+    const currentVideos = tutorialData?.youtube_videos || [];
+    const videoUrlsText = currentVideos.join('\n');
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = videoId ? `https://www.youtube.com/watch?v=${videoId}` : '';
-    input.placeholder = 'Enter YouTube video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)';
+    const input = document.createElement('textarea');
+    input.value = videoUrlsText;
+    input.placeholder =
+      'Enter YouTube video URLs (one per line):\nhttps://www.youtube.com/watch?v=VIDEO_ID1\nhttps://www.youtube.com/watch?v=VIDEO_ID2';
     input.className = 'video-url-input';
+    input.rows = 5;
     input.style.cssText = `
       width: 100%;
       padding: 12px 16px;
@@ -429,6 +453,8 @@ function toggleVideoEdit() {
       background: #2d3748;
       color: #e2e8f0;
       margin-bottom: 10px;
+      resize: vertical;
+      min-height: 120px;
     `;
 
     videoWrapper.style.display = 'none';
@@ -457,36 +483,48 @@ function toggleVideoEdit() {
 }
 
 async function saveVideoUrl(input, videoWrapper, editControls) {
-  const videoUrl = input.value.trim();
+  const videoUrls = input.value
+    .trim()
+    .split('\n')
+    .filter((url) => url.trim());
 
-  if (videoUrl) {
-    // Extract video ID from URL
-    let videoId = '';
-    if (videoUrl.includes('youtube.com/watch?v=')) {
-      videoId = videoUrl.split('v=')[1]?.split('&')[0] || '';
-    } else if (videoUrl.includes('youtu.be/')) {
-      videoId = videoUrl.split('youtu.be/')[1]?.split('?')[0] || '';
-    } else {
-      // Assume it's already a video ID
-      videoId = videoUrl;
-    }
+  if (videoUrls.length > 0) {
+    const validUrls = [];
 
-    if (videoId) {
-      // Update the iframe
-      const iframe = videoWrapper.querySelector('iframe');
-      iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0`;
-
-      // Update tutorial data
-      if (tutorialData) {
-        tutorialData.youtube_video = videoUrl;
+    for (const videoUrl of videoUrls) {
+      // Extract video ID from URL
+      let videoId = '';
+      if (videoUrl.includes('youtube.com/watch?v=')) {
+        videoId = videoUrl.split('v=')[1]?.split('&')[0] || '';
+      } else if (videoUrl.includes('youtu.be/')) {
+        videoId = videoUrl.split('youtu.be/')[1]?.split('?')[0] || '';
+      } else {
+        // Assume it's already a video ID
+        videoId = videoUrl;
       }
 
-      showSaveNotification('Video URL saved successfully!', 'success');
+      if (videoId) {
+        validUrls.push(videoUrl);
+      }
+    }
+
+    if (validUrls.length > 0) {
+      // Update tutorial data
+      if (tutorialData) {
+        tutorialData.youtube_videos = validUrls;
+        // Remove old single video field if it exists
+        delete tutorialData.youtube_video;
+      }
+
+      showSaveNotification(`${validUrls.length} video URL(s) saved successfully!`, 'success');
 
       // Save changes to server
       await saveTutorialData();
+
+      // Reload the page to show the new video structure
+      window.location.reload();
     } else {
-      showSaveNotification('Invalid YouTube URL!', 'error');
+      showSaveNotification('No valid YouTube URLs found!', 'error');
       return;
     }
   }
@@ -826,6 +864,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     initializeTOCTracking();
     initializeTabs(); // Initialize tabs after data is loaded
     initializePrismWithDelay(); // Initialize Prism after data is loaded
+    initializeVideoTabs(); // Initialize video tabs after data is loaded
 
     // Add click listeners to code preview areas for expansion
     const codePreviews = document.querySelectorAll('.code-preview');
@@ -900,28 +939,28 @@ window.addEventListener(
   () => {
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
-  const steps = document.querySelectorAll('.step-item');
-  let currentStep = null;
+      const steps = document.querySelectorAll('.step-item');
+      let currentStep = null;
 
-  steps.forEach((step) => {
-    const rect = step.getBoundingClientRect();
-    if (rect.top <= 150 && rect.bottom > 150) {
-      currentStep = step;
-    }
-  });
+      steps.forEach((step) => {
+        const rect = step.getBoundingClientRect();
+        if (rect.top <= 150 && rect.bottom > 150) {
+          currentStep = step;
+        }
+      });
 
-  if (currentStep) {
-    const stepId = currentStep.getAttribute('data-step-id');
-    const [phaseNumber, stepNumber] = stepId.split('-').map(Number);
+      if (currentStep) {
+        const stepId = currentStep.getAttribute('data-step-id');
+        const [phaseNumber, stepNumber] = stepId.split('-').map(Number);
 
-    const stepTitle = currentStep.querySelector('.step-title')?.innerText ?? '(No title)';
-    const stepFile = currentStep.querySelector('.step-file')?.innerText ?? '–';
+        const stepTitle = currentStep.querySelector('.step-title')?.innerText ?? '(No title)';
+        const stepFile = currentStep.querySelector('.step-file')?.innerText ?? '–';
 
         // Batch DOM updates
         const tocStepNumber = document.getElementById('tocStepNumber');
         const tocStepTitle = document.getElementById('tocStepTitle');
         const tocStepFile = document.getElementById('tocStepFile');
-        
+
         if (tocStepNumber.textContent !== `${phaseNumber}.${stepNumber}`) {
           tocStepNumber.textContent = `${phaseNumber}.${stepNumber}`;
         }
@@ -931,12 +970,12 @@ window.addEventListener(
         if (tocStepFile.textContent !== stepFile) {
           tocStepFile.textContent = stepFile;
         }
-  }
+      }
 
-  const scrollTop = window.scrollY;
-  const docHeight = document.body.scrollHeight - window.innerHeight;
-  const scrollPercent = Math.min(100, (scrollTop / docHeight) * 100);
-  document.getElementById('tocProgressBar').style.width = `${scrollPercent}%`;
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = Math.min(100, (scrollTop / docHeight) * 100);
+      document.getElementById('tocProgressBar').style.width = `${scrollPercent}%`;
     }, 16); // ~60fps
   },
   { passive: true }
