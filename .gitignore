@@ -61,3 +61,9 @@ guide_server/view_stats.db
 *.db-wal
 *.db-shm
 *.db-wal
+
+__pycache__/
+*.py[cod]
+
+# --- Vite “.timestamp” helper files ---
+site-main/vite.config.js.timestamp-*.mjs

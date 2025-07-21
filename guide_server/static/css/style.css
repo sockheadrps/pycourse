@@ -1699,7 +1699,7 @@ pre.line-numbers {
   }
   .step-title-section .step-file {
     display: flex;
-
+    
     padding: 5px;
     justify-content: center;
     align-items: center;

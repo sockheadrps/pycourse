@@ -95,15 +95,15 @@ function updateEditButtonsVisibility() {
   const editButtons = document.querySelectorAll('.step-edit-btn, .code-edit-btn, .video-edit-btn');
 
   // Batch DOM updates to reduce reflows
-  if (isAuthenticated) {
+    if (isAuthenticated) {
     editButtons.forEach((btn) => {
       btn.style.display = 'flex';
       btn.style.opacity = '0.8';
     });
-  } else {
+    } else {
     editButtons.forEach((btn) => {
       btn.style.display = 'none';
-    });
+  });
   }
 }
 
@@ -900,22 +900,22 @@ window.addEventListener(
   () => {
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
-      const steps = document.querySelectorAll('.step-item');
-      let currentStep = null;
+  const steps = document.querySelectorAll('.step-item');
+  let currentStep = null;
 
-      steps.forEach((step) => {
-        const rect = step.getBoundingClientRect();
-        if (rect.top <= 150 && rect.bottom > 150) {
-          currentStep = step;
-        }
-      });
+  steps.forEach((step) => {
+    const rect = step.getBoundingClientRect();
+    if (rect.top <= 150 && rect.bottom > 150) {
+      currentStep = step;
+    }
+  });
 
-      if (currentStep) {
-        const stepId = currentStep.getAttribute('data-step-id');
-        const [phaseNumber, stepNumber] = stepId.split('-').map(Number);
+  if (currentStep) {
+    const stepId = currentStep.getAttribute('data-step-id');
+    const [phaseNumber, stepNumber] = stepId.split('-').map(Number);
 
-        const stepTitle = currentStep.querySelector('.step-title')?.innerText ?? '(No title)';
-        const stepFile = currentStep.querySelector('.step-file')?.innerText ?? '–';
+    const stepTitle = currentStep.querySelector('.step-title')?.innerText ?? '(No title)';
+    const stepFile = currentStep.querySelector('.step-file')?.innerText ?? '–';
 
         // Batch DOM updates
         const tocStepNumber = document.getElementById('tocStepNumber');
@@ -931,12 +931,12 @@ window.addEventListener(
         if (tocStepFile.textContent !== stepFile) {
           tocStepFile.textContent = stepFile;
         }
-      }
+  }
 
-      const scrollTop = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollPercent = Math.min(100, (scrollTop / docHeight) * 100);
-      document.getElementById('tocProgressBar').style.width = `${scrollPercent}%`;
+  const scrollTop = window.scrollY;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  const scrollPercent = Math.min(100, (scrollTop / docHeight) * 100);
+  document.getElementById('tocProgressBar').style.width = `${scrollPercent}%`;
     }, 16); // ~60fps
   },
   { passive: true }
