@@ -92,20 +92,19 @@ async function logout() {
 }
 
 function updateEditButtonsVisibility() {
-  console.log('updateEditButtonsVisibility called, isAuthenticated:', isAuthenticated);
   const editButtons = document.querySelectorAll('.step-edit-btn, .code-edit-btn, .video-edit-btn');
-  console.log('Found edit buttons:', editButtons.length);
-  editButtons.forEach((btn, index) => {
-    console.log(`Button ${index}:`, btn.className, 'display:', btn.style.display);
-    if (isAuthenticated) {
+
+  // Batch DOM updates to reduce reflows
+  if (isAuthenticated) {
+    editButtons.forEach((btn) => {
       btn.style.display = 'flex';
       btn.style.opacity = '0.8';
-      console.log(`Button ${index} set to visible`);
-    } else {
+    });
+  } else {
+    editButtons.forEach((btn) => {
       btn.style.display = 'none';
-      console.log(`Button ${index} set to hidden`);
-    }
-  });
+    });
+  }
 }
 
 // Load tutorial data
@@ -118,7 +117,6 @@ function escapeHtml(text) {
 
 // Step description editing functionality
 function toggleStepDescriptionEdit(stepId) {
-  console.log('toggleStepDescriptionEdit called for step:', stepId);
   const stepItem = document.querySelector(`[data-step-id="${stepId}"]`);
   const descriptionContainer = stepItem.querySelector('.step-description-container');
   const descriptionText = descriptionContainer.querySelector('.step-description');
@@ -180,7 +178,6 @@ function toggleStepDescriptionEdit(stepId) {
 }
 
 function saveStepDescription(stepId, textarea, fileInput, fileElement) {
-  console.log('saveStepDescription called for step:', stepId);
   const newDescription = textarea.value.trim();
   if (newDescription) {
     // Parse the unique step ID to get phase and step index
@@ -331,7 +328,6 @@ function toggleCodeEdit(stepId) {
 }
 
 function saveCodeSnippet(stepId, textarea, codeElement, editBtn) {
-  console.log('saveCodeSnippet called for step:', stepId);
   const newCode = textarea.value;
   if (newCode) {
     // Parse the unique step ID to get phase and step index
@@ -408,7 +404,6 @@ function cancelCodeSnippet(stepId, textarea, codeElement, editBtn) {
 
 // Video editing functionality
 function toggleVideoEdit() {
-  console.log('toggleVideoEdit called');
   const videoContainer = document.querySelector('.youtube-video-container');
   const videoWrapper = videoContainer.querySelector('.youtube-video-wrapper');
   const editControls = videoContainer.querySelector('.video-edit-controls');
@@ -462,7 +457,6 @@ function toggleVideoEdit() {
 }
 
 async function saveVideoUrl(input, videoWrapper, editControls) {
-  console.log('saveVideoUrl called');
   const videoUrl = input.value.trim();
 
   if (videoUrl) {
@@ -514,8 +508,6 @@ async function saveVideoUrl(input, videoWrapper, editControls) {
 }
 
 function cancelVideoEdit(input, videoWrapper, editControls) {
-  console.log('cancelVideoEdit called');
-
   // Restore edit button
   const editBtn = document.createElement('button');
   editBtn.className = 'video-edit-btn';
@@ -583,9 +575,7 @@ async function copyCodeToClipboard(stepId) {
   }
 }
 
-
 function toggleCodeVisibility(stepId) {
-  console.log('toggleCodeVisibility called for stepId:', stepId);
   const stepItem = document.querySelector(`[data-step-id="${stepId}"]`);
   const codeContent = stepItem.querySelector('.code-content');
   const toggleBtn = stepItem.querySelector('.code-toggle-btn');
@@ -612,10 +602,6 @@ function toggleCodeVisibility(stepId) {
 }
 
 async function saveTutorialData() {
-  console.log('saveTutorialData called');
-  console.log('isAuthenticated:', isAuthenticated);
-  console.log('authToken:', authToken ? 'present' : 'missing');
-
   if (!isAuthenticated || !authToken) {
     showSaveNotification('Authentication required to save changes', 'error');
     return;
@@ -625,10 +611,6 @@ async function saveTutorialData() {
   const urlPath = window.location.pathname;
   const guideSlugMatch = urlPath.match(/\/guides\/([^\/]+)\/tutorial/);
   const guideSlug = guideSlugMatch ? guideSlugMatch[1] : 'fastapi-chat-app';
-
-  console.log('URL path:', urlPath);
-  console.log('Guide slug:', guideSlug);
-  console.log('Tutorial data:', tutorialData);
 
   try {
     const response = await fetch('/save-tutorial', {
@@ -643,16 +625,11 @@ async function saveTutorialData() {
       }),
     });
 
-    console.log('Response status:', response.status);
-    console.log('Response ok:', response.ok);
-
     if (response.ok) {
       const responseData = await response.json();
-      console.log('Save successful:', responseData);
       showSaveNotification();
     } else if (response.status === 401) {
       // Authentication failed, clear token and show login
-      console.log('Authentication failed');
       authToken = null;
       isAuthenticated = false;
       localStorage.removeItem('admin_auth_token');
@@ -823,7 +800,7 @@ function initializePrism() {
 function initializePrismWithDelay() {
   setTimeout(() => {
     initializePrism();
-  }, 200);
+  }, 10);
 }
 
 function countTotalSteps(data) {
@@ -849,6 +826,28 @@ document.addEventListener('DOMContentLoaded', async function () {
     initializeTOCTracking();
     initializeTabs(); // Initialize tabs after data is loaded
     initializePrismWithDelay(); // Initialize Prism after data is loaded
+
+    // Add click listeners to code preview areas for expansion
+    const codePreviews = document.querySelectorAll('.code-preview');
+    codePreviews.forEach((preview) => {
+      preview.addEventListener('click', function (e) {
+        // Don't expand if clicking on buttons
+        if (
+          e.target.closest('.code-edit-btn') ||
+          e.target.closest('.code-copy-btn') ||
+          e.target.closest('.code-toggle-btn')
+        ) {
+          return;
+        }
+
+        const codeContent = this.querySelector('.code-content');
+        const stepId = codeContent?.dataset.stepId;
+
+        if (stepId && codeContent.classList.contains('collapsed')) {
+          toggleCodeVisibility(stepId);
+        }
+      });
+    });
   } else {
     console.warn('Tutorial data not available');
   }
@@ -863,36 +862,24 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // Add event listener for step description and code edit buttons
   document.addEventListener('click', function (e) {
-    console.log('Click event on:', e.target);
-    console.log('Target classList:', e.target.classList);
-    console.log('Closest code-edit-btn:', e.target.closest('.code-edit-btn'));
-    console.log('Is authenticated:', isAuthenticated);
-    console.log('Closest code-preview:', e.target.closest('.code-preview'));
-    console.log('Closest code-content:', e.target.closest('.code-content'));
-
     if (e.target.closest('.step-edit-btn')) {
       const stepId = e.target.closest('.step-edit-btn').dataset.stepId;
-      console.log('Step edit button clicked for step:', stepId);
       if (stepId) {
         toggleStepDescriptionEdit(stepId);
       }
     } else if (e.target.closest('.code-edit-btn')) {
       const stepId = e.target.closest('.code-edit-btn').dataset.stepId;
-      console.log('Code edit button clicked for step:', stepId);
       if (stepId) {
         toggleCodeEdit(stepId);
       }
     } else if (e.target.closest('.code-copy-btn')) {
       const stepId = e.target.closest('.code-copy-btn').dataset.stepId;
-      console.log('Code copy button clicked for step:', stepId);
       if (stepId) {
         copyCodeToClipboard(stepId);
       }
-    } else if (e.target.closest('.code-preview')) {
-      console.log('Code preview clicked');
-      const preview = e.target.closest('.code-preview');
-      const stepId = preview?.querySelector('.code-content')?.dataset.stepId;
-      console.log('Code toggle button clicked for step:', stepId);
+    } else if (e.target.closest('.code-toggle-btn')) {
+      const toggleBtn = e.target.closest('.code-toggle-btn');
+      const stepId = toggleBtn?.dataset.stepId;
       if (stepId) {
         toggleCodeVisibility(stepId);
       }
@@ -901,37 +888,56 @@ document.addEventListener('DOMContentLoaded', async function () {
       !e.target.closest('.video-edit-btn.editing') &&
       !e.target.closest('.video-edit-btn.cancel')
     ) {
-      console.log('Video edit button clicked');
       toggleVideoEdit();
     }
   });
 });
 
-window.addEventListener('scroll', () => {
-  const steps = document.querySelectorAll('.step-item');
-  let currentStep = null;
+// Debounced scroll handler to improve performance
+let scrollTimeout;
+window.addEventListener(
+  'scroll',
+  () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const steps = document.querySelectorAll('.step-item');
+      let currentStep = null;
 
-  steps.forEach((step) => {
-    const rect = step.getBoundingClientRect();
-    if (rect.top <= 150 && rect.bottom > 150) {
-      currentStep = step;
-    }
-  });
+      steps.forEach((step) => {
+        const rect = step.getBoundingClientRect();
+        if (rect.top <= 150 && rect.bottom > 150) {
+          currentStep = step;
+        }
+      });
 
-  if (currentStep) {
-    const stepId = currentStep.getAttribute('data-step-id');
-    const [phaseNumber, stepNumber] = stepId.split('-').map(Number);
+      if (currentStep) {
+        const stepId = currentStep.getAttribute('data-step-id');
+        const [phaseNumber, stepNumber] = stepId.split('-').map(Number);
 
-    const stepTitle = currentStep.querySelector('.step-title')?.innerText ?? '(No title)';
-    const stepFile = currentStep.querySelector('.step-file')?.innerText ?? '–';
+        const stepTitle = currentStep.querySelector('.step-title')?.innerText ?? '(No title)';
+        const stepFile = currentStep.querySelector('.step-file')?.innerText ?? '–';
 
-    document.getElementById('tocStepNumber').textContent = `${phaseNumber}.${stepNumber}`;
-    document.getElementById('tocStepTitle').textContent = stepTitle;
-    document.getElementById('tocStepFile').textContent = stepFile;
-  }
+        // Batch DOM updates
+        const tocStepNumber = document.getElementById('tocStepNumber');
+        const tocStepTitle = document.getElementById('tocStepTitle');
+        const tocStepFile = document.getElementById('tocStepFile');
+        
+        if (tocStepNumber.textContent !== `${phaseNumber}.${stepNumber}`) {
+          tocStepNumber.textContent = `${phaseNumber}.${stepNumber}`;
+        }
+        if (tocStepTitle.textContent !== stepTitle) {
+          tocStepTitle.textContent = stepTitle;
+        }
+        if (tocStepFile.textContent !== stepFile) {
+          tocStepFile.textContent = stepFile;
+        }
+      }
 
-  const scrollTop = window.scrollY;
-  const docHeight = document.body.scrollHeight - window.innerHeight;
-  const scrollPercent = Math.min(100, (scrollTop / docHeight) * 100);
-  document.getElementById('tocProgressBar').style.width = `${scrollPercent}%`;
-});
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = Math.min(100, (scrollTop / docHeight) * 100);
+      document.getElementById('tocProgressBar').style.width = `${scrollPercent}%`;
+    }, 16); // ~60fps
+  },
+  { passive: true }
+);

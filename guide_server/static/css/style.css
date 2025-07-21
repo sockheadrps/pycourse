@@ -1095,7 +1095,8 @@ body {
 }
 
 .code-edit-controls .code-edit-btn,
-.code-edit-controls .code-copy-btn {
+.code-edit-controls .code-copy-btn,
+.code-edit-controls .code-toggle-btn {
   pointer-events: auto;
 }
 
@@ -1695,11 +1696,10 @@ pre.line-numbers {
     flex-direction: column;
     gap: 12px;
     max-width: 100%;
-
   }
   .step-title-section .step-file {
     display: flex;
-    
+
     padding: 5px;
     justify-content: center;
     align-items: center;
@@ -1708,7 +1708,6 @@ pre.line-numbers {
     font-size: 12px;
     background-color: #4facfe;
     color: #000;
-
   }
 
   .step-description-container {
@@ -1875,6 +1874,6 @@ pre.line-numbers {
 }
 
 .code-content.expanded {
-  max-height: 2000;
+  max-height: 2000px !important;
   transition: max-height 0.3s ease-in-out;
 }

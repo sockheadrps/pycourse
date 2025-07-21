@@ -511,6 +511,7 @@ body {
   height: auto;
   min-height: 380px;
   max-height: none;
+  overflow: visible;
 }
 
 .guide-card[data-expanded='false'] {

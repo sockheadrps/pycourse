@@ -152,11 +152,16 @@ function createGuideCard(guide) {
 
   // Add click event for card expansion
   card.addEventListener('click', function (e) {
-    // Don't expand if clicking on badges or buttons
+    // Don't expand if clicking on badges, buttons, or content areas
     if (
       e.target.closest('.status-badge') ||
       e.target.closest('.btn-small') ||
-      e.target.closest('a')
+      e.target.closest('a') ||
+      e.target.closest('.guide-content') ||
+      e.target.closest('pre') ||
+      e.target.closest('code') ||
+      e.target.closest('p') ||
+      e.target.closest('div') && e.target.closest('.guide-content')
     ) {
       return;
     }
