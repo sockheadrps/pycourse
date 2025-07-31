@@ -52,6 +52,7 @@
 		<ul class="links">
 			<li><a href="/about">About</a></li>
 			<li><a href="https://chat.socksthoughtshop.lol/chat">Chat</a></li>
+			<li><a href="https://palindrome.socksthoughtshop.lol/monitor" target="_blank">MLPalindrome</a></li>
 			
 			<!-- Guides Dropdown -->
 			<li class="dropdown-container" on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave}>
@@ -60,6 +61,7 @@
 					<ChevronDown size={16} class="chevron" />
 				</button>
 				{#if dropdownOpen}
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<div class="dropdown-menu" on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave} on:click|stopPropagation>
 						{#if $guides.loading}
 							<div class="dropdown-item loading">Loading guides...</div>
